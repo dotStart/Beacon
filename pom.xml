@@ -73,6 +73,11 @@
                         <artifactId>cling-core</artifactId>
                         <version>2.0.1</version>
                 </dependency>
+                <dependency>
+                        <groupId>org.fourthline.cling</groupId>
+                        <artifactId>cling-support</artifactId>
+                        <version>2.0.1</version>
+                </dependency>
 
                 <!-- Java -->
                 <dependency>
@@ -92,6 +97,13 @@
                         <groupId>org.apache.logging.log4j</groupId>
                         <artifactId>log4j-core</artifactId>
                         <version>${log4j.version}</version>
+                </dependency>
+
+                <!-- Utility -->
+                <dependency>
+                        <groupId>com.google.inject</groupId>
+                        <artifactId>guice</artifactId>
+                        <version>4.0</version>
                 </dependency>
         </dependencies>
 
