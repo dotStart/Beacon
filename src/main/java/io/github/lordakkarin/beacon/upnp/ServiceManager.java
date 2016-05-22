@@ -161,4 +161,13 @@ public class ServiceManager {
                 upnpService.shutdown();
                 this.serviceMap.remove(service);
         }
+
+        /**
+         * Un-publishes all active services.
+         */
+        public void shutdown() {
+                logger.info("Cleaning up all remaining services ...");
+                this.serviceMap.keySet().forEach(this::unpublishService);
+                logger.info("All active services were un-published.");
+        }
 }
