@@ -92,6 +92,7 @@ public class ServiceManager {
                 // configuration even when the application or PC crashes
                 mapping.setLeaseDurationSeconds(new UnsignedIntegerFourBytes(30));
 
+                logger.info("Publishing service %s (using %s on port %d) on %s.", service.getDisplayName(), service.getType(), service.getPort(), address.getAddress());
                 UpnpService upnpService = new UpnpServiceImpl(new PortMappingListener(mapping));
                 upnpService.getControlPoint().search();
                 this.serviceMap.put(service, upnpService);
@@ -156,6 +157,7 @@ public class ServiceManager {
                         throw new NoSuchElementException("No such service: " + service);
                 }
 
+                logger.info("Un-publishing service %s (using %s on port %d).", service.getDisplayName(), service.getType(), service.getPort());
                 upnpService.shutdown();
                 this.serviceMap.remove(service);
         }
