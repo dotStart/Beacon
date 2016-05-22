@@ -112,6 +112,52 @@
                 <finalName>Beacon</finalName>
                 <defaultGoal>clean install</defaultGoal>
 
+                <resources>
+                        <!-- Configurations -->
+                        <resource>
+                                <directory>${project.basedir}/src/main/resources</directory>
+                                <targetPath>.</targetPath>
+                                <filtering>false</filtering>
+
+                                <includes>
+                                        <include>log4j2.xml</include>
+                                </includes>
+                        </resource>
+
+                        <!-- FXML -->
+                        <resource>
+                                <directory>${project.basedir}/src/main/resources/fxml</directory>
+                                <targetPath>./fxml/</targetPath>
+                                <filtering>false</filtering>
+
+                                <includes>
+                                        <include>*.fxml</include>
+                                </includes>
+                        </resource>
+
+                        <!-- Images -->
+                        <resource>
+                                <directory>${project.basedir}/src/main/resources/image</directory>
+                                <targetPath>./image/</targetPath>
+                                <filtering>false</filtering>
+
+                                <includes>
+                                        <include>**/*.png</include>
+                                </includes>
+                        </resource>
+
+                        <!-- Localization -->
+                        <resource>
+                                <directory>${project.basedir}/src/main/resources/localization</directory>
+                                <targetPath>./localization/</targetPath>
+                                <filtering>true</filtering>
+
+                                <includes>
+                                        <include>*.properties</include>
+                                </includes>
+                        </resource>
+                </resources>
+
                 <plugins>
                         <!-- Java Compiler -->
                         <plugin>
