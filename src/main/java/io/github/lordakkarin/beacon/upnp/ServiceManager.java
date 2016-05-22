@@ -16,6 +16,7 @@
  */
 package io.github.lordakkarin.beacon.upnp;
 
+import com.google.inject.Inject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.fourthline.cling.UpnpService;
@@ -25,6 +26,7 @@ import org.fourthline.cling.support.igd.PortMappingListener;
 import org.fourthline.cling.support.model.PortMapping;
 
 import javax.annotation.Nonnull;
+import javax.inject.Singleton;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -39,11 +41,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
  *
  * @author <a href="mailto:johannesd@torchmind.com">Johannes Donath</a>
  */
+@Singleton
 public class ServiceManager {
         private final List<NetworkInterface> interfaceList = new CopyOnWriteArrayList<>();
         private static final Logger logger = LogManager.getFormatterLogger(ServiceManager.class);
         private final Map<Service, UpnpService> serviceMap = new ConcurrentHashMap<>();
 
+        @Inject
         public ServiceManager() {
                 this.refreshInterfaceList();
         }
