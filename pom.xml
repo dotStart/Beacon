@@ -125,6 +125,21 @@
                                 </configuration>
                         </plugin>
 
+                        <!-- LESS Compiler -->
+                        <plugin>
+                                <groupId>org.lesscss</groupId>
+                                <artifactId>lesscss-maven-plugin</artifactId>
+                                <version>1.7.0.1.1</version>
+
+                                <executions>
+                                        <execution>
+                                                <goals>
+                                                        <goal>compile</goal>
+                                                </goals>
+                                        </execution>
+                                </executions>
+                        </plugin>
+
                         <!-- Jar Creation -->
                         <plugin>
                                 <groupId>org.apache.maven.plugins</groupId>
