@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+        <modelVersion>4.0.0</modelVersion>
+
+        <!-- Artifact INformation -->
+        <groupId>io.github.lordakkarin</groupId>
+        <artifactId>beacon</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <packaging>jar</packaging>
+
+        <prerequisites>
+                <maven>3.3</maven>
+        </prerequisites>
+
+        <properties>
+                <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+                <log4j.version>2.5</log4j.version>
+        </properties>
+
+        <licenses>
+                <license>
+                        <name>Apache License 2.0</name>
+                        <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+                </license>
+        </licenses>
+
+        <!-- Artifact Metadata -->
+        <name>Beacon</name>
+        <description>Provides a simple UI which allows users to configure port forwarding using UPnP.</description>
+        <url>https://github.com/LordAkkarin/Beacon</url>
+        <inceptionYear>2016</inceptionYear>
+
+        <developers>
+                <developer>
+                        <name>Johannes Donath</name>
+                        <timezone>Europe/Berlin</timezone>
+                        <email>johannesd@torchmind.com</email>
+                        <url>https://www.johannes-donath.com</url>
+
+                        <organization>Torchmind</organization>
+                        <organizationUrl>https://www.torchmind.com</organizationUrl>
+                </developer>
+        </developers>
+
+        <scm>
+                <tag>master</tag>
+                <url>https://github.com/LordAkkarin/Beacon</url>
+                <connection>scm:git:git@github.com:/LordAkkarin/Beacon.git</connection>
+                <developerConnection>scm:git:git@github.com:/LordAkkarin/Beacon.git</developerConnection>
+        </scm>
+
+        <issueManagement>
+                <system>GitHub</system>
+                <url>https://github.com/LordAkkarin/Beacon/issues</url>
+        </issueManagement>
+
+        <!-- Dependencies -->
+        <repositories>
+                <repository>
+                        <id>4thline-repo</id>
+                        <url>http://4thline.org/m2</url>
+
+                        <snapshots>
+                                <enabled>false</enabled>
+                        </snapshots>
+                </repository>
+        </repositories>
+
+        <dependencies>
+                <!-- UPnP -->
+                <dependency>
+                        <groupId>org.fourthline.cling</groupId>
+                        <artifactId>cling-core</artifactId>
+                        <version>2.0.1</version>
+                </dependency>
+
+                <!-- Java -->
+                <dependency>
+                        <groupId>com.google.code.findbugs</groupId>
+                        <artifactId>jsr305</artifactId>
+                        <version>3.0.1</version>
+                        <scope>provided</scope>
+                </dependency>
+
+                <!-- Logging -->
+                <dependency>
+                        <groupId>org.apache.logging.log4j</groupId>
+                        <artifactId>log4j-api</artifactId>
+                        <version>${log4j.version}</version>
+                </dependency>
+                <dependency>
+                        <groupId>org.apache.logging.log4j</groupId>
+                        <artifactId>log4j-core</artifactId>
+                        <version>${log4j.version}</version>
+                </dependency>
+        </dependencies>
+
+        <!-- Build Settings -->
+        <build>
+                <finalName>Beacon</finalName>
+                <defaultGoal>clean install</defaultGoal>
+
+                <plugins>
+                        <!-- Java Compiler -->
+                        <plugin>
+                                <groupId>org.apache.maven.plugins</groupId>
+                                <artifactId>maven-compiler-plugin</artifactId>
+                                <version>3.5</version>
+
+                                <configuration>
+                                        <source>1.8</source>
+                                        <target>1.8</target>
+                                </configuration>
+                        </plugin>
+
+                        <!-- Jar Creation -->
+                        <plugin>
+                                <groupId>org.apache.maven.plugins</groupId>
+                                <artifactId>maven-jar-plugin</artifactId>
+                                <version>2.6</version>
+
+                                <configuration>
+                                        <archive>
+                                                <addMavenDescriptor>true</addMavenDescriptor>
+                                                <compress>true</compress>
+                                                <index>true</index>
+                                        </archive>
+                                </configuration>
+                        </plugin>
+
+                        <!-- Shade -->
+                        <plugin>
+                                <groupId>org.apache.maven.plugins</groupId>
+                                <artifactId>maven-shade-plugin</artifactId>
+                                <version>2.4.3</version>
+
+                                <executions>
+                                        <execution>
+                                                <phase>package</phase>
+
+                                                <goals>
+                                                        <goal>shade</goal>
+                                                </goals>
+                                        </execution>
+                                </executions>
+                        </plugin>
+
+                        <!-- Launch4j -->
+                        <plugin>
+                                <groupId>com.akathist.maven.plugins.launch4j</groupId>
+                                <artifactId>launch4j-maven-plugin</artifactId>
+                                <version>1.7.10</version>
+
+                                <executions>
+                                        <execution>
+                                                <id>l4j-clui</id>
+                                                <phase>package</phase>
+
+                                                <goals>
+                                                        <goal>launch4j</goal>
+                                                </goals>
+
+                                                <configuration>
+                                                        <headerType>gui</headerType>
+                                                        <outfile>${project.build.directory}/${project.build.finalName}.exe</outfile>
+                                                        <jar>${project.build.directory}/${project.build.finalName}.jar</jar>
+                                                        <errTitle>Beacon</errTitle>
+                                                        <icon>${project.basedir}/src/main/resources/logo.ico</icon>
+
+                                                        <jre>
+                                                                <minVersion>1.8.0</minVersion>
+                                                        </jre>
+
+                                                        <versionInfo>
+                                                                <fileVersion>1.0.0.0</fileVersion>
+                                                                <txtFileVersion>${project.version}</txtFileVersion>
+                                                                <fileDescription>${project.description}</fileDescription>
+                                                                <copyright>${project.organization.name}</copyright>
+                                                                <productVersion>1.0.0.0</productVersion>
+                                                                <txtProductVersion>${project.version}</txtProductVersion>
+                                                                <productName>${project.name}</productName>
+                                                                <internalName>${project.artifactId}</internalName>
+                                                                <originalFilename>${project.build.finalName}.exe</originalFilename>
+                                                        </versionInfo>
+                                                </configuration>
+                                        </execution>
+                                </executions>
+                        </plugin>
+
+                        <!-- Attach Sources -->
+                        <plugin>
+                                <groupId>org.apache.maven.plugins</groupId>
+                                <artifactId>maven-source-plugin</artifactId>
+                                <version>2.4</version>
+
+                                <executions>
+                                        <execution>
+                                                <id>attach-sources</id>
+
+                                                <goals>
+                                                        <goal>jar-no-fork</goal>
+                                                </goals>
+                                        </execution>
+                                </executions>
+                        </plugin>
+
+                        <!-- Attach JavaDoc -->
+                        <plugin>
+                                <groupId>org.apache.maven.plugins</groupId>
+                                <artifactId>maven-javadoc-plugin</artifactId>
+                                <version>2.10.3</version>
+
+                                <executions>
+                                        <execution>
+                                                <id>attach-javadocs</id>
+
+                                                <goals>
+                                                        <goal>jar</goal>
+                                                </goals>
+                                        </execution>
+                                </executions>
+                        </plugin>
+                </plugins>
+        </build>
+
+        <profiles>
+                <profile>
+                        <id>deployment</id>
+
+                        <build>
+                                <plugins>
+                                        <!-- GPG Signatures -->
+                                        <plugin>
+                                                <groupId>org.apache.maven.plugins</groupId>
+                                                <artifactId>maven-gpg-plugin</artifactId>
+                                                <version>1.5</version>
+
+                                                <executions>
+                                                        <execution>
+                                                                <id>sign-artifacts</id>
+                                                                <phase>verify</phase>
+
+                                                                <goals>
+                                                                        <goal>sign</goal>
+                                                                </goals>
+                                                        </execution>
+                                                </executions>
+
+                                                <configuration>
+                                                        <keyname>D954FDEE</keyname>
+                                                </configuration>
+                                        </plugin>
+                                </plugins>
+                        </build>
+                </profile>
+        </profiles>
+</project>
