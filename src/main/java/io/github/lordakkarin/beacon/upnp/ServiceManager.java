@@ -89,7 +89,8 @@ public class ServiceManager {
                 PortMapping mapping = new PortMapping(
                         service.getPort(),
                         address.getHostAddress(),
-                        (service.getType() == ProtocolType.TCP ? PortMapping.Protocol.TCP : PortMapping.Protocol.UDP)
+                        (service.getType() == ProtocolType.TCP ? PortMapping.Protocol.TCP : PortMapping.Protocol.UDP),
+                        "Beacon Service (" + service.getDisplayName() + ")"
                 );
 
                 // ensure our lease is refreshed every ~30 seconds so we do not end up with zombie leases in our UPnP
