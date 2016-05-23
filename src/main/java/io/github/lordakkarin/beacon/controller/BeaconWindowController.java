@@ -17,6 +17,7 @@
 package io.github.lordakkarin.beacon.controller;
 
 import com.google.inject.Inject;
+import com.google.inject.Injector;
 import io.github.lordakkarin.beacon.control.NumberField;
 import io.github.lordakkarin.beacon.control.cell.NetworkInterfaceCell;
 import io.github.lordakkarin.beacon.control.cell.ServiceCell;
@@ -27,17 +28,22 @@ import javafx.collections.ListChangeListener;
 import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.stage.Window;
 
 import javax.annotation.Nonnull;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.URL;
@@ -55,11 +61,12 @@ import java.util.ResourceBundle;
 public class BeaconWindowController implements Initializable {
         private static final PseudoClass ERROR_PSEUDO_CLASS = PseudoClass.getPseudoClass("error");
         @FXML
-        private HBox titleBar;
-        @FXML
         private NumberField customPortField;
         @FXML
         private ComboBox<ProtocolType> customProtocolSelector;
+        private double dragDeltaX;
+        private double dragDeltaY;
+        private final Injector injector;
         @FXML
         private ComboBox<NetworkInterface> networkInterfaceSelector;
         @FXML
@@ -71,12 +78,12 @@ public class BeaconWindowController implements Initializable {
         private Button startButton;
         @FXML
         private Button stopButton;
-
-        private double dragDeltaX;
-        private double dragDeltaY;
+        @FXML
+        private HBox titleBar;
 
         @Inject
-        public BeaconWindowController(@Nonnull ServiceManager serviceManager) {
+        public BeaconWindowController(@Nonnull Injector injector, @Nonnull ServiceManager serviceManager) {
+                this.injector = injector;
                 this.serviceManager = serviceManager;
         }
 
@@ -235,8 +242,19 @@ public class BeaconWindowController implements Initializable {
          * @param event the source event.
          */
         @FXML
-        private void onTitleBarAbout(@Nonnull ActionEvent event) {
-                // TODO
+        private void onTitleBarAbout(@Nonnull ActionEvent event) throws IOException {
+                Stage stage = new Stage();
+                stage.initOwner(this.root.getScene().getWindow());
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.initStyle(StageStyle.UNDECORATED);
+
+                FXMLLoader aboutLoader = this.injector.getInstance(FXMLLoader.class);
+                aboutLoader.setLocation(BeaconWindowController.class.getResource("/fxml/AboutDialog.fxml"));
+                aboutLoader.setResources(ResourceBundle.getBundle("localization/AboutWindow"));
+
+                Scene scene = new Scene(aboutLoader.load(), 500, 300);
+                stage.setScene(scene);
+                stage.show();
         }
 
         /**
