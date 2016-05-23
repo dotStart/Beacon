@@ -23,7 +23,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.fourthline.cling.UpnpService;
 import org.fourthline.cling.UpnpServiceImpl;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
 import org.fourthline.cling.support.igd.PortMappingListener;
 import org.fourthline.cling.support.model.PortMapping;
 
@@ -32,7 +31,10 @@ import javax.inject.Singleton;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -97,7 +99,8 @@ public class ServiceManager {
 
                 // ensure our lease is refreshed every ~30 seconds so we do not end up with zombie leases in our UPnP
                 // configuration even when the application or PC crashes
-                mapping.setLeaseDurationSeconds(new UnsignedIntegerFourBytes(30));
+                // FIXME: This causes the lease to expire entirely even while the application is running so we can't quite rely on it at the moment
+                // mapping.setLeaseDurationSeconds(new UnsignedIntegerFourBytes(30));
 
                 logger.info("Publishing service %s (using %s on port %d) on %s.", service.getDisplayName(), service.getType(), service.getPort(), address.getAddress());
                 UpnpService upnpService = new UpnpServiceImpl(new PortMappingListener(mapping));
