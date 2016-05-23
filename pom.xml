@@ -201,6 +201,10 @@
                                                 <addMavenDescriptor>true</addMavenDescriptor>
                                                 <compress>true</compress>
                                                 <index>true</index>
+
+                                                <manifest>
+                                                        <mainClass>io.github.lordakkarin.beacon.Beacon</mainClass>
+                                                </manifest>
                                         </archive>
                                 </configuration>
                         </plugin>
