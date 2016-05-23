@@ -32,8 +32,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 import javax.annotation.Nonnull;
 import java.net.InetAddress;
@@ -53,6 +55,8 @@ import java.util.ResourceBundle;
 public class BeaconWindowController implements Initializable {
         private static final PseudoClass ERROR_PSEUDO_CLASS = PseudoClass.getPseudoClass("error");
         @FXML
+        private HBox titleBar;
+        @FXML
         private NumberField customPortField;
         @FXML
         private ComboBox<ProtocolType> customProtocolSelector;
@@ -67,6 +71,9 @@ public class BeaconWindowController implements Initializable {
         private Button startButton;
         @FXML
         private Button stopButton;
+
+        private double dragDeltaX;
+        private double dragDeltaY;
 
         @Inject
         public BeaconWindowController(@Nonnull ServiceManager serviceManager) {
@@ -125,6 +132,21 @@ public class BeaconWindowController implements Initializable {
                         if (service != null && service.getPort() != Integer.parseUnsignedInt(n)) {
                                 this.presetSelector.getSelectionModel().clearSelection();
                         }
+                });
+
+                // hook title bar to emulate drag and rop
+                this.titleBar.setOnMousePressed(event -> {
+                        Window window = this.root.getScene().getWindow();
+
+                        this.dragDeltaX = window.getX() - event.getScreenX();
+                        this.dragDeltaY = window.getY() - event.getScreenY();
+                });
+
+                this.titleBar.setOnMouseDragged(event -> {
+                        Window window = this.root.getScene().getWindow();
+
+                        window.setX((event.getScreenX() + this.dragDeltaX));
+                        window.setY((event.getScreenY() + this.dragDeltaY));
                 });
         }
 

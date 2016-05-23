@@ -33,7 +33,7 @@
                 <URL value="@/stylesheet/BeaconWindow.css"/>
         </stylesheets>
 
-        <HBox styleClass="title-bar" alignment="CENTER_LEFT">
+        <HBox fx:id="titleBar" styleClass="title-bar" alignment="CENTER_LEFT">
                 <ImageView styleClass="logo">
                         <Image url="@/image/logo.png" />
                 </ImageView>
