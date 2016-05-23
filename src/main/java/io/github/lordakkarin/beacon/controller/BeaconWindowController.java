@@ -250,7 +250,7 @@ public class BeaconWindowController implements Initializable {
 
                 FXMLLoader aboutLoader = this.injector.getInstance(FXMLLoader.class);
                 aboutLoader.setLocation(BeaconWindowController.class.getResource("/fxml/AboutDialog.fxml"));
-                aboutLoader.setResources(ResourceBundle.getBundle("localization/AboutWindow"));
+                aboutLoader.setResources(this.injector.getInstance(LocalizationService.class).load("AboutWindow"));
 
                 Scene scene = new Scene(aboutLoader.load(), 500, 300);
                 stage.setScene(scene);

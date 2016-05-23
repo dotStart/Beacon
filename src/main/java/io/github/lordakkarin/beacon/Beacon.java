@@ -20,6 +20,7 @@ import com.google.inject.Binder;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
+import io.github.lordakkarin.beacon.controller.LocalizationService;
 import io.github.lordakkarin.beacon.inject.FXMLLoaderProvider;
 import io.github.lordakkarin.beacon.upnp.ServiceManager;
 import javafx.application.Application;
@@ -32,7 +33,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
-import java.util.ResourceBundle;
 
 /**
  * <strong>Beacon</strong>
@@ -86,7 +86,7 @@ public class Beacon extends Application implements Module {
 
                 FXMLLoader loader = this.injector.getInstance(FXMLLoader.class);
                 loader.setLocation(Beacon.class.getResource("/fxml/BeaconWindow.fxml"));
-                loader.setResources(ResourceBundle.getBundle("localization/BeaconWindow"));
+                loader.setResources(this.injector.getInstance(LocalizationService.class).load("BeaconWindow"));
 
                 Scene scene = new Scene(loader.load(), 400, 500);
                 primaryStage.setScene(scene);
