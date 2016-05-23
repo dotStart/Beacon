@@ -27,7 +27,7 @@ import javax.annotation.Nonnull;
  * Provides a customized service representation.
  *
  * @author <a href="mailto:johannesd@torchmind.com">Johannes Donath</a>
- * @todo In the future we may want to use this to store custom configurations permanently.
+ * TODO: In the future we may want to use this to store custom configurations permanently.
  */
 public class CustomService implements Service {
         private static final Image STANDARD_IMAGE = new Image(CustomService.class.getResource("/image/logo.png").toExternalForm());
