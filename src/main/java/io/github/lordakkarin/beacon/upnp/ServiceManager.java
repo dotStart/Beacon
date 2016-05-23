@@ -17,6 +17,8 @@
 package io.github.lordakkarin.beacon.upnp;
 
 import com.google.inject.Inject;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.fourthline.cling.UpnpService;
@@ -43,7 +45,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 @Singleton
 public class ServiceManager {
-        private final List<NetworkInterface> interfaceList = new CopyOnWriteArrayList<>();
+        private final ObservableList<NetworkInterface> interfaceList = FXCollections.observableList(new CopyOnWriteArrayList<>());
         private static final Logger logger = LogManager.getFormatterLogger(ServiceManager.class);
         private final Map<Service, UpnpService> serviceMap = new ConcurrentHashMap<>();
 
@@ -75,8 +77,8 @@ public class ServiceManager {
          * @return a list of interfaces.
          */
         @Nonnull
-        public List<NetworkInterface> getInterfaceList() {
-                return Collections.unmodifiableList(this.interfaceList);
+        public ObservableList<NetworkInterface> getInterfaceList() {
+                return FXCollections.unmodifiableObservableList(this.interfaceList);
         }
 
         /**
