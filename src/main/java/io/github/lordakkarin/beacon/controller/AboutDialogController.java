@@ -17,6 +17,7 @@
 package io.github.lordakkarin.beacon.controller;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -55,7 +56,8 @@ public class AboutDialogController {
                 Desktop desktop = (Desktop.isDesktopSupported() ? Desktop.getDesktop() : null);
 
                 if (desktop == null || !desktop.isSupported(Desktop.Action.BROWSE)) {
-                        // TODO: Error Message
+                        Alert alert = new Alert(Alert.AlertType.ERROR, "Could not open URL in browser. Please go to https://github.com/LordAkkarin/Beacon/wiki/Thirdparty-Acknowledgements to view a full list of included libraries.");
+                        alert.showAndWait();
                         return;
                 }
 
