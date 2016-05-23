@@ -177,6 +177,10 @@
                                 <artifactId>lesscss-maven-plugin</artifactId>
                                 <version>1.7.0.1.1</version>
 
+                                <configuration>
+                                        <outputDirectory>${project.build.outputDirectory}/stylesheet</outputDirectory>
+                                </configuration>
+
                                 <executions>
                                         <execution>
                                                 <goals>
