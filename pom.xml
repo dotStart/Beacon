@@ -242,7 +242,7 @@
                                                         <outfile>${project.build.directory}/${project.build.finalName}.exe</outfile>
                                                         <jar>${project.build.directory}/${project.build.finalName}.jar</jar>
                                                         <errTitle>Beacon</errTitle>
-                                                        <icon>${project.basedir}/src/main/resources/logo.ico</icon>
+                                                        <icon>${project.basedir}/src/main/resources/image/logo.ico</icon>
 
                                                         <jre>
                                                                 <minVersion>1.8.0</minVersion>
@@ -252,7 +252,7 @@
                                                                 <fileVersion>1.0.0.0</fileVersion>
                                                                 <txtFileVersion>${project.version}</txtFileVersion>
                                                                 <fileDescription>${project.description}</fileDescription>
-                                                                <copyright>${project.organization.name}</copyright>
+                                                                <copyright>Copyright (C) 2016 Johannes Donath</copyright>
                                                                 <productVersion>1.0.0.0</productVersion>
                                                                 <txtProductVersion>${project.version}</txtProductVersion>
                                                                 <productName>${project.name}</productName>
