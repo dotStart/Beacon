@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2016 Johannes Donath <johannesd@torchmind.com>
+  ~ and other copyright owners as documented in the project's IP log.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ 	http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<?import javafx.scene.layout.VBox?>
+<?import java.net.URL?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ComboBox?>
+<?import io.github.lordakkarin.beacon.control.NumberField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<VBox xmlns:fx="http://javafx.com/fxml" fx:id="root" fx:controller="io.github.lordakkarin.beacon.controller.BeaconWindowController" styleClass="window">
+        <stylesheets>
+                <URL value="@/stylesheet/global.css"/>
+                <URL value="@/stylesheet/BeaconWindow.css"/>
+        </stylesheets>
+
+        <HBox styleClass="title-bar" alignment="CENTER_LEFT">
+                <ImageView styleClass="logo">
+                        <Image url="@/image/logo.png" />
+                </ImageView>
+                <Label styleClass="title" text="%window.title" />
+                <Pane styleClass="title-spacer" HBox.hgrow="ALWAYS" />
+                <HBox styleClass="actions" alignment="CENTER_RIGHT">
+                        <Button fx:id="about" onAction="#onTitleBarAbout" text="?">
+                                <tooltip>
+                                        <Tooltip text="%window.actions.about"></Tooltip>
+                                </tooltip>
+                        </Button>
+                        <Button fx:id="iconify" onAction="#onTitleBarIconify" text="_">
+                                <tooltip>
+                                        <Tooltip text="%window.actions.iconify"></Tooltip>
+                                </tooltip>
+                        </Button>
+                        <Button fx:id="close" onAction="#onTitleBarClose" text="X">
+                                <tooltip>
+                                        <Tooltip text="%window.actions.close"></Tooltip>
+                                </tooltip>
+                        </Button>
+                </HBox>
+        </HBox>
+
+        <VBox styleClass="content">
+                <HBox styleClass="network-selector">
+                        <ComboBox fx:id="networkInterfaceSelector" maxWidth="Infinity" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="networkInterfaceRefreshButton" onAction="#onNetworkInterfaceRefresh" minWidth="60" text="%network.refresh" />
+                </HBox>
+
+                <ListView fx:id="presetSelector" onMouseClicked="#onPresetSelect" />
+
+                <HBox styleClass="custom-configuration" alignment="CENTER_LEFT">
+                        <Label text="%custom.title" />
+                        <ComboBox fx:id="customProtocolSelector" maxWidth="Infinity" HBox.hgrow="ALWAYS" />
+                        <NumberField fx:id="customPortField" prefWidth="60" />
+                </HBox>
+
+                <VBox styleClass="state-controls">
+                        <Button fx:id="startButton" onAction="#onStart" styleClass="start" maxWidth="Infinity" text="%control.start" />
+                        <Button fx:id="stopButton" onAction="#onStop" styleClass="stop" maxWidth="Infinity" text="%control.stop" visible="false" />
+                </VBox>
+        </VBox>
+</VBox>
