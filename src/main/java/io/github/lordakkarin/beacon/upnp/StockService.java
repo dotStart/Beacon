@@ -28,9 +28,31 @@ import javax.annotation.Nonnull;
  * @author <a href="mailto:johannesd@torchmind.com">Johannes Donath</a>
  */
 public enum StockService implements Service {
-  MINECRAFT("Minecraft",
+  MINECRAFT(
+      "Minecraft",
       new Image(StockService.class.getResource("/image/service/minecraft.png").toExternalForm()),
-      25565, ProtocolType.TCP);
+      25565, ProtocolType.TCP
+  ),
+  CSGO(
+      "Counter-Strike: Global Offensive",
+      new Image(StockService.class.getResource("/image/service/csgo.png").toExternalForm()),
+      27015, ProtocolType.UDP
+  ),
+  KILLING_FLOOR_2(
+      "Killing Floor 2",
+      new Image(StockService.class.getResource("/image/service/kf2.png").toExternalForm()),
+      7777, ProtocolType.UDP
+  ),
+  RUST(
+      "Rust",
+      new Image(StockService.class.getResource("/image/service/rust.png").toExternalForm()),
+      28015, ProtocolType.UDP
+  ),
+  STARBOUND(
+      "Starbound",
+      new Image(StockService.class.getResource("/image/service/starbound.png").toExternalForm()),
+      21025, ProtocolType.TCP
+  );
 
   private final String displayName;
   private final Image logo;
