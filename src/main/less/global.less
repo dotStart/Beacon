@@ -19,8 +19,12 @@
  * Window Layout
  */
 .window {
-  -fx-background-color: #1e1e1e;
+  -fx-background-color: #2C4253;
   -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.6), 8, 0.0, 0, 0);
+
+  -fx-border-width: 1px;
+  -fx-border-color: rgba(0, 0, 0, 0.21);
+  -fx-border-style: solid;
 
   > .title-bar,
   > .content {
@@ -29,7 +33,7 @@
 
   > .title-bar {
     -fx-spacing: 8px;
-    -fx-background-color: rgba(0, 0, 0, 0.2);
+    -fx-background-color: linear-gradient(to right, #283545, rgba(40, 53, 69, 0.75));
     -fx-border-width: 0 0 1px 0;
     -fx-border-color: rgba(0, 0, 0, 0.21);
     -fx-border-style: solid;
@@ -70,8 +74,8 @@ Button {
 }
 
 ComboBox .list-view {
-  -fx-background-color: #2f2f2f;
-  -fx-border-color: #292929;
+  -fx-background-color: #283545;
+  -fx-border-color: rgba(0, 0, 0, 0.21);
   -fx-border-width: 1px;
   -fx-border-style: solid;
 

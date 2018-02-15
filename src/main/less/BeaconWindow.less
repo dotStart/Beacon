@@ -18,10 +18,6 @@
 /**
  * Window Layout
  */
-.window {
-  -fx-background-image: url(../image/background.png);
-}
-
 .network-selector,
 .state-controls {
   -fx-padding: 0 0 12px 0;
@@ -36,6 +32,10 @@
   -fx-spacing: 3px;
 }
 
+.state-controls {
+  -fx-padding: 8px 0 0;
+}
+
 .state-controls > .start,
 .state-controls > .stop {
   -fx-font-size: 1.5em;
@@ -43,25 +43,25 @@
 }
 
 .state-controls > .start {
-  -fx-background-color: rgba(71, 179, 71, 0.75);
+  -fx-background-color: #27AE61;
 
   &:hover {
-    -fx-background-color: rgba(80, 199, 80, 0.75);
+    -fx-background-color: #239a56;
   }
 
   &:pressed {
-    -fx-background-color: rgba(66, 166, 66, 0.75);
+    -fx-background-color: #1e854b;
   }
 }
 
 .state-controls > .stop {
-  -fx-background-color: rgba(179, 71, 71, 0.75);
+  -fx-background-color: #a43232;
 
   &:hover {
-    -fx-background-color: rgba(199, 80, 80, 0.75);
+    -fx-background-color: #902c2c;
   }
 
   &:pressed {
-    -fx-background-color: rgba(166, 66, 66, 0.75);
+    -fx-background-color: #7d2626;
   }
 }
