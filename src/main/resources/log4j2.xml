@@ -16,17 +16,18 @@
   ~ limitations under the License.
   -->
 <Configuration status="WARN">
-        <Properties>
-                <Property name="LOG_PATTERN">[%d{yyyy-MM-dd HH:mm:ss.SSS}]%X{context} %5p [%t] --- %c{1}: %m%n</Property>
-        </Properties>
-        <Appenders>
-                <Console name="Console" target="SYSTEM_OUT" follow="true">
-                        <PatternLayout pattern="${LOG_PATTERN}"/>
-                </Console>
-        </Appenders>
-        <Loggers>
-                <Root level="info">
-                        <AppenderRef ref="Console"/>
-                </Root>
-        </Loggers>
+  <Properties>
+    <Property name="LOG_PATTERN">
+      <![CDATA[%style{[%d{HH:mm:ss}]}{dim,blue} %style{[%15.15t]}{dim,cyan} %highlight{[%level]}: %highlight{%msg}%n]]></Property>
+  </Properties>
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT" follow="true">
+      <PatternLayout pattern="${LOG_PATTERN}"/>
+    </Console>
+  </Appenders>
+  <Loggers>
+    <Root level="info">
+      <AppenderRef ref="Console"/>
+    </Root>
+  </Loggers>
 </Configuration>
