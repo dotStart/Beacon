@@ -18,7 +18,7 @@
 <Configuration status="WARN">
   <Properties>
     <Property name="LOG_PATTERN">
-      <![CDATA[%style{[%d{HH:mm:ss}]}{dim,blue} %style{[%15.15t]}{dim,cyan} %highlight{[%level]}: %highlight{%msg}%n]]></Property>
+      <![CDATA[%style{[%d{HH:mm:ss}]}{dim,blue} %style{[%25.25t]}{dim,cyan} %highlight{[%level]}: %highlight{%msg}%n]]></Property>
   </Properties>
   <Appenders>
     <Console name="Console" target="SYSTEM_OUT" follow="true">
