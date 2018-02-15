@@ -157,7 +157,31 @@
     </resources>
 
     <plugins>
-      <!-- Java Compiler -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>3.0.0</version>
+
+        <configuration>
+          <configLocation>google_checks.xml</configLocation>
+          <encoding>UTF-8</encoding>
+          <consoleOutput>true</consoleOutput>
+          <failsOnError>true</failsOnError>
+
+          <excludes>**/module-info.java</excludes>
+        </configuration>
+
+        <executions>
+          <execution>
+            <id>validate</id>
+            <phase>validate</phase>
+
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -168,8 +192,6 @@
           <target>1.8</target>
         </configuration>
       </plugin>
-
-      <!-- LESS Compiler -->
       <plugin>
         <groupId>org.lesscss</groupId>
         <artifactId>lesscss-maven-plugin</artifactId>
@@ -188,7 +210,6 @@
         </executions>
       </plugin>
 
-      <!-- Jar Creation -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
@@ -206,8 +227,6 @@
           </archive>
         </configuration>
       </plugin>
-
-      <!-- Shade -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
@@ -223,8 +242,6 @@
           </execution>
         </executions>
       </plugin>
-
-      <!-- Launch4j -->
       <plugin>
         <groupId>com.akathist.maven.plugins.launch4j</groupId>
         <artifactId>launch4j-maven-plugin</artifactId>
@@ -265,8 +282,6 @@
           </execution>
         </executions>
       </plugin>
-
-      <!-- Attach Sources -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
@@ -282,8 +297,6 @@
           </execution>
         </executions>
       </plugin>
-
-      <!-- Attach JavaDoc -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
@@ -312,7 +325,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-gpg-plugin</artifactId>
-            <version>1.5</version>
+            <version>1.6</version>
 
             <executions>
               <execution>
