@@ -24,7 +24,6 @@ jobs:
       - run: |
           mkdir /tmp/artifacts/
           cp target/Beacon.jar /tmp/artifacts/
-          cp target/Beacon.exe /tmp/artifacts/
           cp target/Beacon-*.jar /tmp/artifacts/
       - store_artifacts:
           path: /tmp/artifacts/
