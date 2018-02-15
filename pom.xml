@@ -125,7 +125,7 @@
       <!-- FXML -->
       <resource>
         <directory>${project.basedir}/src/main/resources/fxml</directory>
-        <targetPath>./fxml/</targetPath>
+        <targetPath>fxml/</targetPath>
         <filtering>false</filtering>
 
         <includes>
@@ -136,7 +136,7 @@
       <!-- Images -->
       <resource>
         <directory>${project.basedir}/src/main/resources/image</directory>
-        <targetPath>./image/</targetPath>
+        <targetPath>image/</targetPath>
         <filtering>false</filtering>
 
         <includes>
@@ -147,7 +147,7 @@
       <!-- Localization -->
       <resource>
         <directory>${project.basedir}/src/main/resources/localization</directory>
-        <targetPath>./localization/</targetPath>
+        <targetPath>localization/</targetPath>
         <filtering>true</filtering>
 
         <includes>
