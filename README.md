@@ -21,11 +21,11 @@ developers. Make sure to include a detailed description of your problem when ask
 2. Describe the expected result.
 3. Describe the actual result when different from the expected result.
 
-[wiki]: https://github.com/LordAkkarin/Beacon/wiki
+[wiki]: https://github.com/dotStart/Beacon/wiki
 
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for information on working on Beacon and submitting patches. You can also join
 the [project's chat room][gitter] to discuss future improvements or to get your custom implementation listed.
 
-[gitter]: https://gitter.im/LordAkkarin/Beacon
+[gitter]: https://gitter.im/dotStart/Beacon
