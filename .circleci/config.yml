@@ -6,7 +6,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: torchmind/circleci-openjdk:9-jdk-browsers
+      - image: torchmind/circleci-openjdk:8-jdk-browsers
     working_directory: ~/repo
     steps:
       - checkout
