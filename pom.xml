@@ -8,11 +8,6 @@
   <groupId>io.github.lordakkarin</groupId>
   <artifactId>beacon</artifactId>
   <version>1.0.2</version>
-  <packaging>jar</packaging>
-
-  <prerequisites>
-    <maven>3.3</maven>
-  </prerequisites>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
