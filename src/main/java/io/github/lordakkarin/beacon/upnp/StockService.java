@@ -17,7 +17,6 @@
 package io.github.lordakkarin.beacon.upnp;
 
 import javafx.scene.image.Image;
-
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
@@ -29,52 +28,55 @@ import javax.annotation.Nonnull;
  * @author <a href="mailto:johannesd@torchmind.com">Johannes Donath</a>
  */
 public enum StockService implements Service {
-        MINECRAFT("Minecraft", new Image(StockService.class.getResource("/image/service/minecraft.png").toExternalForm()), 25565, ProtocolType.TCP);
+  MINECRAFT("Minecraft",
+      new Image(StockService.class.getResource("/image/service/minecraft.png").toExternalForm()),
+      25565, ProtocolType.TCP);
 
-        private final String displayName;
-        private final Image logo;
-        private final int port;
-        private final ProtocolType type;
+  private final String displayName;
+  private final Image logo;
+  private final int port;
+  private final ProtocolType type;
 
-        StockService(@Nonnull String displayName, @Nonnull Image logo, @Nonnegative int port, @Nonnull ProtocolType type) {
-                this.displayName = displayName;
-                this.logo = logo;
-                this.port = port;
-                this.type = type;
-        }
+  StockService(@Nonnull String displayName, @Nonnull Image logo, @Nonnegative int port,
+      @Nonnull ProtocolType type) {
+    this.displayName = displayName;
+    this.logo = logo;
+    this.port = port;
+    this.type = type;
+  }
 
-        /**
-         * {@inheritDoc}
-         */
-        @Nonnull
-        @Override
-        public String getDisplayName() {
-                return this.displayName;
-        }
+  /**
+   * {@inheritDoc}
+   */
+  @Nonnull
+  @Override
+  public String getDisplayName() {
+    return this.displayName;
+  }
 
-        /**
-         * {@inheritDoc}
-         */
-        @Nonnull
-        @Override
-        public Image getLogo() {
-                return this.logo;
-        }
+  /**
+   * {@inheritDoc}
+   */
+  @Nonnull
+  @Override
+  public Image getLogo() {
+    return this.logo;
+  }
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public int getPort() {
-                return this.port;
-        }
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public int getPort() {
+    return this.port;
+  }
 
-        /**
-         * {@inheritDoc}
-         */
-        @Nonnull
-        @Override
-        public ProtocolType getType() {
-                return this.type;
-        }
+  /**
+   * {@inheritDoc}
+   */
+  @Nonnull
+  @Override
+  public ProtocolType getType() {
+    return this.type;
+  }
 }

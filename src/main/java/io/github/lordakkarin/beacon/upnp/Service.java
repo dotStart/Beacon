@@ -17,7 +17,6 @@
 package io.github.lordakkarin.beacon.upnp;
 
 import javafx.scene.image.Image;
-
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
@@ -30,35 +29,35 @@ import javax.annotation.Nonnull;
  */
 public interface Service {
 
-        /**
-         * Retrieves the service display name.
-         *
-         * @return a display name.
-         */
-        @Nonnull
-        String getDisplayName();
+  /**
+   * Retrieves the service display name.
+   *
+   * @return a display name.
+   */
+  @Nonnull
+  String getDisplayName();
 
-        /**
-         * Retrieves a logo for this service.
-         *
-         * @return a logo.
-         */
-        @Nonnull
-        Image getLogo();
+  /**
+   * Retrieves a logo for this service.
+   *
+   * @return a logo.
+   */
+  @Nonnull
+  Image getLogo();
 
-        /**
-         * Retrieves the service port.
-         *
-         * @return a port.
-         */
-        @Nonnegative
-        int getPort();
+  /**
+   * Retrieves the service port.
+   *
+   * @return a port.
+   */
+  @Nonnegative
+  int getPort();
 
-        /**
-         * Retrieves the service protocol type.
-         *
-         * @return a type.
-         */
-        @Nonnull
-        ProtocolType getType();
+  /**
+   * Retrieves the service protocol type.
+   *
+   * @return a type.
+   */
+  @Nonnull
+  ProtocolType getType();
 }

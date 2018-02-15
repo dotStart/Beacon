@@ -16,15 +16,14 @@
  */
 package io.github.lordakkarin.beacon.controller;
 
+import java.awt.Desktop;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
-import java.awt.*;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
 
 /**
  * <strong>About Window Controller</strong>
@@ -34,33 +33,36 @@ import java.net.URL;
  * @author <a href="mailto:johannesd@torchmind.com">Johannes Donath</a>
  */
 public class AboutDialogController {
-        @FXML
-        private VBox root;
 
-        /**
-         * Handles clicks on the main window.
-         */
-        @FXML
-        private void onClick() {
-                ((Stage) this.root.getScene().getWindow()).close();
-        }
+  @FXML
+  private VBox root;
 
-        /**
-         * Handles clicks on the open source button.
-         *
-         * @throws IOException        when constructing the URL or opening the browser fails.
-         * @throws URISyntaxException when the hardcoded URL is malformed.
-         */
-        @FXML
-        private void onThirdpartyClick() throws IOException, URISyntaxException {
-                Desktop desktop = (Desktop.isDesktopSupported() ? Desktop.getDesktop() : null);
+  /**
+   * Handles clicks on the main window.
+   */
+  @FXML
+  private void onClick() {
+    ((Stage) this.root.getScene().getWindow()).close();
+  }
 
-                if (desktop == null || !desktop.isSupported(Desktop.Action.BROWSE)) {
-                        Alert alert = new Alert(Alert.AlertType.ERROR, "Could not open URL in browser. Please go to https://github.com/LordAkkarin/Beacon/wiki/Thirdparty-Acknowledgements to view a full list of included libraries.");
-                        alert.showAndWait();
-                        return;
-                }
+  /**
+   * Handles clicks on the open source button.
+   *
+   * @throws IOException when constructing the URL or opening the browser fails.
+   * @throws URISyntaxException when the hardcoded URL is malformed.
+   */
+  @FXML
+  private void onThirdpartyClick() throws IOException, URISyntaxException {
+    Desktop desktop = (Desktop.isDesktopSupported() ? Desktop.getDesktop() : null);
 
-                desktop.browse(new URL("https://github.com/LordAkkarin/Beacon/wiki/Thirdparty-Acknowledgements").toURI());
-        }
+    if (desktop == null || !desktop.isSupported(Desktop.Action.BROWSE)) {
+      Alert alert = new Alert(Alert.AlertType.ERROR,
+          "Could not open URL in browser. Please go to https://github.com/LordAkkarin/Beacon/wiki/Thirdparty-Acknowledgements to view a full list of included libraries.");
+      alert.showAndWait();
+      return;
+    }
+
+    desktop.browse(
+        new URL("https://github.com/LordAkkarin/Beacon/wiki/Thirdparty-Acknowledgements").toURI());
+  }
 }

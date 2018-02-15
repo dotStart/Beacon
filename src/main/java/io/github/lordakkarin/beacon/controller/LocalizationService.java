@@ -17,11 +17,10 @@
 package io.github.lordakkarin.beacon.controller;
 
 import com.google.inject.Singleton;
-
-import javax.annotation.Nonnull;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+import javax.annotation.Nonnull;
 
 /**
  * <strong>Localization Service</strong>
@@ -32,20 +31,21 @@ import java.util.ResourceBundle;
  */
 @Singleton
 public class LocalizationService {
-        public static final Locale DEFAULT_LOCALE = Locale.ENGLISH;
 
-        /**
-         * Attempts to load the most fitting resource bundle.
-         *
-         * @param name a bundle name.
-         * @return a resource bundle.
-         */
-        @Nonnull
-        public ResourceBundle load(@Nonnull String name) {
-                try {
-                        return ResourceBundle.getBundle("localization/" + name);
-                } catch (MissingResourceException ex) {
-                        return ResourceBundle.getBundle("localization/" + name, DEFAULT_LOCALE);
-                }
-        }
+  public static final Locale DEFAULT_LOCALE = Locale.ENGLISH;
+
+  /**
+   * Attempts to load the most fitting resource bundle.
+   *
+   * @param name a bundle name.
+   * @return a resource bundle.
+   */
+  @Nonnull
+  public ResourceBundle load(@Nonnull String name) {
+    try {
+      return ResourceBundle.getBundle("localization/" + name);
+    } catch (MissingResourceException ex) {
+      return ResourceBundle.getBundle("localization/" + name, DEFAULT_LOCALE);
+    }
+  }
 }

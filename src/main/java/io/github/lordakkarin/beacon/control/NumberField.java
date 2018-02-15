@@ -17,45 +17,45 @@
 package io.github.lordakkarin.beacon.control;
 
 import javafx.scene.control.TextField;
-
 import javax.annotation.Nonnull;
 
 /**
  * <strong>Number Field</strong>
  *
- * Provides an extension to {@link TextField} which will only allow numbers to be part of its contents.
+ * Provides an extension to {@link TextField} which will only allow numbers to be part of its
+ * contents.
  *
  * @author <a href="mailto:johannesd@torchmind.com">Johannes Donath</a>
  */
 public class NumberField extends TextField {
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void replaceSelection(String replacement) {
-                if (this.validate(replacement)) {
-                        super.replaceSelection(replacement);
-                }
-        }
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void replaceSelection(String replacement) {
+    if (this.validate(replacement)) {
+      super.replaceSelection(replacement);
+    }
+  }
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void replaceText(int start, int end, String text) {
-                if (this.validate(text)) {
-                        super.replaceText(start, end, text);
-                }
-        }
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void replaceText(int start, int end, String text) {
+    if (this.validate(text)) {
+      super.replaceText(start, end, text);
+    }
+  }
 
-        /**
-         * Validates the text.
-         *
-         * @param text a text.
-         * @return true if valid, false otherwise.
-         */
-        private boolean validate(@Nonnull String text) {
-                return text.matches("^[0-9]*$");
-        }
+  /**
+   * Validates the text.
+   *
+   * @param text a text.
+   * @return true if valid, false otherwise.
+   */
+  private boolean validate(@Nonnull String text) {
+    return text.matches("^[0-9]*$");
+  }
 }

@@ -24,6 +24,6 @@ package io.github.lordakkarin.beacon.upnp;
  * @author <a href="mailto:johannesd@torchmind.com">Johannes Donath</a>
  */
 public enum ProtocolType {
-        TCP,
-        UDP
+  TCP,
+  UDP
 }

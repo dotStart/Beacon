@@ -29,10 +29,9 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javax.annotation.Nonnull;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import javax.annotation.Nonnull;
 
 /**
  * <strong>Beacon</strong>
@@ -42,66 +41,69 @@ import javax.annotation.Nonnull;
  * @author <a href="mailto:johannesd@torchmind.com">Johannes Donath</a>
  */
 public class Beacon extends Application implements Module {
-        private final Injector injector;
-        private static final Logger logger = LogManager.getFormatterLogger(Beacon.class);
 
-        public Beacon() {
-                super();
+  private static final Logger logger = LogManager.getFormatterLogger(Beacon.class);
+  private final Injector injector;
 
-                this.injector = Guice.createInjector(this);
-        }
+  public Beacon() {
+    super();
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void configure(@Nonnull Binder binder) {
-                binder.bind(FXMLLoader.class).toProvider(FXMLLoaderProvider.class);
-        }
+    this.injector = Guice.createInjector(this);
+  }
 
-        /**
-         * <strong>Main Entry Point</strong>
-         *
-         * Provides an entry point to the JVM which is automatically executed when double-clicking a jar (while Java is
-         * associated with the jar file extension) as well as double-clicking or otherwise launching the wrapped
-         * executable version of this program.
-         *
-         * @param arguments an array of command line arguments.
-         */
-        public static void main(@Nonnull String[] arguments) {
-                launch(Beacon.class, arguments);
-        }
+  /**
+   * <strong>Main Entry Point</strong>
+   *
+   * Provides an entry point to the JVM which is automatically executed when double-clicking a jar
+   * (while Java is associated with the jar file extension) as well as double-clicking or otherwise
+   * launching the wrapped executable version of this program.
+   *
+   * @param arguments an array of command line arguments.
+   */
+  public static void main(@Nonnull String[] arguments) {
+    launch(Beacon.class, arguments);
+  }
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void start(@Nonnull Stage primaryStage) throws Exception {
-                primaryStage.getIcons().add(new Image(Beacon.class.getResource("/image/logo.png").toExternalForm()));
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void configure(@Nonnull Binder binder) {
+    binder.bind(FXMLLoader.class).toProvider(FXMLLoaderProvider.class);
+  }
 
-                logger.info("Beacon UPnP Port Forwarding Assistant");
-                logger.info("Copyright (C) 2016 Johannes Donath and other copyright owners as documented in the project's IP log.");
-                logger.info("Licensed under the terms of the Apache License, Version 2.0");
-                primaryStage.initStyle(StageStyle.UNDECORATED);
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void start(@Nonnull Stage primaryStage) throws Exception {
+    primaryStage.getIcons()
+        .add(new Image(Beacon.class.getResource("/image/logo.png").toExternalForm()));
 
-                FXMLLoader loader = this.injector.getInstance(FXMLLoader.class);
-                loader.setLocation(Beacon.class.getResource("/fxml/BeaconWindow.fxml"));
-                loader.setResources(this.injector.getInstance(LocalizationService.class).load("BeaconWindow"));
+    logger.info("Beacon UPnP Port Forwarding Assistant");
+    logger.info(
+        "Copyright (C) 2016 Johannes Donath and other copyright owners as documented in the project's IP log.");
+    logger.info("Licensed under the terms of the Apache License, Version 2.0");
+    primaryStage.initStyle(StageStyle.UNDECORATED);
 
-                Scene scene = new Scene(loader.load(), 400, 500);
-                primaryStage.setScene(scene);
-                primaryStage.show();
-        }
+    FXMLLoader loader = this.injector.getInstance(FXMLLoader.class);
+    loader.setLocation(Beacon.class.getResource("/fxml/BeaconWindow.fxml"));
+    loader.setResources(this.injector.getInstance(LocalizationService.class).load("BeaconWindow"));
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void stop() throws Exception {
-                logger.info("Shutting down beacon ...");
-                this.injector.getInstance(ServiceManager.class).shutdown();
-                logger.info("Good bye! :)");
+    Scene scene = new Scene(loader.load(), 400, 500);
+    primaryStage.setScene(scene);
+    primaryStage.show();
+  }
 
-                super.stop();
-        }
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void stop() throws Exception {
+    logger.info("Shutting down beacon ...");
+    this.injector.getInstance(ServiceManager.class).shutdown();
+    logger.info("Good bye! :)");
+
+    super.stop();
+  }
 }

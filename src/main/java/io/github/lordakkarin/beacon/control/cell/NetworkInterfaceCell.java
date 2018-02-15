@@ -16,9 +16,8 @@
  */
 package io.github.lordakkarin.beacon.control.cell;
 
-import javafx.scene.control.ListCell;
-
 import java.net.NetworkInterface;
+import javafx.scene.control.ListCell;
 
 /**
  * <strong>Network Interface Cell</strong>
@@ -29,15 +28,15 @@ import java.net.NetworkInterface;
  */
 public class NetworkInterfaceCell extends ListCell<NetworkInterface> {
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected void updateItem(NetworkInterface item, boolean empty) {
-                super.updateItem(item, empty);
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void updateItem(NetworkInterface item, boolean empty) {
+    super.updateItem(item, empty);
 
-                if (!empty) {
-                        this.setText(item.getDisplayName());
-                }
-        }
+    if (!empty) {
+      this.setText(item.getDisplayName());
+    }
+  }
 }

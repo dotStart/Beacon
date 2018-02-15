@@ -30,36 +30,38 @@ import javafx.util.Callback;
  * @author <a href="mailto:johannesd@torchmind.com">Johannes Donath</a>
  */
 public class FXMLLoaderProvider implements Provider<FXMLLoader> {
-        private final Injector injector;
 
-        @Inject
-        public FXMLLoaderProvider(Injector injector) {
-                this.injector = injector;
-        }
+  private final Injector injector;
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public FXMLLoader get() {
-                FXMLLoader loader = new FXMLLoader();
-                loader.setControllerFactory(new GuiceControllerFactory());
-                return loader;
-        }
+  @Inject
+  public FXMLLoaderProvider(Injector injector) {
+    this.injector = injector;
+  }
 
-        /**
-         * <strong>Guice Controller Factory</strong>
-         *
-         * Provides a simple controller factory which constructs new controller instances using Guice's injector.
-         */
-        private class GuiceControllerFactory implements Callback<Class<?>, Object> {
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public FXMLLoader get() {
+    FXMLLoader loader = new FXMLLoader();
+    loader.setControllerFactory(new GuiceControllerFactory());
+    return loader;
+  }
 
-                /**
-                 * {@inheritDoc}
-                 */
-                @Override
-                public Object call(Class<?> param) {
-                        return FXMLLoaderProvider.this.injector.getInstance(param);
-                }
-        }
+  /**
+   * <strong>Guice Controller Factory</strong>
+   *
+   * Provides a simple controller factory which constructs new controller instances using Guice's
+   * injector.
+   */
+  private class GuiceControllerFactory implements Callback<Class<?>, Object> {
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Object call(Class<?> param) {
+      return FXMLLoaderProvider.this.injector.getInstance(param);
+    }
+  }
 }

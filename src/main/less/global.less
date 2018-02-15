@@ -19,25 +19,25 @@
  * Window Layout
  */
 .window {
-        -fx-background-color: #1e1e1e;
-        -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.6) , 8, 0.0, 0, 0);
+  -fx-background-color: #1e1e1e;
+  -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.6), 8, 0.0, 0, 0);
 
-        > .title-bar,
-        > .content {
-                -fx-padding: 8px 12px;
-        }
+  > .title-bar,
+  > .content {
+    -fx-padding: 8px 12px;
+  }
 
-        > .title-bar {
-                -fx-spacing: 8px;
-                -fx-background-color: rgba(0, 0, 0, 0.2);
-                -fx-border-width: 0 0 1px 0;
-                -fx-border-color: rgba(0, 0, 0, 0.21);
-                -fx-border-style: solid;
+  > .title-bar {
+    -fx-spacing: 8px;
+    -fx-background-color: rgba(0, 0, 0, 0.2);
+    -fx-border-width: 0 0 1px 0;
+    -fx-border-color: rgba(0, 0, 0, 0.21);
+    -fx-border-style: solid;
 
-                > .actions {
-                        -fx-spacing: 3px;
-                }
-        }
+    > .actions {
+      -fx-spacing: 3px;
+    }
+  }
 }
 
 /**
@@ -48,7 +48,7 @@ ComboBox .list-cell,
 Label,
 NumberField,
 TextField {
-        -fx-text-fill: white;
+  -fx-text-fill: white;
 }
 
 Button,
@@ -56,53 +56,53 @@ ComboBox,
 ListView,
 NumberField,
 TextField {
-        -fx-background-color: rgba(0, 0, 0, 0.5);
+  -fx-background-color: rgba(0, 0, 0, 0.5);
 }
 
 Button {
-        &:hover {
-                -fx-background-color: rgba(10, 10, 10, 0.8);
-        }
+  &:hover {
+    -fx-background-color: rgba(10, 10, 10, 0.8);
+  }
 
-        &:pressed {
-                -fx-background-color: rgba(20, 20, 20, 0.8);
-        }
+  &:pressed {
+    -fx-background-color: rgba(20, 20, 20, 0.8);
+  }
 }
 
 ComboBox .list-view {
-        -fx-background-color: #2f2f2f;
-        -fx-border-color: #292929;
-        -fx-border-width: 1px;
-        -fx-border-style: solid;
+  -fx-background-color: #2f2f2f;
+  -fx-border-color: #292929;
+  -fx-border-width: 1px;
+  -fx-border-style: solid;
 
-        .list-cell {
-                -fx-background-color: transparent;
-                -fx-text-fill: white;
+  .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
 
-                &:hover {
-                        -fx-background-color: rgba(255, 255, 255, 0.1);
-                }
-        }
+    &:hover {
+      -fx-background-color: rgba(255, 255, 255, 0.1);
+    }
+  }
 }
 
 ListView .list-cell {
-        -fx-background-color: transparent;
+  -fx-background-color: transparent;
 }
 
 ListView .list-cell:odd {
-        -fx-background-color: rgba(0, 0, 0, 0.1);
+  -fx-background-color: rgba(0, 0, 0, 0.1);
 }
 
 ListView .list-cell:hover {
-        -fx-background-color: rgba(0, 0, 0, 0.2);
+  -fx-background-color: rgba(0, 0, 0, 0.2);
 }
 
 ListView .list-cell:selected {
-        -fx-background-color: rgba(0, 0, 0, 0.4);
+  -fx-background-color: rgba(0, 0, 0, 0.4);
 }
 
 TextField:error,
 NumberField:error,
 ComboBox:error {
-        -fx-background-color: rgba(130, 0, 0, 0.5);
+  -fx-background-color: rgba(130, 0, 0, 0.5);
 }

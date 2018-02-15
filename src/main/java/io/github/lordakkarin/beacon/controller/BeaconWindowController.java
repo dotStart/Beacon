@@ -21,7 +21,18 @@ import com.google.inject.Injector;
 import io.github.lordakkarin.beacon.control.NumberField;
 import io.github.lordakkarin.beacon.control.cell.NetworkInterfaceCell;
 import io.github.lordakkarin.beacon.control.cell.ServiceCell;
-import io.github.lordakkarin.beacon.upnp.*;
+import io.github.lordakkarin.beacon.upnp.CustomService;
+import io.github.lordakkarin.beacon.upnp.ProtocolType;
+import io.github.lordakkarin.beacon.upnp.Service;
+import io.github.lordakkarin.beacon.upnp.ServiceManager;
+import io.github.lordakkarin.beacon.upnp.StockService;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -41,15 +52,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
-
 import javax.annotation.Nonnull;
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.URL;
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.ResourceBundle;
 
 /**
  * <strong>Beacon Window Controller</strong>
@@ -59,221 +62,229 @@ import java.util.ResourceBundle;
  * @author <a href="mailto:johannesd@torchmind.com">Johannes Donath</a>
  */
 public class BeaconWindowController implements Initializable {
-        private static final PseudoClass ERROR_PSEUDO_CLASS = PseudoClass.getPseudoClass("error");
-        @FXML
-        private NumberField customPortField;
-        @FXML
-        private ComboBox<ProtocolType> customProtocolSelector;
-        private double dragDeltaX;
-        private double dragDeltaY;
-        private final Injector injector;
-        @FXML
-        private ComboBox<NetworkInterface> networkInterfaceSelector;
-        @FXML
-        private ListView<Service> presetSelector;
-        @FXML
-        private VBox root;
-        private final ServiceManager serviceManager;
-        @FXML
-        private Button startButton;
-        @FXML
-        private Button stopButton;
-        @FXML
-        private HBox titleBar;
 
-        @Inject
-        public BeaconWindowController(@Nonnull Injector injector, @Nonnull ServiceManager serviceManager) {
-                this.injector = injector;
-                this.serviceManager = serviceManager;
-        }
+  private static final PseudoClass ERROR_PSEUDO_CLASS = PseudoClass.getPseudoClass("error");
+  private final Injector injector;
+  private final ServiceManager serviceManager;
+  @FXML
+  private NumberField customPortField;
+  @FXML
+  private ComboBox<ProtocolType> customProtocolSelector;
+  private double dragDeltaX;
+  private double dragDeltaY;
+  @FXML
+  private ComboBox<NetworkInterface> networkInterfaceSelector;
+  @FXML
+  private ListView<Service> presetSelector;
+  @FXML
+  private VBox root;
+  @FXML
+  private Button startButton;
+  @FXML
+  private Button stopButton;
+  @FXML
+  private HBox titleBar;
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void initialize(@Nonnull URL location, @Nonnull ResourceBundle resources) {
-                // bind properties to ensure their correct updating
-                this.startButton.managedProperty().bind(this.startButton.visibleProperty());
-                this.stopButton.managedProperty().bind(this.stopButton.visibleProperty());
+  @Inject
+  public BeaconWindowController(@Nonnull Injector injector,
+      @Nonnull ServiceManager serviceManager) {
+    this.injector = injector;
+    this.serviceManager = serviceManager;
+  }
 
-                // set component contents
-                this.networkInterfaceSelector.setItems(this.serviceManager.getInterfaceList());
-                this.presetSelector.setItems(FXCollections.observableArrayList(Arrays.asList(StockService.values())));
-                this.customProtocolSelector.setItems(FXCollections.observableArrayList(Arrays.asList(ProtocolType.values())));
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void initialize(@Nonnull URL location, @Nonnull ResourceBundle resources) {
+    // bind properties to ensure their correct updating
+    this.startButton.managedProperty().bind(this.startButton.visibleProperty());
+    this.stopButton.managedProperty().bind(this.stopButton.visibleProperty());
 
-                // register all custom cell factories
-                this.networkInterfaceSelector.setButtonCell(new NetworkInterfaceCell());
-                this.networkInterfaceSelector.setCellFactory((p) -> new NetworkInterfaceCell());
-                this.presetSelector.setCellFactory((p) -> new ServiceCell());
+    // set component contents
+    this.networkInterfaceSelector.setItems(this.serviceManager.getInterfaceList());
+    this.presetSelector
+        .setItems(FXCollections.observableArrayList(Arrays.asList(StockService.values())));
+    this.customProtocolSelector
+        .setItems(FXCollections.observableArrayList(Arrays.asList(ProtocolType.values())));
 
-                // execute initial selection for the user
-                this.networkInterfaceSelector.getSelectionModel().select(0);
-                this.networkInterfaceSelector.getItems().addListener((ListChangeListener<NetworkInterface>) c -> this.networkInterfaceSelector.getSelectionModel().select(0));
+    // register all custom cell factories
+    this.networkInterfaceSelector.setButtonCell(new NetworkInterfaceCell());
+    this.networkInterfaceSelector.setCellFactory((p) -> new NetworkInterfaceCell());
+    this.presetSelector.setCellFactory((p) -> new ServiceCell());
 
-                // hook network interface
-                this.networkInterfaceSelector.valueProperty().addListener((ob, o, n) -> {
-                        // remove error class
-                        this.networkInterfaceSelector.pseudoClassStateChanged(ERROR_PSEUDO_CLASS, false);
-                });
+    // execute initial selection for the user
+    this.networkInterfaceSelector.getSelectionModel().select(0);
+    this.networkInterfaceSelector.getItems().addListener(
+        (ListChangeListener<NetworkInterface>) c -> this.networkInterfaceSelector
+            .getSelectionModel().select(0));
 
-                // hook properties on custom service fields
-                this.customProtocolSelector.valueProperty().addListener((ob, o, n) -> {
-                        // remove error class
-                        this.customProtocolSelector.pseudoClassStateChanged(ERROR_PSEUDO_CLASS, false);
+    // hook network interface
+    this.networkInterfaceSelector.valueProperty().addListener((ob, o, n) -> {
+      // remove error class
+      this.networkInterfaceSelector.pseudoClassStateChanged(ERROR_PSEUDO_CLASS, false);
+    });
 
-                        // un-select the currently active preset if the port differs
-                        Service service = this.presetSelector.getSelectionModel().getSelectedItem();
+    // hook properties on custom service fields
+    this.customProtocolSelector.valueProperty().addListener((ob, o, n) -> {
+      // remove error class
+      this.customProtocolSelector.pseudoClassStateChanged(ERROR_PSEUDO_CLASS, false);
 
-                        if (service != null && service.getType() != n) {
-                                this.presetSelector.getSelectionModel().clearSelection();
-                        }
-                });
+      // un-select the currently active preset if the port differs
+      Service service = this.presetSelector.getSelectionModel().getSelectedItem();
 
-                this.customPortField.textProperty().addListener((ob, o, n) -> {
-                        // remove the error class
-                        this.customPortField.pseudoClassStateChanged(ERROR_PSEUDO_CLASS, false);
+      if (service != null && service.getType() != n) {
+        this.presetSelector.getSelectionModel().clearSelection();
+      }
+    });
 
-                        // un-select the currently active preset if the port differs
-                        Service service = this.presetSelector.getSelectionModel().getSelectedItem();
+    this.customPortField.textProperty().addListener((ob, o, n) -> {
+      // remove the error class
+      this.customPortField.pseudoClassStateChanged(ERROR_PSEUDO_CLASS, false);
 
-                        if (service != null && service.getPort() != Integer.parseUnsignedInt(n)) {
-                                this.presetSelector.getSelectionModel().clearSelection();
-                        }
-                });
+      // un-select the currently active preset if the port differs
+      Service service = this.presetSelector.getSelectionModel().getSelectedItem();
 
-                // hook title bar to emulate drag and rop
-                this.titleBar.setOnMousePressed(event -> {
-                        Window window = this.root.getScene().getWindow();
+      if (service != null && service.getPort() != Integer.parseUnsignedInt(n)) {
+        this.presetSelector.getSelectionModel().clearSelection();
+      }
+    });
 
-                        this.dragDeltaX = window.getX() - event.getScreenX();
-                        this.dragDeltaY = window.getY() - event.getScreenY();
-                });
+    // hook title bar to emulate drag and rop
+    this.titleBar.setOnMousePressed(event -> {
+      Window window = this.root.getScene().getWindow();
 
-                this.titleBar.setOnMouseDragged(event -> {
-                        Window window = this.root.getScene().getWindow();
+      this.dragDeltaX = window.getX() - event.getScreenX();
+      this.dragDeltaY = window.getY() - event.getScreenY();
+    });
 
-                        window.setX((event.getScreenX() + this.dragDeltaX));
-                        window.setY((event.getScreenY() + this.dragDeltaY));
-                });
-        }
+    this.titleBar.setOnMouseDragged(event -> {
+      Window window = this.root.getScene().getWindow();
 
-        /**
-         * Handles the refreshing of our cached network interface list.
-         *
-         * @param event the source event.
-         */
-        @FXML
-        private void onNetworkInterfaceRefresh(@Nonnull ActionEvent event) {
-                this.serviceManager.refreshInterfaceList();
-        }
+      window.setX((event.getScreenX() + this.dragDeltaX));
+      window.setY((event.getScreenY() + this.dragDeltaY));
+    });
+  }
 
-        /**
-         * Handles the selection of presets.
-         *
-         * @param event the source event.
-         */
-        @FXML
-        private void onPresetSelect(@Nonnull MouseEvent event) {
-                Service service = this.presetSelector.getSelectionModel().getSelectedItem();
+  /**
+   * Handles the refreshing of our cached network interface list.
+   *
+   * @param event the source event.
+   */
+  @FXML
+  private void onNetworkInterfaceRefresh(@Nonnull ActionEvent event) {
+    this.serviceManager.refreshInterfaceList();
+  }
 
-                if (service != null) {
-                        this.customProtocolSelector.getSelectionModel().select(service.getType());
-                        this.customPortField.setText(Integer.toString(service.getPort()));
-                }
-        }
+  /**
+   * Handles the selection of presets.
+   *
+   * @param event the source event.
+   */
+  @FXML
+  private void onPresetSelect(@Nonnull MouseEvent event) {
+    Service service = this.presetSelector.getSelectionModel().getSelectedItem();
 
-        /**
-         * Handles the port opening requested by a user.
-         *
-         * @param event the source event.
-         */
-        @FXML
-        private void onStart(@Nonnull ActionEvent event) {
-                NetworkInterface selectedInterface = this.networkInterfaceSelector.getValue();
+    if (service != null) {
+      this.customProtocolSelector.getSelectionModel().select(service.getType());
+      this.customPortField.setText(Integer.toString(service.getPort()));
+    }
+  }
 
-                if (selectedInterface == null) {
-                        this.networkInterfaceSelector.pseudoClassStateChanged(ERROR_PSEUDO_CLASS, true);
-                        return;
-                }
+  /**
+   * Handles the port opening requested by a user.
+   *
+   * @param event the source event.
+   */
+  @FXML
+  private void onStart(@Nonnull ActionEvent event) {
+    NetworkInterface selectedInterface = this.networkInterfaceSelector.getValue();
 
-                Optional<InetAddress> address = this.serviceManager.findCompatibleAddress(selectedInterface);
+    if (selectedInterface == null) {
+      this.networkInterfaceSelector.pseudoClassStateChanged(ERROR_PSEUDO_CLASS, true);
+      return;
+    }
 
-                if (!address.isPresent()) {
-                        this.networkInterfaceSelector.pseudoClassStateChanged(ERROR_PSEUDO_CLASS, true);
-                        return;
-                }
+    Optional<InetAddress> address = this.serviceManager.findCompatibleAddress(selectedInterface);
 
-                String portRaw = this.customPortField.getText();
+    if (!address.isPresent()) {
+      this.networkInterfaceSelector.pseudoClassStateChanged(ERROR_PSEUDO_CLASS, true);
+      return;
+    }
 
-                if (portRaw == null || portRaw.isEmpty()) {
-                        this.customPortField.pseudoClassStateChanged(ERROR_PSEUDO_CLASS, true);
-                }
+    String portRaw = this.customPortField.getText();
 
-                ProtocolType protocolType = this.customProtocolSelector.getValue();
+    if (portRaw == null || portRaw.isEmpty()) {
+      this.customPortField.pseudoClassStateChanged(ERROR_PSEUDO_CLASS, true);
+    }
 
-                if (protocolType == null) {
-                        this.customProtocolSelector.pseudoClassStateChanged(ERROR_PSEUDO_CLASS, true);
-                }
+    ProtocolType protocolType = this.customProtocolSelector.getValue();
 
-                if (protocolType == null || portRaw == null || portRaw.isEmpty()) {
-                        return;
-                }
+    if (protocolType == null) {
+      this.customProtocolSelector.pseudoClassStateChanged(ERROR_PSEUDO_CLASS, true);
+    }
 
-                this.serviceManager.publishService(address.get(), new CustomService(protocolType, Integer.parseUnsignedInt(portRaw)));
-                this.startButton.setVisible(false);
-                this.stopButton.setVisible(true);
-        }
+    if (protocolType == null || portRaw == null || portRaw.isEmpty()) {
+      return;
+    }
 
-        /**
-         * Handles port closing.
-         *
-         * @param event the source event.
-         */
-        @FXML
-        private void onStop(@Nonnull ActionEvent event) {
-                this.serviceManager.shutdown();
-                this.stopButton.setVisible(false);
-                this.startButton.setVisible(true);
-        }
+    this.serviceManager.publishService(address.get(),
+        new CustomService(protocolType, Integer.parseUnsignedInt(portRaw)));
+    this.startButton.setVisible(false);
+    this.stopButton.setVisible(true);
+  }
 
-        /**
-         * Displays the about page of this application.
-         *
-         * @param event the source event.
-         */
-        @FXML
-        private void onTitleBarAbout(@Nonnull ActionEvent event) throws IOException {
-                Stage stage = new Stage();
-                stage.initOwner(this.root.getScene().getWindow());
-                stage.initModality(Modality.APPLICATION_MODAL);
-                stage.initStyle(StageStyle.UNDECORATED);
+  /**
+   * Handles port closing.
+   *
+   * @param event the source event.
+   */
+  @FXML
+  private void onStop(@Nonnull ActionEvent event) {
+    this.serviceManager.shutdown();
+    this.stopButton.setVisible(false);
+    this.startButton.setVisible(true);
+  }
 
-                FXMLLoader aboutLoader = this.injector.getInstance(FXMLLoader.class);
-                aboutLoader.setLocation(BeaconWindowController.class.getResource("/fxml/AboutDialog.fxml"));
-                aboutLoader.setResources(this.injector.getInstance(LocalizationService.class).load("AboutWindow"));
+  /**
+   * Displays the about page of this application.
+   *
+   * @param event the source event.
+   */
+  @FXML
+  private void onTitleBarAbout(@Nonnull ActionEvent event) throws IOException {
+    Stage stage = new Stage();
+    stage.initOwner(this.root.getScene().getWindow());
+    stage.initModality(Modality.APPLICATION_MODAL);
+    stage.initStyle(StageStyle.UNDECORATED);
 
-                Scene scene = new Scene(aboutLoader.load(), 500, 300);
-                stage.setScene(scene);
-                stage.show();
-        }
+    FXMLLoader aboutLoader = this.injector.getInstance(FXMLLoader.class);
+    aboutLoader.setLocation(BeaconWindowController.class.getResource("/fxml/AboutDialog.fxml"));
+    aboutLoader
+        .setResources(this.injector.getInstance(LocalizationService.class).load("AboutWindow"));
 
-        /**
-         * Closes the application window.
-         *
-         * @param event the source event.
-         */
-        @FXML
-        private void onTitleBarClose(@Nonnull ActionEvent event) {
-                Platform.exit();
-        }
+    Scene scene = new Scene(aboutLoader.load(), 500, 300);
+    stage.setScene(scene);
+    stage.show();
+  }
 
-        /**
-         * Iconifies (minimizes) the application window.
-         *
-         * @param event the source event.
-         */
-        @FXML
-        private void onTitleBarIconify(@Nonnull ActionEvent event) {
-                ((Stage) this.root.getScene().getWindow()).setIconified(true);
-        }
+  /**
+   * Closes the application window.
+   *
+   * @param event the source event.
+   */
+  @FXML
+  private void onTitleBarClose(@Nonnull ActionEvent event) {
+    Platform.exit();
+  }
+
+  /**
+   * Iconifies (minimizes) the application window.
+   *
+   * @param event the source event.
+   */
+  @FXML
+  private void onTitleBarIconify(@Nonnull ActionEvent event) {
+    ((Stage) this.root.getScene().getWindow()).setIconified(true);
+  }
 }

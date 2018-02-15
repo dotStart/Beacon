@@ -18,9 +18,8 @@ package io.github.lordakkarin.beacon.control.cell;
 
 import io.github.lordakkarin.beacon.control.ServiceView;
 import io.github.lordakkarin.beacon.upnp.Service;
-import javafx.scene.control.ListCell;
-
 import java.io.IOException;
+import javafx.scene.control.ListCell;
 
 /**
  * <strong>Service Cell</strong>
@@ -31,23 +30,23 @@ import java.io.IOException;
  */
 public class ServiceCell extends ListCell<Service> {
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected void updateItem(Service item, boolean empty) {
-                super.updateItem(item, empty);
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void updateItem(Service item, boolean empty) {
+    super.updateItem(item, empty);
 
-                if (!empty) {
-                        try {
-                                ServiceView serviceView = new ServiceView();
-                                serviceView.setImageProperty(item.getLogo());
-                                serviceView.setTitleProperty(item.getDisplayName());
-                                serviceView.setDetailsProperty(String.format("%d (%s)", item.getPort(), item.getType()));
-                                this.setGraphic(serviceView);
-                        } catch (IOException ex) {
-                                throw new IllegalStateException("Could not construct service view: " + ex.getMessage(), ex);
-                        }
-                }
-        }
+    if (!empty) {
+      try {
+        ServiceView serviceView = new ServiceView();
+        serviceView.setImageProperty(item.getLogo());
+        serviceView.setTitleProperty(item.getDisplayName());
+        serviceView.setDetailsProperty(String.format("%d (%s)", item.getPort(), item.getType()));
+        this.setGraphic(serviceView);
+      } catch (IOException ex) {
+        throw new IllegalStateException("Could not construct service view: " + ex.getMessage(), ex);
+      }
+    }
+  }
 }

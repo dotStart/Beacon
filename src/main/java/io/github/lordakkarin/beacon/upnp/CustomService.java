@@ -17,7 +17,6 @@
 package io.github.lordakkarin.beacon.upnp;
 
 import javafx.scene.image.Image;
-
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
@@ -26,51 +25,53 @@ import javax.annotation.Nonnull;
  *
  * Provides a customized service representation.
  *
- * @author <a href="mailto:johannesd@torchmind.com">Johannes Donath</a>
- * TODO: In the future we may want to use this to store custom configurations permanently.
+ * @author <a href="mailto:johannesd@torchmind.com">Johannes Donath</a> TODO: In the future we may
+ * want to use this to store custom configurations permanently.
  */
 public class CustomService implements Service {
-        private static final Image STANDARD_IMAGE = new Image(CustomService.class.getResource("/image/logo.png").toExternalForm());
-        private final int port;
-        private final ProtocolType type;
 
-        public CustomService(@Nonnull ProtocolType type, @Nonnegative int port) {
-                this.type = type;
-                this.port = port;
-        }
+  private static final Image STANDARD_IMAGE = new Image(
+      CustomService.class.getResource("/image/logo.png").toExternalForm());
+  private final int port;
+  private final ProtocolType type;
 
-        /**
-         * {@inheritDoc}
-         */
-        @Nonnull
-        @Override
-        public String getDisplayName() {
-                return "Custom"; // TODO: Proper naming for storage
-        }
+  public CustomService(@Nonnull ProtocolType type, @Nonnegative int port) {
+    this.type = type;
+    this.port = port;
+  }
 
-        /**
-         * {@inheritDoc}
-         */
-        @Nonnull
-        @Override
-        public Image getLogo() {
-                return STANDARD_IMAGE;
-        }
+  /**
+   * {@inheritDoc}
+   */
+  @Nonnull
+  @Override
+  public String getDisplayName() {
+    return "Custom"; // TODO: Proper naming for storage
+  }
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public int getPort() {
-                return this.port;
-        }
+  /**
+   * {@inheritDoc}
+   */
+  @Nonnull
+  @Override
+  public Image getLogo() {
+    return STANDARD_IMAGE;
+  }
 
-        /**
-         * {@inheritDoc}
-         */
-        @Nonnull
-        @Override
-        public ProtocolType getType() {
-                return this.type;
-        }
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public int getPort() {
+    return this.port;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Nonnull
+  @Override
+  public ProtocolType getType() {
+    return this.type;
+  }
 }
