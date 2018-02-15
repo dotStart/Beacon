@@ -337,10 +337,6 @@
                 </goals>
               </execution>
             </executions>
-
-            <configuration>
-              <keyname>D954FDEE</keyname>
-            </configuration>
           </plugin>
         </plugins>
       </build>
