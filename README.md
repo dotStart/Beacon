@@ -1,4 +1,7 @@
-# Beacon ![State](https://img.shields.io/badge/state-stable-green.svg) [![Latest Tag](https://img.shields.io/github/release/lordakkarin/beacon.svg)](https://github.com/LordAkkarin/Beacon/releases)
+[![License](https://img.shields.io/github/license/dotStart/Beacon.svg?style=flat-square)](https://www.apache.org/licenses/LICENSE-2.0.txt)
+[![GitHub Release](https://img.shields.io/github/release/dotStart/Beacon.svg?style=flat-square)](https://github.com/dotStart/Beacon/releases)
+
+# Beacon
 
 Beacon is a lightweight and easy to use UPnP assistant to open arbitrary ports.
 
