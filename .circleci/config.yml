@@ -5,6 +5,9 @@
 version: 2
 jobs:
   build:
+    branches:
+      ignore:
+        - gh-pages
     docker:
       - image: torchmind/circleci-openjdk:8-jdk-browsers
     working_directory: ~/repo
