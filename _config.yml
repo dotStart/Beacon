@@ -1,0 +1,7 @@
+baseurl: "" # the subpath of your site, e.g. /blog
+repository: dotStart/Beacon
+
+# Build settings
+markdown: kramdown
+plugins:
+  - jekyll-feed

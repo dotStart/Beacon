@@ -1,0 +1,190 @@
+---
+---
+<!DOCTYPE html>
+<html xmlns="https://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+
+    <title>MineClock - Overlay complex time keeping for Minecraft</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.14/semantic.min.css" />
+    <link rel="stylesheet" type="text/css" href="style/beacon.css" />
+  </head>
+  <body>
+    <header id="header-container" class="ui vertical inverted very padded segment">
+      <section id="header" class="ui inner container">
+        <div class="ui large secondary inverted menu">
+          <a href="{{ '/' | relative_url }}" class="item">
+            <h1 class="ui inverted header">Beacon</h1>
+          </a>
+
+          <div class="right menu">
+            <a href="#releases" class="item">
+              <i class="rocket icon"></i>
+              Releases
+            </a>
+            <a href="https://github.com/dotStart/Beacon" class="item">
+              <i class="github icon"></i>
+              Source Code
+            </a>
+          </div>
+        </div>
+
+        <section id="pitch" class="ui center aligned grid">
+          <div class="twelve wide column">
+            <h1>Simplified port forwarding</h1>
+            <p>Automatically expose your game server using UPnP magic</p>
+
+            <div id="download-buttons">
+              {% for asset in site.github.releases[0].assets %}
+                {% if asset.content_type == "application/x-msdownload" %}
+                  <a href="{{ asset.browser_download_url }}" class="ui inverted huge button">
+                    <i class="windows icon"></i>
+                    Windows
+                  </a>
+                {% endif %}
+              {% endfor %}
+              {% for asset in site.github.releases[0].assets %}
+                {% if asset.content_type == "application/octet-stream" and asset.name contains '.jar' %}
+                  <a href="{{ asset.browser_download_url }}" class="ui inverted huge button">
+                    <i class="linux icon"></i>
+                    Linux
+                  </a>
+                  <a href="{{ asset.browser_download_url }}" class="ui inverted huge button">
+                    <i class="apple icon"></i>
+                    Mac OS
+                  </a>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        </section>
+
+        <section id="demo-container" class="ui center aligned basic segment">
+          <img id="demo" src="media/demo.png" />
+        </section>
+      </section>
+    </header>
+    <main id="main-container" class="ui vertical very padded segment">
+      <section id="main" class="ui inner container">
+        <section class="ui vertical very padded segment">
+          <section class="ui center aligned very relaxed grid">
+            <div class="row">
+              <div class="five wide column">
+                <h2 class="ui icon header">
+                  <i class="thumbs up icon"></i>
+
+                  <div class="content">
+                    Simple and Efficient
+                    <div class="sub header">
+                      Open up your local servers with a single click
+                    </div>
+                  </div>
+                </h2>
+              </div>
+              <div class="five wide column">
+                <h2 class="ui icon header">
+                  <i class="microchip icon"></i>
+
+                  <div class="content">
+                    Broad Support
+                    <div class="sub header">
+                      Supported out of the box by most consumer routers
+                    </div>
+                  </div>
+                </h2>
+              </div>
+              <div class="five wide column">
+                <h2 class="ui icon header">
+                  <i class="unlock icon"></i>
+
+                  <div class="content">
+                    No Login Required
+                    <div class="sub header">
+                      Knowing the router password is not required
+                    </div>
+                  </div>
+                </h2>
+              </div>
+            </div>
+          </section>
+        </section>
+        <section id="releases" class="ui vertical very padded segment">
+          <h2 class="ui header">Releases</h2>
+
+          <table class="ui very basic celled table">
+            <thead>
+              <tr>
+                <th>Version</th>
+                <th class="collapsing">Downloads</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for release in site.github.releases %}
+                <tr>
+                  <td>
+                    <h4 class="ui header">
+                      {{ release.tag_name }}
+
+                      {% if release.prerelease %}
+                        <a class="ui red label">Pre-Release</a>
+                      {% endif %}
+                    </h4>
+
+                    {% if release.body != "" %}
+                      <pre>{{ release.body }}</pre>
+                    {% endif %}
+                  </td>
+                  <td class="top aligned collapsing">
+                    {% for asset in release.assets %}
+                      {% if asset.content_type == "application/x-msdownload" %}
+                        <a href="{{ asset.browser_download_url }}" class="ui basic blue icon button" title="Windows">
+                          <i class="windows icon"></i>
+                        </a>
+                      {% endif %}
+                    {% endfor %}
+                    {% for asset in release.assets %}
+                      {% if asset.content_type == "application/octet-stream" and asset.name contains '.jar' %}
+                        <a href="{{ asset.browser_download_url }}" class="ui basic blue icon button" title="Linux">
+                          <i class="linux icon"></i>
+                        </a>
+                        <a href="{{ asset.browser_download_url }}" class="ui basic blue icon button" title="Mac OS">
+                          <i class="apple icon"></i>
+                        </a>
+                      {% endif %}
+                    {% endfor %}
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </section>
+        <section class="ui vertical very padded segment">
+          <h2 class="ui header">License</h2>
+
+          <pre>Copyright 2016 .start &lt;https://www.dotstart.tv&gt;
+and other copyright owners as documented in the project's IP log.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.</pre>
+        </section>
+      </section>
+    </main>
+    <footer id="footer-container" class="ui vertical inverted very padded segment">
+      <section id="footer" class="ui inner container">
+        <p>Copyright &copy; 2016-2018 .start</p>
+      </section>
+    </footer>
+  </body>
+</html>
