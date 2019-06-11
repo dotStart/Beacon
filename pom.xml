@@ -143,6 +143,7 @@
         <filtering>false</filtering>
 
         <includes>
+          <include>banner.txt</include>
           <include>log4j2.xml</include>
         </includes>
       </resource>
