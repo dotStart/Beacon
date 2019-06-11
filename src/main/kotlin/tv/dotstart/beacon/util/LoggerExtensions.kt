@@ -33,5 +33,5 @@ import kotlin.reflect.KClass
  * LogManager#getLogger()) and should thus be cached in a property or local variable if accessed
  * more frequently.
  */
-inline val KClass<Any>.logger: Logger
+inline val <T : Any> KClass<T>.logger: Logger
   get() = LogManager.getLogger(this.java)
