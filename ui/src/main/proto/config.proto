@@ -1,0 +1,36 @@
+syntax = "proto3";
+package config;
+option java_package = "tv.dotstart.beacon.config.storage";
+
+/**
+ * Represents a previously persisted user configuration.
+ */
+message UserConfiguration {
+
+  /**
+   * Identifies the format revision of this particular configuration.
+   *
+   * This value is bumped every time this configuration format is altered in a way that would
+   * require special migration logic (e.g. to migrate fields to a new storage format) and is left
+   * untouched otherwise.
+   *
+   * Otherwise backwards compatible changes (e.g. addition of new fields) will leave this field
+   * untouched.
+   */
+  Version version = 1;
+
+  /**
+   * Stores a listing of user defined service definition repositories.
+   *
+   * These URLs are accessed every time the application starts up in order to discover potential
+   * services, their protocols and ports.
+   */
+  repeated string repository = 2;
+}
+
+/**
+ * Provides a listing of known configuration file revisions.
+ */
+enum Version {
+  V1_0 = 0;
+}
