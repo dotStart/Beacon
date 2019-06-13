@@ -89,6 +89,15 @@
         </includes>
       </resource>
       <resource>
+        <directory>${project.basedir}/src/main/resources</directory>
+        <targetPath>.</targetPath>
+        <filtering>true</filtering>
+
+        <includes>
+          <include>beacon.properties</include>
+        </includes>
+      </resource>
+      <resource>
         <directory>${project.basedir}/src/main/resources/fxml</directory>
         <targetPath>fxml/</targetPath>
         <filtering>false</filtering>
