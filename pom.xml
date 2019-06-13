@@ -196,7 +196,9 @@
           <version>0.5.1</version>
 
           <configuration>
-            <protocArtifact>com.google.protobuf:protoc:${protobuf.version}:exe:${os.detected.classifier}</protocArtifact>
+            <protocArtifact>
+              com.google.protobuf:protoc:${protobuf.version}:exe:${os.detected.classifier}
+            </protocArtifact>
           </configuration>
 
           <executions>
@@ -213,7 +215,7 @@
           <version>1.7.0.1.1</version>
 
           <configuration>
-            <outputDirectory>${project.build.outputDirectory}/stylesheet</outputDirectory>
+            <outputDirectory>${project.build.outputDirectory}/style</outputDirectory>
           </configuration>
 
           <executions>
