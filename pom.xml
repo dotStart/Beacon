@@ -237,10 +237,6 @@
               <addMavenDescriptor>true</addMavenDescriptor>
               <compress>true</compress>
               <index>true</index>
-
-              <manifest>
-                <mainClass>tv.dotstart.beacon.Beacon</mainClass>
-              </manifest>
             </archive>
           </configuration>
         </plugin>
