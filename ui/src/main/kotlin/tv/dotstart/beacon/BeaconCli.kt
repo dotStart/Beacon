@@ -19,6 +19,10 @@ package tv.dotstart.beacon
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.*
 import javafx.application.Application
+import org.apache.logging.log4j.Level
+import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.core.config.Configurator
+import tv.dotstart.beacon.util.Banner
 import java.net.URI
 import java.time.Duration
 
@@ -62,14 +66,14 @@ object BeaconCli : CliktCommand(name = "Beacon") {
   /**
    * Enables global debug logging.
    */
-  val debug: Boolean by option("debug",
+  val debug: Boolean by option("--debug",
       help = "Enables debug logging")
       .flag()
 
   /**
    * Enables global trace logging.
    */
-  val verbose: Boolean by option("verbose",
+  val verbose: Boolean by option("--verbose",
       help = "Enables verbose logging")
       .flag()
 
@@ -78,6 +82,25 @@ object BeaconCli : CliktCommand(name = "Beacon") {
   }
 
   override fun run() {
+    Banner()
+
+    if (this.verbose || this.debug) {
+      Configurator.setRootLevel(
+          if (this.verbose) {
+            Level.ALL
+          } else {
+            Level.DEBUG
+          }
+      )
+
+      val logger = LogManager.getLogger(Beacon::class.java)
+      if (this.verbose) {
+        logger.warn("Enabled VERBOSE logging - This may cause significant log output")
+      } else {
+        logger.warn("Enabled DEBUG logging")
+      }
+    }
+
     // we do not pass any of our arguments to JavaFX since there's nothing special to handle here
     Application.launch(Beacon::class.java)
   }

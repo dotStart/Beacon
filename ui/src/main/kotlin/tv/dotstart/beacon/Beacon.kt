@@ -20,7 +20,6 @@ import javafx.application.Application
 import javafx.scene.image.Image
 import javafx.stage.Stage
 import tv.dotstart.beacon.config.Configuration
-import tv.dotstart.beacon.util.Banner
 import tv.dotstart.beacon.util.OperatingSystem
 import tv.dotstart.beacon.util.logger
 import tv.dotstart.beacon.util.splashWindow
@@ -54,8 +53,6 @@ class Beacon : Application() {
   }
 
   override fun start(stage: Stage) {
-    Banner()
-
     try {
       stage.icons.add(icon)
     } catch (ex: Throwable) {
