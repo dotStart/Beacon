@@ -17,10 +17,16 @@
 package tv.dotstart.beacon
 
 import javafx.application.Application
+import javafx.scene.image.Image
 import javafx.stage.Stage
 import tv.dotstart.beacon.config.Configuration
-import tv.dotstart.beacon.util.*
+import tv.dotstart.beacon.util.Banner
+import tv.dotstart.beacon.util.OperatingSystem
+import tv.dotstart.beacon.util.logger
+import tv.dotstart.beacon.util.splashWindow
 import java.nio.file.Files
+import java.nio.file.NoSuchFileException
+import java.nio.file.Paths
 
 /**
  * JavaFX Entry Point
@@ -34,10 +40,27 @@ class Beacon : Application() {
 
   companion object {
     private val logger = Beacon::class.logger
+
+    private const val iconPath = "image/logo.png"
+    private val icon: Image by lazy {
+      val resource = Thread.currentThread().contextClassLoader.getResource(iconPath)
+          ?.let { Paths.get(it.toURI()) }
+          ?: throw NoSuchFileException("No such file or directory: $iconPath")
+
+      Files.newInputStream(resource).use {
+        Image(it)
+      }
+    }
   }
 
   override fun start(stage: Stage) {
     Banner()
+
+    try {
+      stage.icons.add(icon)
+    } catch (ex: Throwable) {
+      logger.warn("Failed to load application icon", ex)
+    }
 
     if (Files.notExists(OperatingSystem.current.storage)) {
       logger.info("Creating persistence directory")
