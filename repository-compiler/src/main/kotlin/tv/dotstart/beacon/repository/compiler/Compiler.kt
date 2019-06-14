@@ -87,12 +87,6 @@ object Compiler {
           "expected to to be a file, http or https URL which points to the desired image. When")
       println("an icon is given, it will be converted into the PNG format and resized to the")
       println("default icon size (currently 32x32).")
-      println()
-      println(
-          "Important: This is meant to be used as a utility for development purposes and is")
-      println(
-          "rarely used in production. It is recommended to make use of the maven plugin (as")
-      println("defined in the Beacon project itself).")
       System.exit(1)
     }
 
