@@ -22,7 +22,7 @@ import javafx.collections.ObservableList
 import tv.dotstart.beacon.config.storage.Config
 import tv.dotstart.beacon.util.OperatingSystem
 import tv.dotstart.beacon.util.logger
-import java.net.URL
+import java.net.URI
 import java.nio.file.Files
 import java.nio.file.StandardOpenOption
 
@@ -48,7 +48,7 @@ object Configuration {
    * Exposes an index of user specified repository URLs which are to be pulled upon application
    * initialization (or manual repository refresh).
    */
-  val userRepositoryIndex: ObservableList<URL> = FXCollections.observableArrayList<URL>()
+  val userRepositoryIndex: ObservableList<URI> = FXCollections.observableArrayList<URI>()
 
   /**
    * Constructs a persistable representation of the current configuration state.
@@ -88,7 +88,7 @@ object Configuration {
     }
 
     this.userRepositoryIndex.setAll(serialized.repositoryList
-        .map { URL(it) }
+        .map { URI.create(it) }
         .toList())
 
     logger.info("Discovered ${this.userRepositoryIndex.size} user repositories")
