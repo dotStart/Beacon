@@ -52,6 +52,10 @@
       <groupId>com.jfoenix</groupId>
       <artifactId>jfoenix</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.github.ajalt</groupId>
+      <artifactId>clikt</artifactId>
+    </dependency>
 
     <dependency>
       <groupId>org.fourthline.cling</groupId>

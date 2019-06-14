@@ -113,6 +113,11 @@
         <artifactId>jfoenix</artifactId>
         <version>9.0.9</version>
       </dependency>
+      <dependency>
+        <groupId>com.github.ajalt</groupId>
+        <artifactId>clikt</artifactId>
+        <version>2.0.0</version>
+      </dependency>
 
       <dependency>
         <groupId>org.fourthline.cling</groupId>
