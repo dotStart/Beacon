@@ -17,12 +17,10 @@
 package tv.dotstart.beacon
 
 import com.github.ajalt.clikt.core.CliktCommand
-import com.github.ajalt.clikt.parameters.options.convert
-import com.github.ajalt.clikt.parameters.options.multiple
-import com.github.ajalt.clikt.parameters.options.option
-import com.github.ajalt.clikt.parameters.options.versionOption
+import com.github.ajalt.clikt.parameters.options.*
 import javafx.application.Application
 import java.net.URI
+import java.time.Duration
 
 /**
  * Provides a CLI entry point which permits the customization of application parameters.
@@ -42,6 +40,38 @@ object BeaconCli : CliktCommand(name = "Beacon") {
       .multiple(listOf(
           URI.create("github://dotStart/Beacon")
       ))
+
+  /**
+   * When enabled, this flag causes all cache checks to fail (e.g. files such as repositories and
+   * icons will be reloaded immediately).
+   */
+  val disableCache: Boolean by option(
+      "--disable-cache",
+      help = "Disables all caching measures")
+      .flag()
+
+  /**
+   * Defines the minimum amount of time that has to pass between repository cache refreshes.
+   */
+  val cacheDuration: Duration by option(
+      "--cache-duration",
+      help = "Specifies the duration for which repositories will be cached locally")
+      .convert { Duration.parse(it) }
+      .default(Duration.ofMinutes(10))
+
+  /**
+   * Enables global debug logging.
+   */
+  val debug: Boolean by option("debug",
+      help = "Enables debug logging")
+      .flag()
+
+  /**
+   * Enables global trace logging.
+   */
+  val verbose: Boolean by option("verbose",
+      help = "Enables verbose logging")
+      .flag()
 
   init {
     versionOption(BeaconMetadata.version)
