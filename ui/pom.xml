@@ -151,7 +151,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>tv.dotstart.beacon.BeaconKt</mainClass>
+              <mainClass>tv.dotstart.beacon.BeaconCliKt</mainClass>
             </manifest>
           </archive>
         </configuration>

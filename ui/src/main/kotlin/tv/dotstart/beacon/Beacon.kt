@@ -77,16 +77,3 @@ class Beacon : Application() {
     stage.show()
   }
 }
-
-/**
- * JVM Entry Point
- *
- * Note that this method will immediately initialize JavaFX before any other services are referenced
- * in order to give the framework a chance to initialize its threads and take control of the JVM
- * main thread.
- *
- * All following logic will be invoked from JFX managed threads.
- */
-fun main(args: Array<String>) {
-  Application.launch(Beacon::class.java, *args)
-}
