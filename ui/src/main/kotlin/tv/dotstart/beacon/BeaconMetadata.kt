@@ -39,4 +39,6 @@ object BeaconMetadata {
 
     this.version = properties.getProperty("version", "0.0.0+dev")
   }
+
+  val userAgent = "Beacon/$version (+https://github.com/dotStart/Beacon)"
 }
