@@ -41,6 +41,10 @@ interface RepositoryLoader {
   companion object {
     private val loaders = mutableMapOf<String, RepositoryLoader>()
 
+    init {
+      this += HttpRepositoryLoader
+    }
+
     /**
      * Registers a new loader with this implementation.
      */
