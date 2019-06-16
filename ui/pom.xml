@@ -67,6 +67,10 @@
     </dependency>
 
     <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>fluent-hc</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.sangupta</groupId>
       <artifactId>murmur</artifactId>
     </dependency>
