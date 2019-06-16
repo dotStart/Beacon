@@ -37,4 +37,30 @@ interface RepositoryLoader {
    * the given location.
    */
   operator fun invoke(uri: URI, target: Path)
+
+  companion object {
+    private val loaders = mutableMapOf<String, RepositoryLoader>()
+
+    /**
+     * Registers a new loader with this implementation.
+     */
+    operator fun plusAssign(loader: RepositoryLoader) {
+      loader.schemes.forEach {
+        this.loaders[it] = loader
+      }
+    }
+
+    /**
+     * Retrieves the repository loader for a given URI.
+     */
+    operator fun get(location: URI) = this.loaders[location.scheme]
+        ?: throw IllegalArgumentException("Unsupported URI scheme: ${location.scheme}")
+
+    /**
+     * Executes a compatible loader for the given URI.
+     */
+    operator fun invoke(location: URI, target: Path) {
+      this[location](location, target)
+    }
+  }
 }
