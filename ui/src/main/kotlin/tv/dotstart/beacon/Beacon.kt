@@ -46,9 +46,7 @@ class Beacon : Application() {
           ?.let { Paths.get(it.toURI()) }
           ?: throw NoSuchFileException("No such file or directory: $iconPath")
 
-      Files.newInputStream(resource).use {
-        Image(it)
-      }
+      Files.newInputStream(resource).use(::Image)
     }
   }
 
