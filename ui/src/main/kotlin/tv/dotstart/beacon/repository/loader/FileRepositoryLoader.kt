@@ -19,9 +19,7 @@ package tv.dotstart.beacon.repository.loader
 import tv.dotstart.beacon.repository.error.RepositoryAvailabilityException
 import java.io.IOException
 import java.net.URI
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.Paths
+import java.nio.file.*
 
 /**
  * Provides a simple file based loader which access a file from the local file system and copies it
@@ -39,7 +37,7 @@ object FileRepositoryLoader : RepositoryLoader {
   override fun invoke(uri: URI, target: Path) {
     try {
       val source = Paths.get(uri)
-      Files.copy(source, target)
+      Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING)
     } catch (ex: IOException) {
       throw RepositoryAvailabilityException("Failed to copy repository", ex)
     }
