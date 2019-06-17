@@ -18,6 +18,7 @@ package tv.dotstart.beacon.util
 
 import com.sangupta.murmur.Murmur3
 import tv.dotstart.beacon.BeaconCli
+import java.io.IOException
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
@@ -59,7 +60,16 @@ object Cache {
     }
 
     logger.debug("""Cache for key "$key" does not exist or has been invalidated - Regenerating""")
-    generator(path)
+    try {
+      generator(path)
+    } catch (ex: Throwable) {
+      try {
+        Files.deleteIfExists(path)
+      } catch (ignore: IOException) {
+      }
+
+      throw ex
+    }
     return path
   }
 
