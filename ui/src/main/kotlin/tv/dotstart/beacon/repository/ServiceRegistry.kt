@@ -120,6 +120,7 @@ object ServiceRegistry : Iterable<Service> {
    */
   operator fun plusAssign(service: Service) {
     logger.info("""Registered service "${service.id}"""")
+    logger.debug(service)
     this.services[service.id] = service
   }
 
