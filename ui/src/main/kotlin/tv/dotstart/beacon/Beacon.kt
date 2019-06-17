@@ -62,9 +62,6 @@ class Beacon : Application() {
       Files.createDirectories(OperatingSystem.current.storage)
     }
 
-    logger.info("Operating System: ${OperatingSystem.current}")
-    logger.info("Persistence Directory: ${OperatingSystem.current.storage}")
-
     Configuration.load()
 
     logger.info("Displaying splash screen")

@@ -23,6 +23,7 @@ import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.core.config.Configurator
 import tv.dotstart.beacon.util.Banner
+import tv.dotstart.beacon.util.OperatingSystem
 import java.net.URI
 import java.time.Duration
 
@@ -85,6 +86,9 @@ object BeaconCli : CliktCommand(name = "Beacon") {
     Banner()
 
     val logger = LogManager.getLogger(Beacon::class.java)
+
+    logger.info("Operating System: ${OperatingSystem.current}")
+    logger.info("Persistence Directory: ${OperatingSystem.current.storage}")
 
     if (this.verbose || this.debug) {
       Configurator.setRootLevel(
