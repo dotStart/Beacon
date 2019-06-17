@@ -42,6 +42,7 @@ interface RepositoryLoader {
     private val loaders = mutableMapOf<String, RepositoryLoader>()
 
     init {
+      this += FileRepositoryLoader
       this += HttpRepositoryLoader
     }
 
