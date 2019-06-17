@@ -41,7 +41,7 @@ class Beacon : Application() {
     private val logger = Beacon::class.logger
 
     private const val iconPath = "image/logo.png"
-    private val icon: Image by lazy {
+    val icon: Image by lazy {
       val resource = Thread.currentThread().contextClassLoader.getResource(iconPath)
           ?.let { Paths.get(it.toURI()) }
           ?: throw NoSuchFileException("No such file or directory: $iconPath")
