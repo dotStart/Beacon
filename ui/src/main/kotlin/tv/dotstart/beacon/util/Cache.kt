@@ -71,7 +71,7 @@ object Cache {
     val hash = Murmur3.hash_x64_128(data, data.size, 424242L)
 
     hash.forEach {
-      append("%016X", it)
+      append("%016X".format(it))
     }
   }
 }
