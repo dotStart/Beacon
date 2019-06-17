@@ -58,6 +58,9 @@ object Preloader {
         this._completed.set(false)
       }
 
+      // slight delay to prevent the screen from flickering
+      Thread.sleep(1000)
+
       for (i in 0 until this.loaders.size) {
         val loader = this.loaders[i]
 
@@ -68,6 +71,8 @@ object Preloader {
 
         loader.load()
       }
+
+      Thread.sleep(500)
 
       Platform.runLater {
         this._percentage.set(1.0)
