@@ -119,7 +119,7 @@ object ServiceRegistry : Iterable<Service> {
    * Registers a new service with this registry.
    */
   operator fun plusAssign(service: Service) {
-    logger.info("""Registered service "$service.id"""")
+    logger.info("""Registered service "${service.id}"""")
     this.services[service.id] = service
   }
 
