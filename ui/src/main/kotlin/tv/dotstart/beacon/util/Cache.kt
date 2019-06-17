@@ -51,6 +51,8 @@ object Cache {
   operator fun invoke(key: String, generator: (Path) -> Unit): Path {
     val path = base.resolve(
         hash(key))
+    logger.debug("""Using "$path" to store data for key "$key"""")
+
     if (Files.exists(path) && !BeaconCli.disableCache) {
       val modificationTime = Files.getLastModifiedTime(path).toInstant()
       if (modificationTime.plus(BeaconCli.cacheDuration).isAfter(Instant.now())) {
