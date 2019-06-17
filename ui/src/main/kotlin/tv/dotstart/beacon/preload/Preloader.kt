@@ -18,6 +18,7 @@ package tv.dotstart.beacon.preload
 
 import javafx.application.Platform
 import javafx.beans.property.*
+import tv.dotstart.beacon.repository.ServiceRegistry
 import kotlin.concurrent.thread
 
 /**
@@ -27,7 +28,10 @@ import kotlin.concurrent.thread
  */
 object Preloader {
 
-  private val loaders = listOf<Loader>()
+  private val loaders = listOf(
+      ServiceRegistry.SystemRepositoryLoader,
+      ServiceRegistry.UserRepositoryLoader
+  )
 
   private val _description = SimpleStringProperty()
   private val _percentage = SimpleDoubleProperty()
