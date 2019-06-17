@@ -16,6 +16,8 @@
  */
 package tv.dotstart.beacon.repository.loader
 
+import tv.dotstart.beacon.repository.error.RepositoryAvailabilityException
+import java.io.IOException
 import java.net.URI
 import java.nio.file.Files
 import java.nio.file.Path
@@ -35,7 +37,11 @@ object FileRepositoryLoader : RepositoryLoader {
   override val schemes = listOf("file")
 
   override fun invoke(uri: URI, target: Path) {
-    val source = Paths.get(uri)
-    Files.copy(source, target)
+    try {
+      val source = Paths.get(uri)
+      Files.copy(source, target)
+    } catch (ex: IOException) {
+      throw RepositoryAvailabilityException("Failed to copy repository", ex)
+    }
   }
 }

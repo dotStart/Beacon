@@ -16,6 +16,7 @@
  */
 package tv.dotstart.beacon.repository.loader
 
+import tv.dotstart.beacon.repository.error.IllegalRepositorySchemeException
 import java.net.URI
 import java.nio.file.Path
 
@@ -59,7 +60,7 @@ interface RepositoryLoader {
      * Retrieves the repository loader for a given URI.
      */
     operator fun get(location: URI) = this.loaders[location.scheme]
-        ?: throw IllegalArgumentException("Unsupported URI scheme: ${location.scheme}")
+        ?: throw IllegalRepositorySchemeException("Unsupported URI scheme: ${location.scheme}")
 
     /**
      * Executes a compatible loader for the given URI.
