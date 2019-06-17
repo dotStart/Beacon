@@ -84,6 +84,8 @@ object BeaconCli : CliktCommand(name = "Beacon") {
   override fun run() {
     Banner()
 
+    val logger = LogManager.getLogger(Beacon::class.java)
+
     if (this.verbose || this.debug) {
       Configurator.setRootLevel(
           if (this.verbose) {
@@ -93,12 +95,18 @@ object BeaconCli : CliktCommand(name = "Beacon") {
           }
       )
 
-      val logger = LogManager.getLogger(Beacon::class.java)
       if (this.verbose) {
         logger.warn("Enabled VERBOSE logging - This may cause significant log output")
       } else {
         logger.warn("Enabled DEBUG logging")
       }
+    }
+
+
+    if (this.disableCache) {
+      logger.warn("Caching has been disabled - Performance may be degraded")
+    } else {
+      logger.info("Cache duration has been set to $cacheDuration")
     }
 
     // we do not pass any of our arguments to JavaFX since there's nothing special to handle here
