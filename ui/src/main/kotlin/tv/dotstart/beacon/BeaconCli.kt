@@ -96,6 +96,13 @@ object BeaconCli : CliktCommand(name = "Beacon") {
     logger.info("Operating System: ${OperatingSystem.current}")
     logger.info("Persistence Directory: ${OperatingSystem.current.storage}")
 
+    if (this.defaultSystemRepositories != this.systemRepositories) {
+      logger.warn(
+          "System repositories have been overridden - Some standard services may be missing")
+    }
+
+    logger.info("System Repositories (${systemRepositories.size}): ${systemRepositories.joinToString()}")
+
     if (this.verbose || this.debug) {
       Configurator.setRootLevel(
           if (this.verbose) {
@@ -117,11 +124,6 @@ object BeaconCli : CliktCommand(name = "Beacon") {
       logger.warn("Caching has been disabled - Performance may be degraded")
     } else {
       logger.info("Cache duration has been set to $cacheDuration")
-    }
-
-    if (this.defaultSystemRepositories != this.systemRepositories) {
-      logger.warn(
-          "System repositories have been overridden - Some standard services may be missing")
     }
 
     // we do not pass any of our arguments to JavaFX since there's nothing special to handle here
