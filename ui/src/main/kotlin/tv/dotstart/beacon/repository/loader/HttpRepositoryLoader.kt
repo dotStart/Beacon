@@ -38,6 +38,7 @@ object HttpRepositoryLoader : RepositoryLoader {
     try {
       Request.Get(uri)
           .setHeader("User-Agent", BeaconMetadata.userAgent)
+          .setHeader("X-Beacon-Version", BeaconMetadata.version)
           .execute()
           .saveContent(target.toFile())
     } catch (ex: HttpResponseException) {
