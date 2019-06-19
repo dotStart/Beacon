@@ -147,6 +147,7 @@ object ServiceRegistry : Iterable<Service> {
     override val description = "preloader.service.system"
 
     override fun load() {
+      logger.info("Refreshing system repositories")
       refresh(BeaconCli.systemRepositories)
     }
   }
@@ -159,6 +160,7 @@ object ServiceRegistry : Iterable<Service> {
     override val description = "preloader.service.user"
 
     override fun load() {
+      logger.info("Refreshing user repositories")
       refresh(Configuration.userRepositoryIndex)
     }
   }
