@@ -19,6 +19,7 @@ package tv.dotstart.beacon.repository.loader
 import org.apache.http.client.HttpResponseException
 import org.apache.http.client.fluent.Request
 import tv.dotstart.beacon.BeaconMetadata
+import tv.dotstart.beacon.repository.ModelVersion
 import tv.dotstart.beacon.repository.error.NoSuchRepositoryException
 import tv.dotstart.beacon.repository.error.RepositoryAvailabilityException
 import java.io.IOException
@@ -39,6 +40,7 @@ object HttpRepositoryLoader : RepositoryLoader {
       Request.Get(uri)
           .setHeader("User-Agent", BeaconMetadata.userAgent)
           .setHeader("X-Beacon-Version", BeaconMetadata.version)
+          .setHeader("X-Beacon-Model-Version", ModelVersion.number.toString())
           .execute()
           .saveContent(target.toFile())
     } catch (ex: HttpResponseException) {
