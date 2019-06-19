@@ -33,6 +33,14 @@ import java.time.Duration
 object BeaconCli : CliktCommand(name = "Beacon") {
 
   /**
+   * Defines a listing of default system repositories which are queried when no custom overrides are
+   * given.
+   */
+  private val defaultSystemRepositories = listOf(
+      URI.create("github://dotStart/Beacon")
+  )
+
+  /**
    * Specifies a listing of system repositories which are to be queried.
    *
    * This value is typically hardcoded but may be overridden for development purposes (e.g. to test
@@ -42,9 +50,7 @@ object BeaconCli : CliktCommand(name = "Beacon") {
       names = *arrayOf("--repository", "-r"),
       help = "Specifies a custom system repository (Overrides any default system repositories)")
       .convert { URI.create(it) }
-      .multiple(listOf(
-          URI.create("github://dotStart/Beacon")
-      ))
+      .multiple(defaultSystemRepositories)
 
   /**
    * When enabled, this flag causes all cache checks to fail (e.g. files such as repositories and
@@ -111,6 +117,11 @@ object BeaconCli : CliktCommand(name = "Beacon") {
       logger.warn("Caching has been disabled - Performance may be degraded")
     } else {
       logger.info("Cache duration has been set to $cacheDuration")
+    }
+
+    if (this.defaultSystemRepositories != this.systemRepositories) {
+      logger.warn(
+          "System repositories have been overridden - Some standard services may be missing")
     }
 
     // we do not pass any of our arguments to JavaFX since there's nothing special to handle here
