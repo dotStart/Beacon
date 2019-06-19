@@ -20,6 +20,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.apache.http.client.fluent.Request
 import org.apache.logging.log4j.LogManager
+import tv.dotstart.beacon.repository.compiler.model.Repository
 import tv.dotstart.beacon.repository.compiler.model.Service
 import java.awt.image.BufferedImage
 import java.net.URL
@@ -63,22 +64,25 @@ object Compiler {
       println("Generally, the JSON file is expected to be formatted as")
       println("follows:")
       println()
-      println("  [")
-      println("    {")
-      println("""      "id": "game://valvesoftware.com/csgo",""")
-      println("""      "title": "Counter Strike: Global Offensive",""")
-      println("""      "icon": "file://icon/csgo.png",""")
-      println("""      "category": "GAME_SERVER",""")
-      println("""      "ports": [""")
-      println("""        {""")
-      println("""          "protocol": "TCP",""")
-      println("""          "port": 27015""")
-      println("""        },""")
-      println("""        {""")
-      println("""          "protocol": "UDP",""")
-      println("""          "port": 27015""")
-      println("""        }""")
-      println("""      ]""")
+      println("  {")
+      println("""    "displayName": "My Repository",""")
+      println("""    "services": [""")
+      println("      {")
+      println("""        "id": "game://valvesoftware.com/csgo",""")
+      println("""        "title": "Counter Strike: Global Offensive",""")
+      println("""        "icon": "file://icon/csgo.png",""")
+      println("""        "category": "GAME_SERVER",""")
+      println("""        "ports": [""")
+      println("""          {""")
+      println("""            "protocol": "TCP",""")
+      println("""            "port": 27015""")
+      println("""          },""")
+      println("""          {""")
+      println("""            "protocol": "UDP",""")
+      println("""            "port": 27015""")
+      println("""          }""")
+      println("""        ]""")
+      println("      }")
       println("    }")
       println("  ]")
       println()
@@ -108,9 +112,11 @@ object Compiler {
   fun compile(input: Path, output: Path) {
     logger.info("Compiling $input into $output")
 
-    val repository = mapper.readValue<List<Service>>(input.toFile())
+    val repository = mapper.readValue<Repository>(input.toFile())
     RepositoryBuilder {
-      repository.forEach { service ->
+      displayName = repository.displayName
+
+      repository.services.forEach { service ->
         logger.debug("Compiling service ${service.id} (\"${service.title}\")")
 
         withService(service.id, service.title) {

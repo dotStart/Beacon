@@ -31,6 +31,17 @@ class RepositoryBuilder {
 
   private val builder = Model.Repository.newBuilder()
 
+  var displayName: String?
+    get() = this.builder.displayName
+    set(value) {
+      if (value == null) {
+        this.builder.clearDisplayName()
+        return
+      }
+
+      this.builder.displayName = value
+    }
+
   companion object {
 
     /**

@@ -6,7 +6,20 @@ option java_package = "tv.dotstart.beacon.repository";
  * Represents a complete listing of services.
  */
 message Repository {
-  repeated ServiceDefinition service = 1;
+
+  /**
+   * Stores a human readable identifier with which this repository will be referenced (for instance,
+   * as a copyright at the bottom of a service definition).
+   *
+   * When this value is omitted, no such information will be displayed. This is, however, typically
+   * only the case when dealing with system repositories.
+   */
+  string displayName = 1;
+
+  /**
+   * Stores a complete listing of known services and their respective ports.
+   */
+  repeated ServiceDefinition service = 2;
 }
 
 message ServiceDefinition {
