@@ -20,11 +20,6 @@ package tv.dotstart.beacon.repository.compiler.model
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
  */
 data class Repository(
-    /**
-     * Provides a human readable identification for this particular repository.
-     *
-     * Refer to the protobuf definition (model.proto) for more information.
-     */
     val displayName: String?,
-
+    val revision: Long?,
     val services: List<Service>)

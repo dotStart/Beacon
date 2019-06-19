@@ -102,10 +102,11 @@ object ServiceRegistry : Iterable<Service> {
    */
   private fun refresh(repository: Model.Repository) {
     if (repository.displayName != null) {
-      logger.debug("""Repository identifies itself as "${repository.displayName}"""")
+      logger.debug("""Display Name: "${repository.displayName}"""")
     } else {
-      logger.debug("""Repository does not include identification metadata""")
+      logger.debug("""Display Name: <unset>""")
     }
+    logger.debug("Revision: ${repository.revision}")
     logger.debug("Parsing ${repository.serviceCount} services")
 
     repository.serviceList

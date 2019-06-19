@@ -17,9 +17,17 @@ message Repository {
   string displayName = 1;
 
   /**
+   * Stores a revision number with which this repository is versioned.
+   *
+   * This value is currently not used by the client in any useful way apart from identifying
+   * specific repository versions when debugging issues (including caching related issues).
+   */
+  uint64 revision = 2;
+
+  /**
    * Stores a complete listing of known services and their respective ports.
    */
-  repeated ServiceDefinition service = 2;
+  repeated ServiceDefinition service = 3;
 }
 
 message ServiceDefinition {

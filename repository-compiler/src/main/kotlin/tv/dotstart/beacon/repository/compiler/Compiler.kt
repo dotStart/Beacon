@@ -21,7 +21,6 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import org.apache.http.client.fluent.Request
 import org.apache.logging.log4j.LogManager
 import tv.dotstart.beacon.repository.compiler.model.Repository
-import tv.dotstart.beacon.repository.compiler.model.Service
 import java.awt.image.BufferedImage
 import java.net.URL
 import java.nio.file.Files
@@ -66,6 +65,7 @@ object Compiler {
       println()
       println("  {")
       println("""    "displayName": "My Repository",""")
+      println("""    "revision": 42,""")
       println("""    "services": [""")
       println("      {")
       println("""        "id": "game://valvesoftware.com/csgo",""")
@@ -91,6 +91,9 @@ object Compiler {
           "expected to to be a file, http or https URL which points to the desired image. When")
       println("an icon is given, it will be converted into the PNG format and resized to the")
       println("default icon size (currently 32x32).")
+      println()
+      println("In addition, the revision and displayName fields in the repository definition may")
+      println("be omitted. The revision is always assumed to be zero in this case.")
       System.exit(1)
     }
 
@@ -115,6 +118,7 @@ object Compiler {
     val repository = mapper.readValue<Repository>(input.toFile())
     RepositoryBuilder {
       displayName = repository.displayName
+      repository.revision?.let { revision = it }
 
       repository.services.forEach { service ->
         logger.debug("Compiling service ${service.id} (\"${service.title}\")")

@@ -1,5 +1,6 @@
 {
   "displayName": "Test Repository",
+  "revision": 42,
   "services": [
     {
       "id": "game+steam://730",

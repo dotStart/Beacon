@@ -42,6 +42,12 @@ class RepositoryBuilder {
       this.builder.displayName = value
     }
 
+  var revision: Long
+    get() = this.builder.revision
+    set(value) {
+      this.builder.revision = value
+    }
+
   companion object {
 
     /**
@@ -51,6 +57,10 @@ class RepositoryBuilder {
       val builder = RepositoryBuilder()
       builder.block()
     }
+  }
+
+  init {
+    this.builder.revision = 0
   }
 
   /**
