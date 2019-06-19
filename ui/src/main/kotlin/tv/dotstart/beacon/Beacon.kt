@@ -41,14 +41,12 @@ class Beacon : Application() {
     private val logger = Beacon::class.logger
 
     private const val iconPath = "image/logo.png"
-    private val icon: Image by lazy {
+    val icon: Image by lazy {
       val resource = Thread.currentThread().contextClassLoader.getResource(iconPath)
           ?.let { Paths.get(it.toURI()) }
           ?: throw NoSuchFileException("No such file or directory: $iconPath")
 
-      Files.newInputStream(resource).use {
-        Image(it)
-      }
+      Files.newInputStream(resource).use(::Image)
     }
   }
 
@@ -63,9 +61,6 @@ class Beacon : Application() {
       logger.info("Creating persistence directory")
       Files.createDirectories(OperatingSystem.current.storage)
     }
-
-    logger.info("Operating System: ${OperatingSystem.current}")
-    logger.info("Persistence Directory: ${OperatingSystem.current.storage}")
 
     Configuration.load()
 
