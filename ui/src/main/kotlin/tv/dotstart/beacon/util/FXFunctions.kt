@@ -62,17 +62,17 @@ fun Stage.splashWindow(path: String): Scene {
  */
 fun Stage.window(path: String, fullScreen: Boolean = false, maximizable: Boolean = true,
     minimizable: Boolean = true): Scene {
+  val classLoader = Thread.currentThread().contextClassLoader
   val node = fxml<Node>(path)
 
   val decorator = JFXDecorator(this, node, fullScreen, maximizable, minimizable)
 
   val scene = Scene(decorator)
-
   scene.stylesheets.addAll(
       JFoenixResources.load("css/jfoenix-fonts.css").toExternalForm(),
-      JFoenixResources.load("css/jfoenix-design.css").toExternalForm()
+      JFoenixResources.load("css/jfoenix-design.css").toExternalForm(),
+      classLoader.getResource("style/application.css").toExternalForm()
   )
-
   this.scene = scene
   return scene
 }
