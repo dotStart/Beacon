@@ -16,16 +16,23 @@
  */
 package tv.dotstart.beacon
 
+import com.jfoenix.controls.JFXAlert
+import com.jfoenix.controls.JFXButton
+import com.jfoenix.controls.JFXDialogLayout
 import javafx.application.Application
+import javafx.event.EventHandler
+import javafx.scene.control.Label
 import javafx.scene.image.Image
 import javafx.stage.Stage
 import tv.dotstart.beacon.config.Configuration
+import tv.dotstart.beacon.exposure.InterfaceChooser
 import tv.dotstart.beacon.util.OperatingSystem
 import tv.dotstart.beacon.util.logger
 import tv.dotstart.beacon.util.splashWindow
 import java.nio.file.Files
 import java.nio.file.NoSuchFileException
 import java.nio.file.Paths
+
 
 /**
  * JavaFX Entry Point
@@ -56,6 +63,36 @@ class Beacon : Application() {
     } catch (ex: Throwable) {
       logger.warn("Failed to load application icon", ex)
     }
+
+    val gatewayInterface = InterfaceChooser.gatewayInterface
+    if (gatewayInterface == null) {
+      logger.warn("Failed to detect gateway interface - Port forwarding may fail")
+    } else {
+      logger.info("Gateway Interface: $gatewayInterface")
+    }
+
+    val recommendedInterface = InterfaceChooser.recommended
+    if (recommendedInterface == null) {
+      logger.error("Failed to detect viable network interface - Cannot continue")
+      val alert = JFXAlert<Nothing>()
+      alert.title = "System Error"
+      val layout = JFXDialogLayout()
+      layout.setHeading(Label("System Error"))
+      layout.setBody(Label(
+          "Failed to detect at least one compatible network interface. " +
+              "Please make sure that your computer is connected to the internet and try again. " +
+              "If this issue persists, please report it to the application maintainer."
+      ))
+      val closeButton = JFXButton("Exit")
+      closeButton.onAction = EventHandler { alert.close() }
+      layout.setActions(closeButton)
+      alert.setContent(layout)
+      alert.showAndWait()
+      return
+    }
+
+    logger.info("Detected Interfaces: ${InterfaceChooser.interfaces.joinToString()}")
+    logger.info("Recommended Interface: $recommendedInterface")
 
     if (Files.notExists(OperatingSystem.current.storage)) {
       logger.info("Creating persistence directory")
