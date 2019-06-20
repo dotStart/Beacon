@@ -16,6 +16,8 @@
  */
 package tv.dotstart.beacon.exposure
 
+import javafx.beans.property.ObjectProperty
+import javafx.beans.property.SimpleObjectProperty
 import java.net.InetAddress
 import java.net.NetworkInterface
 
@@ -58,4 +60,21 @@ object InterfaceChooser {
    * This field will be set to null when no interfaces are available.
    */
   val recommended = this.gatewayInterface ?: this.interfaces.firstOrNull()
+
+  val selectedProperty: ObjectProperty<NetworkInterface> = SimpleObjectProperty(this.recommended)
+
+  /**
+   * Identifies the interface which will be used to broadcast UPnP forwarding messages.
+   *
+   * At initialization time, this will match the recommended interface but may be altered via the
+   * user configuration if necessary.
+   *
+   * Note that there is absolutely no guarantee that this interface is capable of reaching a UPnP
+   * compatible gateway.
+   */
+  var selected: NetworkInterface
+    get() = this.selectedProperty.value
+    set(value) {
+      this.selectedProperty.value = value
+    }
 }
