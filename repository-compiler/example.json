@@ -17,6 +17,17 @@
           "number": 27015
         }
       ]
+    },
+    {
+      "id": "tool+generic://httpd",
+      "title": "HTTP Server",
+      "category": "TOOL",
+      "ports": [
+        {
+          "protocol": "TCP",
+          "number": 80
+        }
+      ]
     }
   ]
 }
