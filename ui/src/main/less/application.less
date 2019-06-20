@@ -19,6 +19,10 @@
 .jfx-decorator {
   -fx-decorator-color: @brand-color;
 
+  .jfx-decorator-title {
+    -fx-font-size: 1em;
+  }
+
   .jfx-decorator-buttons-container {
     -fx-background-color: -fx-decorator-color;
   }
@@ -27,6 +31,18 @@
     -fx-border-color: -fx-decorator-color;
     -fx-border-width: 0 4 4 4;
   }
+}
+
+.tree-view {
+  &, &:focused {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+  }
+}
+
+.tree-cell:selected {
+  -fx-background-color: @brand-color;
+  -fx-text-fill: white;
 }
 
 .button {
