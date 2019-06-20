@@ -16,6 +16,7 @@
  */
 package tv.dotstart.beacon.util
 
+import com.jfoenix.assets.JFoenixResources
 import com.jfoenix.controls.JFXDecorator
 import javafx.fxml.FXMLLoader
 import javafx.scene.Node
@@ -25,7 +26,6 @@ import javafx.stage.Stage
 import javafx.stage.StageStyle
 import java.io.FileNotFoundException
 import java.nio.charset.StandardCharsets
-import java.nio.file.NoSuchFileException
 
 /**
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
@@ -67,6 +67,12 @@ fun Stage.window(path: String, fullScreen: Boolean = false, maximizable: Boolean
   val decorator = JFXDecorator(this, node, fullScreen, maximizable, minimizable)
 
   val scene = Scene(decorator)
+
+  scene.stylesheets.addAll(
+      JFoenixResources.load("css/jfoenix-fonts.css").toExternalForm(),
+      JFoenixResources.load("css/jfoenix-design.css").toExternalForm()
+  )
+
   this.scene = scene
   return scene
 }
