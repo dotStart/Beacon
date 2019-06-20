@@ -119,7 +119,6 @@ object BeaconCli : CliktCommand(name = "Beacon") {
       }
     }
 
-
     if (this.disableCache) {
       logger.warn("Caching has been disabled - Performance may be degraded")
     } else {
