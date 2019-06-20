@@ -23,6 +23,7 @@ import javafx.scene.Parent
 import javafx.scene.Scene
 import javafx.stage.Stage
 import javafx.stage.StageStyle
+import java.io.FileNotFoundException
 import java.nio.charset.StandardCharsets
 import java.nio.file.NoSuchFileException
 
@@ -36,7 +37,7 @@ import java.nio.file.NoSuchFileException
 fun <T : Any> fxml(path: String): T {
   val classLoader = Thread.currentThread().contextClassLoader
   val resource = classLoader.getResource("fxml/$path")
-      ?: throw NoSuchFileException("No such FXML resource: $path")
+      ?: throw FileNotFoundException("No such FXML resource: $path")
 
   val loader = FXMLLoader(resource)
   loader.charset = StandardCharsets.UTF_8
