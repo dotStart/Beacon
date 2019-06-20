@@ -36,7 +36,7 @@ import javax.imageio.ImageIO
  */
 object Compiler {
 
-  private const val ICON_SIZE = 32
+  private const val ICON_SIZE = 24
 
   private val logger = LogManager.getLogger(Compiler::class.java)
 
@@ -90,7 +90,7 @@ object Compiler {
       println(
           "expected to to be a file, http or https URL which points to the desired image. When")
       println("an icon is given, it will be converted into the PNG format and resized to the")
-      println("default icon size (currently 32x32).")
+      println("default icon size (currently ${ICON_SIZE}x$ICON_SIZE).")
       println()
       println("In addition, the revision and displayName fields in the repository definition may")
       println("be omitted. The revision is always assumed to be zero in this case.")
