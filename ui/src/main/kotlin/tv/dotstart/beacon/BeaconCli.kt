@@ -140,5 +140,9 @@ object BeaconCli : CliktCommand(name = "Beacon") {
  * All following logic will be invoked from JFX managed threads.
  */
 fun main(args: Array<String>) {
+  // register Log4j as the JDK logging manager as early as possible for third party library
+  // logging support
+  System.setProperty("java.util.logging.manager", "org.apache.logging.log4j.jul.LogManager")
+
   BeaconCli.main(args)
 }
