@@ -23,6 +23,8 @@ import javafx.beans.property.SimpleObjectProperty
 import org.fourthline.cling.model.action.ActionInvocation
 import org.fourthline.cling.model.message.UpnpResponse
 import org.fourthline.cling.model.meta.Device
+import org.fourthline.cling.model.meta.RemoteDevice
+import org.fourthline.cling.model.meta.RemoteService
 import org.fourthline.cling.model.meta.Service
 import org.fourthline.cling.model.types.UDADeviceType
 import org.fourthline.cling.model.types.UDAServiceType
@@ -52,10 +54,16 @@ object GatewayInfo {
   private val lock = ReentrantLock()
   private var service: Service<*, *>? = null
 
-  private val _externalAddressProperty = SimpleObjectProperty<InetAddress>()
-  val externalAddressProperty: ReadOnlyProperty<InetAddress>
+  private val _gatewayAddressProperty = SimpleObjectProperty<InetAddress?>()
+  val gatewayAddressProperty: ReadOnlyProperty<InetAddress?>
+    get() = this._gatewayAddressProperty
+  val gatewayAddress: InetAddress?
+    get() = this._gatewayAddressProperty.value
+
+  private val _externalAddressProperty = SimpleObjectProperty<InetAddress?>()
+  val externalAddressProperty: ReadOnlyProperty<InetAddress?>
     get() = this._externalAddressProperty
-  val externalAddress: InetAddress
+  val externalAddress: InetAddress?
     get() = this._externalAddressProperty.value
 
   /**
@@ -134,11 +142,20 @@ object GatewayInfo {
               Observable.empty()
             }
           }
+          .filter { it is RemoteService }
           .subscribe {
-            logger.debug("""Discovered WAN aware service via "${it.device.displayString}"""")
+            val device = it.device as RemoteDevice
+            val gatewayHost = InetAddress.getByName(device.identity.descriptorURL.host)
+
+            logger.info("""Discovered gateway device "${it.device.displayString} ($gatewayHost)"""")
 
             lock.withLock {
               service = it
+
+              Platform.runLater {
+                _gatewayAddressProperty.set(gatewayHost)
+              }
+
               doRefresh()
             }
           }
