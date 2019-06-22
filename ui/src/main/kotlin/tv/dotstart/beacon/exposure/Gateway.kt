@@ -41,7 +41,7 @@ import kotlin.concurrent.withLock
  *
  * @author <a href="mailto:johannesd@torchmind.com">Johannes Donath</a>
  */
-object GatewayInfo {
+object Gateway {
 
   private val igdDeviceType = UDADeviceType("InternetGatewayDevice", 1)
   private val connectionDeviceType = UDADeviceType("WANConnectionDevice", 1)
@@ -49,7 +49,7 @@ object GatewayInfo {
   private val ipServiceType = UDAServiceType("WANIPConnection", 1)
   private val pppServiceType = UDAServiceType("WANPPPConnection", 1)
 
-  private val logger = GatewayInfo::class.logger
+  private val logger = Gateway::class.logger
 
   private val lock = ReentrantLock()
   private var service: Service<*, *>? = null
