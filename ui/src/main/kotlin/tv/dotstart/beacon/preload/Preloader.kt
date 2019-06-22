@@ -19,6 +19,7 @@ package tv.dotstart.beacon.preload
 import javafx.application.Platform
 import javafx.beans.property.*
 import tv.dotstart.beacon.repository.ServiceRegistry
+import tv.dotstart.beacon.util.logger
 import kotlin.concurrent.thread
 
 /**
@@ -52,6 +53,9 @@ object Preloader {
   val completedProperty: ReadOnlyBooleanProperty
     get() = this._completed
 
+  /**
+   * Invokes all preloader components in an asynchronous fashion.
+   */
   operator fun invoke(onComplete: () -> Unit) {
     thread(name = "preload") {
       Platform.runLater {
@@ -87,5 +91,17 @@ object Preloader {
         onComplete()
       }
     }
+  }
+
+  /**
+   * Performs a clean shutdown of all loaders.
+   */
+  fun shutdown() {
+    this.loaders.forEach {
+      logger.info("--- ${it.description} shutdown ---")
+      it.shutdown()
+    }
+
+    logger.info("--- shutdown complete ---")
   }
 }

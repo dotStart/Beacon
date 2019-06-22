@@ -36,4 +36,10 @@ interface Loader {
    * Handles the preloading for this particular manager implementation.
    */
   fun load()
+
+  /**
+   * Handles the application shutdown.
+   */
+  fun shutdown() {
+  }
 }

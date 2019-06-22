@@ -26,6 +26,7 @@ import javafx.scene.image.Image
 import javafx.stage.Stage
 import tv.dotstart.beacon.config.Configuration
 import tv.dotstart.beacon.exposure.InterfaceChooser
+import tv.dotstart.beacon.preload.Preloader
 import tv.dotstart.beacon.util.OperatingSystem
 import tv.dotstart.beacon.util.logger
 import tv.dotstart.beacon.util.splashWindow
@@ -104,5 +105,11 @@ class Beacon : Application() {
     logger.info("Displaying splash screen")
     stage.splashWindow("splash.fxml")
     stage.show()
+  }
+
+  override fun stop() {
+    Preloader.shutdown()
+
+    super.stop()
   }
 }
