@@ -16,7 +16,9 @@
  */
 package tv.dotstart.beacon.controller
 
+import com.jfoenix.controls.JFXTextField
 import com.jfoenix.controls.JFXTreeView
+import javafx.beans.binding.Bindings
 import javafx.event.ActionEvent
 import javafx.fxml.FXML
 import javafx.fxml.Initializable
@@ -30,6 +32,7 @@ import tv.dotstart.beacon.cell.ServiceListTreeCell
 import tv.dotstart.beacon.cell.model.CategoryNode
 import tv.dotstart.beacon.cell.model.ServiceListNode
 import tv.dotstart.beacon.cell.model.ServiceNode
+import tv.dotstart.beacon.exposure.Gateway
 import tv.dotstart.beacon.exposure.PortMapper
 import tv.dotstart.beacon.repository.Model
 import tv.dotstart.beacon.repository.ServiceRegistry
@@ -37,6 +40,7 @@ import tv.dotstart.beacon.repository.model.Port
 import java.net.URL
 import java.nio.file.Files
 import java.util.*
+import java.util.concurrent.Callable
 
 /**
  * Manages the components and interactions of the main application window.
@@ -47,6 +51,8 @@ class MainController : Initializable {
 
   @FXML
   private lateinit var serviceList: JFXTreeView<ServiceListNode>
+  @FXML
+  private lateinit var externalAddress: JFXTextField
 
   @FXML
   private lateinit var serviceIcon: ImageView
@@ -73,6 +79,12 @@ class MainController : Initializable {
 
     this.serviceList.selectionModel.selectedItemProperty()
         .addListener({ _, _, new -> this.onServiceSelect(new.value) })
+    this.externalAddress.textProperty().bind(Bindings.createObjectBinding(
+        Callable {
+          Gateway.externalAddress?.hostAddress
+        },
+        Gateway.externalAddressProperty
+    ))
 
     this.serviceOpenButton.managedProperty().bind(this.serviceOpenButton.visibleProperty())
     this.serviceCloseButton.managedProperty().bind(this.serviceCloseButton.visibleProperty())
