@@ -28,6 +28,8 @@ import kotlin.concurrent.thread
  */
 object Preloader {
 
+  val logger = Preloader::class.logger
+
   private val loaders = listOf(
       ServiceRegistry.SystemRepositoryLoader,
       ServiceRegistry.UserRepositoryLoader
@@ -63,6 +65,7 @@ object Preloader {
 
       for (i in 0 until this.loaders.size) {
         val loader = this.loaders[i]
+        logger.info("--- ${loader.description} ---")
 
         Platform.runLater {
           this._percentage.set((i.toDouble() / this.loaders.size.toDouble()))
@@ -73,6 +76,8 @@ object Preloader {
       }
 
       Thread.sleep(500)
+
+      logger.info("--- preload end ---")
 
       Platform.runLater {
         this._percentage.set(1.0)
