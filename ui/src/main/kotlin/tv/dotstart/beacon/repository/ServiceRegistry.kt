@@ -76,7 +76,7 @@ object ServiceRegistry : Iterable<Service> {
     logger.info("Loading repository $location")
 
     val path = Cache(location.toString()) {
-      logger.info("Retrieving updated version of $location")
+      logger.trace("Retrieving updated version of $location")
       RepositoryLoader(location, it)
     }
 
@@ -85,7 +85,7 @@ object ServiceRegistry : Iterable<Service> {
         val compressor = CompressorStreamFactory.detect(buffered)
             ?: throw MalformedRepositoryException(
                 "Cannot detect repository compression type")
-        logger.debug("Detected $compressor compression")
+        logger.trace("Detected $compressor compression")
 
         CompressorStreamFactory().createCompressorInputStream(compressor, buffered)
             .use { compressed ->
@@ -107,7 +107,7 @@ object ServiceRegistry : Iterable<Service> {
       logger.debug("""Display Name: <unset>""")
     }
     logger.debug("Revision: ${repository.revision}")
-    logger.debug("Parsing ${repository.serviceCount} services")
+    logger.trace("Parsing ${repository.serviceCount} services")
 
     repository.serviceList
         .mapNotNull {
