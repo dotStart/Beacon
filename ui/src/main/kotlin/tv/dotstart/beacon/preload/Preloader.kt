@@ -99,7 +99,12 @@ object Preloader {
   fun shutdown() {
     this.loaders.forEach {
       logger.info("--- ${it.description} shutdown ---")
-      it.shutdown()
+
+      try {
+        it.shutdown()
+      } catch (ex: Throwable) {
+        logger.error("Shutdown of ${it.description} failed", ex)
+      }
     }
 
     logger.info("--- shutdown complete ---")
