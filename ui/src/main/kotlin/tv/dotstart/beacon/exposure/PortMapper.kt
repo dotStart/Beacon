@@ -16,6 +16,7 @@
  */
 package tv.dotstart.beacon.exposure
 
+import org.fourthline.cling.model.types.UnsignedIntegerFourBytes
 import org.fourthline.cling.support.model.PortMapping
 import tv.dotstart.beacon.preload.Loader
 import tv.dotstart.beacon.repository.Model
@@ -104,16 +105,20 @@ object PortMapper {
   private fun createPortMappings(service: Service) = service.ports
       .map { this.createPortMapping(service, it) }
 
-  private fun createPortMapping(service: Service, port: Port) = PortMapping(
-      port.number,
-      InetAddress.getLocalHost().hostAddress,
-      when (port.protocol) {
-        Model.Protocol.TCP -> PortMapping.Protocol.TCP
-        Model.Protocol.UDP -> PortMapping.Protocol.UDP
-        else -> throw IllegalArgumentException("Unsupported protocol: ${port.protocol}")
-      },
-      "Beacon Service ({$service.id})"
-  )
+  private fun createPortMapping(service: Service, port: Port): PortMapping {
+    val mapping = PortMapping(
+        port.number,
+        InetAddress.getLocalHost().hostAddress,
+        when (port.protocol) {
+          Model.Protocol.TCP -> PortMapping.Protocol.TCP
+          Model.Protocol.UDP -> PortMapping.Protocol.UDP
+          else -> throw IllegalArgumentException("Unsupported protocol: ${port.protocol}")
+        },
+        "Beacon Service ({$service.id})"
+    )
+    mapping.leaseDurationSeconds = UnsignedIntegerFourBytes(LEASE_DURATION)
+    return mapping
+  }
 
   object ScheduleLoader : Loader {
 
