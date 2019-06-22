@@ -16,6 +16,7 @@
  */
 package tv.dotstart.beacon.controller
 
+import javafx.beans.binding.Bindings
 import javafx.fxml.FXML
 import javafx.fxml.Initializable
 import javafx.scene.control.Label
@@ -24,10 +25,12 @@ import javafx.stage.Stage
 import tv.dotstart.beacon.Beacon
 import tv.dotstart.beacon.BeaconMetadata
 import tv.dotstart.beacon.preload.Preloader
+import tv.dotstart.beacon.util.Localization
 import tv.dotstart.beacon.util.logger
 import tv.dotstart.beacon.util.window
 import java.net.URL
 import java.util.*
+import java.util.concurrent.Callable
 
 /**
  * Handles the application startup logic.
@@ -48,7 +51,19 @@ class SplashController : Initializable {
   }
 
   override fun initialize(resourceURL: URL, resourceBundle: ResourceBundle?) {
-    this.statusLabel.textProperty().bind(Preloader.descriptionProperty)
+    this.statusLabel.textProperty().bind(
+        Bindings.createStringBinding(
+            Callable {
+              val key = Preloader.description
+              if (key.isEmpty()) {
+                return@Callable ""
+              }
+
+              Localization("preload.$key")
+            },
+            Preloader.descriptionProperty
+        )
+    )
     this.versionLabel.text = "v${BeaconMetadata.version}"
     this.progressBar.progressProperty().bind(Preloader.percentageProperty)
 

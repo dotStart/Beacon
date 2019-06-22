@@ -47,15 +47,15 @@ object Preloader {
   private val _completed = SimpleBooleanProperty()
 
   val description: String
-    get() = this._description.value
+    get() = this._description.value ?: ""
   val descriptionProperty: ReadOnlyStringProperty
     get() = this._description
   val percentage: Double
-    get() = this._percentage.value
+    get() = this._percentage.value ?: 0.0
   val percentageProperty: ReadOnlyDoubleProperty
     get() = this._percentage
   val completed: Boolean
-    get() = this._completed.value
+    get() = this._completed.value ?: false
   val completedProperty: ReadOnlyBooleanProperty
     get() = this._completed
 
@@ -106,14 +106,14 @@ object Preloader {
     this.loaders
         .reversed()
         .forEach {
-      logger.info("--- ${it.description} shutdown ---")
+          logger.info("--- ${it.description} shutdown ---")
 
-      try {
-        it.shutdown()
-      } catch (ex: Throwable) {
-        logger.error("Shutdown of ${it.description} failed", ex)
-      }
-    }
+          try {
+            it.shutdown()
+          } catch (ex: Throwable) {
+            logger.error("Shutdown of ${it.description} failed", ex)
+          }
+        }
 
     logger.info("--- shutdown complete ---")
   }

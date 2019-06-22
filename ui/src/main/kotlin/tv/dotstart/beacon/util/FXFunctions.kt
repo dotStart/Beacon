@@ -41,6 +41,7 @@ fun <T : Any> fxml(path: String): T {
 
   val loader = FXMLLoader(resource)
   loader.charset = StandardCharsets.UTF_8
+  loader.resources = Localization.Bundle
   return loader.load()
 }
 

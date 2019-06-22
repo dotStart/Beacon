@@ -151,7 +151,7 @@ object Gateway {
   // TODO: This registration method is ugly
   object RegistrationLoader : Loader {
 
-    override val description = "preload.registration.gateway"
+    override val description = "registration.gateway"
 
     override fun load() {
       UPnP.device

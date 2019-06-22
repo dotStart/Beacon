@@ -130,7 +130,7 @@ object PortMapper {
 
   object ScheduleLoader : Loader {
 
-    override val description = "preload.mapper"
+    override val description = "mapper"
 
     override fun load() {
       executor.scheduleAtFixedRate({ announce() }, REFRESH_DURATION, REFRESH_DURATION,

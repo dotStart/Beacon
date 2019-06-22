@@ -144,7 +144,7 @@ object ServiceRegistry : Iterable<Service> {
    */
   object SystemRepositoryLoader : Loader {
 
-    override val description = "preloader.service.system"
+    override val description = "service.system"
 
     override fun load() {
       logger.info("Refreshing system repositories")
@@ -157,7 +157,7 @@ object ServiceRegistry : Iterable<Service> {
    */
   object UserRepositoryLoader : Loader {
 
-    override val description = "preloader.service.user"
+    override val description = "service.user"
 
     override fun load() {
       logger.info("Refreshing user repositories")

@@ -48,9 +48,9 @@
       </HBox>
 
       <HBox styleClass="service-actions">
-        <JFXButton fx:id="serviceOpenButton" text="Open Ports" onAction="#onServiceOpen"
+        <JFXButton fx:id="serviceOpenButton" text="%service.action.open" onAction="#onServiceOpen"
           styleClass="green-800"/>
-        <JFXButton fx:id="serviceCloseButton" text="Close Ports" onAction="#onServiceClose"
+        <JFXButton fx:id="serviceCloseButton" text="%service.action.close" onAction="#onServiceClose"
           styleClass="red-500"/>
       </HBox>
 

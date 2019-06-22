@@ -17,6 +17,7 @@
 package tv.dotstart.beacon.cell.model
 
 import tv.dotstart.beacon.repository.Model
+import tv.dotstart.beacon.util.Localization
 
 /**
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
@@ -26,5 +27,5 @@ data class CategoryNode(val category: Model.Category) : ServiceListNode {
   override val styleClass = "category"
 
   override val icon = null
-  override val title = category.toString()
+  override val title = Localization("category.${category.name.toLowerCase()}")
 }

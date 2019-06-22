@@ -69,7 +69,7 @@ object UPnP {
    */
   object ServiceLoader : Loader {
 
-    override val description = "preload.service"
+    override val description = "upnp"
 
     override fun load() {
       serviceImpl = UpnpServiceImpl(DiscoveryListener)
