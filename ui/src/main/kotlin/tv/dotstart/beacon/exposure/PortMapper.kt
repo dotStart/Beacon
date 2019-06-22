@@ -130,8 +130,13 @@ object PortMapper {
     }
 
     override fun shutdown() {
-      logger.info("Performing clean port mapper shutdown")
+      logger.info("Shutting down announcement scheduler")
       executor.shutdownNow()
+
+      logger.info("Clearing any remaining registrations")
+      lock.read { mappings }
+          .flatMap { createPortMappings(it) }
+          .forEach { Gateway -= it }
     }
   }
 }
