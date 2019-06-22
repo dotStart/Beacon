@@ -120,6 +120,14 @@ object PortMapper {
     return mapping
   }
 
+  /**
+   * Evaluates whether a given service has already been registered with this mapper and is currently
+   * announced to the chosen gateway device.
+   */
+  operator fun contains(service: Service) = this.lock.read {
+    this.mappings.any { it.id == service.id }
+  }
+
   object ScheduleLoader : Loader {
 
     override val description = "preload.mapper"
