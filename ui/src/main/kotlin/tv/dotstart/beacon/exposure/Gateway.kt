@@ -29,6 +29,9 @@ import org.fourthline.cling.model.meta.Service
 import org.fourthline.cling.model.types.UDADeviceType
 import org.fourthline.cling.model.types.UDAServiceType
 import org.fourthline.cling.support.igd.callback.GetExternalIP
+import org.fourthline.cling.support.igd.callback.PortMappingAdd
+import org.fourthline.cling.support.igd.callback.PortMappingDelete
+import org.fourthline.cling.support.model.PortMapping
 import tv.dotstart.beacon.preload.Loader
 import tv.dotstart.beacon.upnp.UPnP
 import tv.dotstart.beacon.util.logger
@@ -106,6 +109,38 @@ object Gateway {
         Platform.runLater {
           _externalAddressProperty.set(addr)
         }
+      }
+    })
+  }
+
+  operator fun plusAssign(mapping: PortMapping) {
+    val service = this.lock.withLock(this::service)
+
+    UPnP(object : PortMappingAdd(service, mapping) {
+      override fun success(invocation: ActionInvocation<out Service<*, *>>) {
+        logger.trace(
+            "Port mapping for ${mapping.internalPort} (${mapping.protocol}) has been confirmed")
+      }
+
+      override fun failure(invocation: ActionInvocation<out Service<*, *>>, operation: UpnpResponse,
+          defaultMsg: String) {
+        logger.error("Port mapping for ${mapping.internalPort} (${mapping.protocol}) has failed")
+      }
+    })
+  }
+
+  operator fun minusAssign(mapping: PortMapping) {
+    val service = this.lock.withLock(this::service)
+
+    UPnP(object : PortMappingDelete(service, mapping) {
+      override fun success(invocation: ActionInvocation<out Service<*, *>>) {
+        logger.trace(
+            "Port mapping for ${mapping.internalPort} (${mapping.protocol}) has been confirmed")
+      }
+
+      override fun failure(invocation: ActionInvocation<out Service<*, *>>, operation: UpnpResponse,
+          defaultMsg: String) {
+        logger.error("Port mapping for ${mapping.internalPort} (${mapping.protocol}) has failed")
       }
     })
   }
