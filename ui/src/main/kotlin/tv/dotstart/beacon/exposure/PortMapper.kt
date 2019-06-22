@@ -46,6 +46,9 @@ object PortMapper {
   private val lock = ReentrantReadWriteLock()
   private val mappings = mutableListOf<Service>()
 
+  /**
+   * Appends a set of port mappings to the regular announcement.
+   */
   operator fun plusAssign(service: Service) {
     val registered = this.lock.write {
       if (this.mappings.any { it.id == service.id }) {
@@ -62,6 +65,9 @@ object PortMapper {
     }
   }
 
+  /**
+   * Removes a set of port mappings from the regular announcement.
+   */
   operator fun minusAssign(service: Service) {
     val removed = this.lock.write {
       if (!this.mappings.removeIf { it.id == service.id }) {
@@ -80,6 +86,9 @@ object PortMapper {
     }
   }
 
+  /**
+   * Announces all currently registered services to the chosen router.
+   */
   private fun announce() {
     logger.debug("Announcing port mappings")
 
