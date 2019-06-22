@@ -19,6 +19,7 @@ package tv.dotstart.beacon.preload
 import javafx.application.Platform
 import javafx.beans.property.*
 import tv.dotstart.beacon.repository.ServiceRegistry
+import tv.dotstart.beacon.upnp.UPnP
 import tv.dotstart.beacon.util.logger
 import kotlin.concurrent.thread
 
@@ -33,7 +34,8 @@ object Preloader {
 
   private val loaders = listOf(
       ServiceRegistry.SystemRepositoryLoader,
-      ServiceRegistry.UserRepositoryLoader
+      ServiceRegistry.UserRepositoryLoader,
+      UPnP.ServiceLoader
   )
 
   private val _description = SimpleStringProperty()
