@@ -103,7 +103,9 @@ object Preloader {
    * Performs a clean shutdown of all loaders.
    */
   fun shutdown() {
-    this.loaders.forEach {
+    this.loaders
+        .reversed()
+        .forEach {
       logger.info("--- ${it.description} shutdown ---")
 
       try {
