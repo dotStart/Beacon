@@ -94,7 +94,7 @@ object UPnP {
 
     override fun deviceAdded(registry: Registry,
         device: Device<*, out Device<*, *, *>, out Service<*, *>>) {
-      logger.debug(
+      logger.info(
           """Discovered device "${device.displayString}" (${device.type} v${device.version.major}.${device.version.minor})""")
       deviceSubject.onNext(device)
     }
