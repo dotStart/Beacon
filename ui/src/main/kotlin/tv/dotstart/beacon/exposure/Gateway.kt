@@ -119,12 +119,12 @@ object Gateway {
     UPnP(object : PortMappingAdd(service, mapping) {
       override fun success(invocation: ActionInvocation<out Service<*, *>>) {
         logger.trace(
-            "Port mapping for ${mapping.internalPort} (${mapping.protocol}) has been confirmed")
+            "Port mapping registration for ${mapping.internalPort} (${mapping.protocol}) has been confirmed")
       }
 
       override fun failure(invocation: ActionInvocation<out Service<*, *>>, operation: UpnpResponse,
           defaultMsg: String) {
-        logger.error("Port mapping for ${mapping.internalPort} (${mapping.protocol}) has failed")
+        logger.error("Port mapping registration for ${mapping.internalPort} (${mapping.protocol}) has failed")
       }
     })
   }
@@ -135,12 +135,12 @@ object Gateway {
     UPnP(object : PortMappingDelete(service, mapping) {
       override fun success(invocation: ActionInvocation<out Service<*, *>>) {
         logger.trace(
-            "Port mapping for ${mapping.internalPort} (${mapping.protocol}) has been confirmed")
+            "Port mapping removal for ${mapping.internalPort} (${mapping.protocol}) has been confirmed")
       }
 
       override fun failure(invocation: ActionInvocation<out Service<*, *>>, operation: UpnpResponse,
           defaultMsg: String) {
-        logger.error("Port mapping for ${mapping.internalPort} (${mapping.protocol}) has failed")
+        logger.error("Port mapping removal for ${mapping.internalPort} (${mapping.protocol}) has failed")
       }
     })
   }
