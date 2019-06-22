@@ -20,9 +20,12 @@ import javafx.fxml.FXML
 import javafx.fxml.Initializable
 import javafx.scene.control.Label
 import javafx.scene.control.ProgressBar
+import javafx.stage.Stage
+import tv.dotstart.beacon.Beacon
 import tv.dotstart.beacon.BeaconMetadata
 import tv.dotstart.beacon.preload.Preloader
 import tv.dotstart.beacon.util.logger
+import tv.dotstart.beacon.util.window
 import java.net.URL
 import java.util.*
 
@@ -52,6 +55,17 @@ class SplashController : Initializable {
     logger.info("Starting preloading process")
     Preloader {
       logger.info("Completed application pre-loading")
+
+      val stage = Stage()
+      stage.title = "Beacon v${BeaconMetadata.version}"
+      stage.icons += Beacon.icon
+      stage.window("main.fxml", maximizable = false)
+      stage.show()
+
+      // we're always spawned in primary
+      (this.statusLabel.scene.window as Stage).close()
+
+      logger.info("Switched to main window")
     }
   }
 }
