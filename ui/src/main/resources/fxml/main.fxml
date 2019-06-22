@@ -36,7 +36,9 @@
   <VBox styleClass="sidebar">
     <JFXTreeView fx:id="serviceList" prefWidth="250" showRoot="false"/>
 
-    <JFXTextField fx:id="externalAddress" styleClass="external-address" editable="false" />
+    <VBox styleClass="global-actions">
+      <JFXTextField fx:id="externalAddress" styleClass="external-address" editable="false" />
+    </VBox>
   </VBox>
   <StackPane HBox.hgrow="ALWAYS">
     <VBox fx:id="serviceDetails" styleClass="service-details">
