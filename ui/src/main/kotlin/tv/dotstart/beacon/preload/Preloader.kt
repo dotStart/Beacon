@@ -18,6 +18,7 @@ package tv.dotstart.beacon.preload
 
 import javafx.application.Platform
 import javafx.beans.property.*
+import tv.dotstart.beacon.exposure.GatewayInfo
 import tv.dotstart.beacon.repository.ServiceRegistry
 import tv.dotstart.beacon.upnp.UPnP
 import tv.dotstart.beacon.util.logger
@@ -33,6 +34,7 @@ object Preloader {
   val logger = Preloader::class.logger
 
   private val loaders = listOf(
+      GatewayInfo.RegistrationLoader,
       ServiceRegistry.SystemRepositoryLoader,
       ServiceRegistry.UserRepositoryLoader,
       UPnP.ServiceLoader
