@@ -28,6 +28,7 @@ import javafx.scene.control.TableView
 import javafx.scene.control.TreeItem
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
+import javafx.stage.Stage
 import tv.dotstart.beacon.cell.ServiceListTreeCell
 import tv.dotstart.beacon.cell.model.CategoryNode
 import tv.dotstart.beacon.cell.model.ServiceListNode
@@ -37,6 +38,7 @@ import tv.dotstart.beacon.exposure.PortMapper
 import tv.dotstart.beacon.repository.Model
 import tv.dotstart.beacon.repository.ServiceRegistry
 import tv.dotstart.beacon.repository.model.Port
+import tv.dotstart.beacon.util.splashWindow
 import java.net.URL
 import java.nio.file.Files
 import java.util.*
@@ -155,5 +157,17 @@ class MainController : Initializable {
     PortMapper -= service
 
     this.serviceOpenButton.isVisible = true
+  }
+
+  @FXML
+  private fun onAboutOpen(actionEvent: ActionEvent) {
+    val stage = Stage()
+    stage.focusedProperty().addListener({ _, _, n ->
+      if (!n) {
+        stage.close()
+      }
+    })
+    stage.splashWindow("about.fxml")
+    stage.show()
   }
 }

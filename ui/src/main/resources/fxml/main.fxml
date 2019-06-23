@@ -38,6 +38,7 @@
 
     <VBox styleClass="global-actions">
       <JFXTextField fx:id="externalAddress" styleClass="external-address" editable="false" />
+      <JFXButton text="%action.about" onAction="#onAboutOpen" styleClass="brand" maxWidth="Infinity" />
     </VBox>
   </VBox>
   <StackPane HBox.hgrow="ALWAYS">
