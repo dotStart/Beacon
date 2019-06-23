@@ -37,7 +37,9 @@ object BeaconCli : CliktCommand(name = "Beacon") {
    * given.
    */
   private val defaultSystemRepositories = listOf(
-      URI.create("github://dotStart/Beacon#games.dat")
+      URI.create("github://dotStart/Beacon#indie.dat"),
+      URI.create("github://dotStart/Beacon#steam.dat"),
+      URI.create("github://dotStart/Beacon#tools.dat")
   )
 
   /**
@@ -101,7 +103,8 @@ object BeaconCli : CliktCommand(name = "Beacon") {
           "System repositories have been overridden - Some standard services may be missing")
     }
 
-    logger.info("System Repositories (${systemRepositories.size}): ${systemRepositories.joinToString()}")
+    logger.info(
+        "System Repositories (${systemRepositories.size}): ${systemRepositories.joinToString()}")
 
     if (this.verbose || this.debug) {
       Configurator.setRootLevel(
