@@ -47,6 +47,7 @@
     <Label text="OpenJFX"/>
     <Label text="ProtoBuffers"/>
     <Label text="Reactive Java"/>
+    <Label text="%about.dependencies.remaining" />
   </VBox>
 
   <Pane VBox.vgrow="ALWAYS"/>
