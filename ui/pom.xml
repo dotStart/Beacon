@@ -239,7 +239,7 @@
           <plugin>
             <groupId>com.akathist.maven.plugins.launch4j</groupId>
             <artifactId>launch4j-maven-plugin</artifactId>
-            <version>1.7.10</version>
+            <version>1.7.25</version>
 
             <executions>
               <execution>
@@ -258,7 +258,7 @@
                   <icon>${project.basedir}/src/main/resources/image/logo.ico</icon>
 
                   <jre>
-                    <minVersion>1.8.0</minVersion>
+                    <minVersion>9</minVersion>
                   </jre>
 
                   <versionInfo>
