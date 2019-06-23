@@ -20,8 +20,12 @@ import javafx.application.Platform
 import javafx.beans.property.*
 import tv.dotstart.beacon.exposure.Gateway
 import tv.dotstart.beacon.exposure.PortMapper
+import tv.dotstart.beacon.preload.error.PreloadError
 import tv.dotstart.beacon.repository.ServiceRegistry
 import tv.dotstart.beacon.upnp.UPnP
+import tv.dotstart.beacon.util.Localization
+import tv.dotstart.beacon.util.detailedErrorDialog
+import tv.dotstart.beacon.util.errorDialog
 import tv.dotstart.beacon.util.logger
 import kotlin.concurrent.thread
 
@@ -82,7 +86,24 @@ object Preloader {
           this._description.set(loader.description)
         }
 
-        loader.load()
+        try {
+          loader.load()
+        } catch (ex: PreloadError) {
+          logger.error("Preloading failed - Aborting application startup", ex)
+          Platform.runLater {
+            errorDialog(Localization("error.${ex.key}.title"), Localization("error.${ex.key}.body"))
+            System.exit(1)
+          }
+          return@thread
+        } catch (ex: Throwable) {
+          logger.error("Preloading failed - Aborting application startup", ex)
+          Platform.runLater {
+            detailedErrorDialog(Localization("error.unknown.title"),
+                Localization("error.unknown.body"), ex)
+            System.exit(128)
+          }
+          return@thread
+        }
       }
 
       Thread.sleep(500)
