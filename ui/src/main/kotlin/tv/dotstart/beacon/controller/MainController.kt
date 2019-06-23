@@ -111,6 +111,7 @@ class MainController : Initializable {
         .filter { it.children.isNotEmpty() }
         .forEach {
           it.isExpanded = true
+          it.children.sortBy { it.value.title }
           this.root.children.add(it)
         }
 
