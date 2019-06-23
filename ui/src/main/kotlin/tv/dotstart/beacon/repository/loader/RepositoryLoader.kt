@@ -45,6 +45,7 @@ interface RepositoryLoader {
     init {
       this += FileRepositoryLoader
       this += HttpRepositoryLoader
+      this += GitHubRepositoryLoader
     }
 
     /**
