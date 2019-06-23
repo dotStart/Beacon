@@ -1,17 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (C) 2019 Johannes Donath <johannesd@torchmind.com>
+  ~ and other copyright owners as documented in the project's IP log.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns="http://maven.apache.org/POM/4.0.0"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <!-- Artifact INformation -->
-  <groupId>io.github.lordakkarin</groupId>
-  <artifactId>beacon</artifactId>
-  <version>1.1.0</version>
+  <groupId>tv.dotstart.beacon</groupId>
+  <artifactId>parent</artifactId>
+  <version>2.0</version>
+  <packaging>pom</packaging>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+    <cling.version>2.1.2</cling.version>
+    <jackson.version>2.9.9</jackson.version>
+    <kotlin.version>1.3.31</kotlin.version>
     <log4j.version>2.5</log4j.version>
+    <openjfx.version>11</openjfx.version>
+    <protobuf.version>3.8.0</protobuf.version>
   </properties>
 
   <licenses>
@@ -21,11 +43,9 @@
     </license>
   </licenses>
 
-  <!-- Artifact Metadata -->
   <name>Beacon</name>
-  <description>Provides a simple UI which allows users to configure port forwarding using UPnP.
-  </description>
-  <url>https://github.com/LordAkkarin/Beacon</url>
+  <description>Local game server hosting made simple</description>
+  <url>https://github.com/dotStart/Beacon</url>
   <inceptionYear>2016</inceptionYear>
 
   <developers>
@@ -42,304 +62,312 @@
 
   <scm>
     <tag>master</tag>
-    <url>https://github.com/LordAkkarin/Beacon</url>
-    <connection>scm:git:git@github.com:/LordAkkarin/Beacon.git</connection>
-    <developerConnection>scm:git:git@github.com:/LordAkkarin/Beacon.git</developerConnection>
+    <url>https://github.com/dotStart/Beacon</url>
+    <connection>scm:git:git@github.com:dotStart/Beacon.git</connection>
+    <developerConnection>scm:git:git@github.com:dotStart/Beacon.git</developerConnection>
   </scm>
 
   <issueManagement>
     <system>GitHub</system>
-    <url>https://github.com/LordAkkarin/Beacon/issues</url>
+    <url>https://github.com/dotStart/Beacon/issues</url>
   </issueManagement>
 
-  <!-- Dependencies -->
   <repositories>
     <repository>
       <id>4thline-repo</id>
       <url>http://4thline.org/m2</url>
-
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
     </repository>
   </repositories>
 
-  <dependencies>
-    <!-- UPnP -->
-    <dependency>
-      <groupId>org.fourthline.cling</groupId>
-      <artifactId>cling-core</artifactId>
-      <version>2.0.1</version>
-    </dependency>
-    <dependency>
-      <groupId>org.fourthline.cling</groupId>
-      <artifactId>cling-support</artifactId>
-      <version>2.0.1</version>
-    </dependency>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>tv.dotstart.beacon</groupId>
+        <artifactId>repository-model</artifactId>
+        <version>2.0</version>
+      </dependency>
 
-    <!-- Java -->
-    <dependency>
-      <groupId>com.google.code.findbugs</groupId>
-      <artifactId>jsr305</artifactId>
-      <version>3.0.1</version>
-      <scope>provided</scope>
-    </dependency>
+      <dependency>
+        <groupId>org.jetbrains.kotlin</groupId>
+        <artifactId>kotlin-stdlib-jdk8</artifactId>
+        <version>${kotlin.version}</version>
+      </dependency>
 
-    <!-- Logging -->
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-api</artifactId>
-      <version>${log4j.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-core</artifactId>
-      <version>${log4j.version}</version>
-    </dependency>
+      <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-base</artifactId>
+        <version>${openjfx.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-fxml</artifactId>
+        <version>${openjfx.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-controls</artifactId>
+        <version>${openjfx.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-graphics</artifactId>
+        <version>${openjfx.version}</version>
+        <classifier>win</classifier>
+      </dependency>
+      <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-graphics</artifactId>
+        <version>${openjfx.version}</version>
+        <classifier>linux</classifier>
+      </dependency>
+      <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-graphics</artifactId>
+        <version>${openjfx.version}</version>
+        <classifier>mac</classifier>
+      </dependency>
+      <dependency>
+        <groupId>com.jfoenix</groupId>
+        <artifactId>jfoenix</artifactId>
+        <version>9.0.9</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.ajalt</groupId>
+        <artifactId>clikt</artifactId>
+        <version>2.0.0</version>
+      </dependency>
 
-    <!-- Utility -->
-    <dependency>
-      <groupId>com.google.inject</groupId>
-      <artifactId>guice</artifactId>
-      <version>4.0</version>
-    </dependency>
-  </dependencies>
+      <dependency>
+        <groupId>org.fourthline.cling</groupId>
+        <artifactId>cling-core</artifactId>
+        <version>${cling.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.fourthline.cling</groupId>
+        <artifactId>cling-support</artifactId>
+        <version>${cling.version}</version>
+      </dependency>
 
-  <!-- Build Settings -->
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-compress</artifactId>
+        <version>1.18</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>fluent-hc</artifactId>
+        <version>4.5.9</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>${jackson.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.module</groupId>
+        <artifactId>jackson-module-kotlin</artifactId>
+        <version>${jackson.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.sangupta</groupId>
+        <artifactId>murmur</artifactId>
+        <version>1.0.0</version>
+      </dependency>
+      <dependency>
+        <groupId>com.google.protobuf</groupId>
+        <artifactId>protobuf-java</artifactId>
+        <version>${protobuf.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.tukaani</groupId>
+        <artifactId>xz</artifactId>
+        <version>1.8</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.reactivex.rxjava2</groupId>
+        <artifactId>rxjava</artifactId>
+        <version>2.2.9</version>
+      </dependency>
+      <dependency>
+        <groupId>io.reactivex.rxjava2</groupId>
+        <artifactId>rxkotlin</artifactId>
+        <version>2.3.0</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-api</artifactId>
+        <version>${log4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-core</artifactId>
+        <version>${log4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-jul</artifactId>
+        <version>${log4j.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
   <build>
-    <finalName>Beacon</finalName>
     <defaultGoal>clean install</defaultGoal>
 
-    <resources>
-      <!-- Configurations -->
-      <resource>
-        <directory>${project.basedir}/src/main/resources</directory>
-        <targetPath>.</targetPath>
-        <filtering>false</filtering>
+    <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
+    <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
 
-        <includes>
-          <include>log4j2.xml</include>
-        </includes>
-      </resource>
+    <extensions>
+      <extension>
+        <groupId>kr.motd.maven</groupId>
+        <artifactId>os-maven-plugin</artifactId>
+        <version>1.5.0.Final</version>
+      </extension>
+    </extensions>
 
-      <!-- FXML -->
-      <resource>
-        <directory>${project.basedir}/src/main/resources/fxml</directory>
-        <targetPath>fxml/</targetPath>
-        <filtering>false</filtering>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.8.0</version>
 
-        <includes>
-          <include>*.fxml</include>
-        </includes>
-      </resource>
+          <configuration>
+            <source>9</source>
+            <target>9</target>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.jetbrains.kotlin</groupId>
+          <artifactId>kotlin-maven-plugin</artifactId>
+          <version>${kotlin.version}</version>
 
-      <!-- Images -->
-      <resource>
-        <directory>${project.basedir}/src/main/resources/image</directory>
-        <targetPath>image/</targetPath>
-        <filtering>false</filtering>
+          <configuration>
+            <jvmTarget>1.8</jvmTarget>
+          </configuration>
 
-        <includes>
-          <include>**/*.png</include>
-        </includes>
-      </resource>
+          <executions>
+            <execution>
+              <id>compile</id>
+              <goals>
+                <goal>compile</goal>
+              </goals>
+            </execution>
 
-      <!-- Localization -->
-      <resource>
-        <directory>${project.basedir}/src/main/resources/localization</directory>
-        <targetPath>localization/</targetPath>
-        <filtering>true</filtering>
+            <execution>
+              <id>test-compile</id>
+              <goals>
+                <goal>test-compile</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.xolstice.maven.plugins</groupId>
+          <artifactId>protobuf-maven-plugin</artifactId>
+          <version>0.5.1</version>
 
-        <includes>
-          <include>*.properties</include>
-        </includes>
-      </resource>
-    </resources>
+          <configuration>
+            <protocArtifact>
+              com.google.protobuf:protoc:${protobuf.version}:exe:${os.detected.classifier}
+            </protocArtifact>
+          </configuration>
 
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>3.0.0</version>
+          <executions>
+            <execution>
+              <goals>
+                <goal>compile</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.lesscss</groupId>
+          <artifactId>lesscss-maven-plugin</artifactId>
+          <version>1.7.0.1.1</version>
 
-        <configuration>
-          <configLocation>google_checks.xml</configLocation>
-          <encoding>UTF-8</encoding>
-          <consoleOutput>true</consoleOutput>
-          <failsOnError>true</failsOnError>
+          <configuration>
+            <outputDirectory>${project.build.outputDirectory}/style</outputDirectory>
+          </configuration>
 
-          <excludes>**/module-info.java</excludes>
-        </configuration>
+          <executions>
+            <execution>
+              <goals>
+                <goal>compile</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>license-maven-plugin</artifactId>
+          <version>1.20</version>
 
-        <executions>
-          <execution>
-            <id>validate</id>
-            <phase>validate</phase>
+          <executions>
+            <execution>
+              <id>default-cli</id>
 
-            <goals>
-              <goal>check</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.5</version>
+              <goals>
+                <goal>add-third-party</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
 
-        <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.lesscss</groupId>
-        <artifactId>lesscss-maven-plugin</artifactId>
-        <version>1.7.0.1.1</version>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>3.1.2</version>
 
-        <configuration>
-          <outputDirectory>${project.build.outputDirectory}/stylesheet</outputDirectory>
-        </configuration>
+          <configuration>
+            <archive>
+              <addMavenDescriptor>true</addMavenDescriptor>
+              <compress>true</compress>
+              <index>true</index>
+            </archive>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>3.1.0</version>
 
-        <executions>
-          <execution>
-            <goals>
-              <goal>compile</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
+          <executions>
+            <execution>
+              <id>attach-sources</id>
 
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <version>2.6</version>
+              <goals>
+                <goal>jar-no-fork</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
 
-        <configuration>
-          <archive>
-            <addMavenDescriptor>true</addMavenDescriptor>
-            <compress>true</compress>
-            <index>true</index>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-shade-plugin</artifactId>
+          <version>3.2.1</version>
 
-            <manifest>
-              <mainClass>io.github.lordakkarin.beacon.Beacon</mainClass>
-            </manifest>
-          </archive>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-shade-plugin</artifactId>
-        <version>2.4.3</version>
+          <executions>
+            <execution>
+              <phase>package</phase>
 
-        <executions>
-          <execution>
-            <phase>package</phase>
-
-            <goals>
-              <goal>shade</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>com.akathist.maven.plugins.launch4j</groupId>
-        <artifactId>launch4j-maven-plugin</artifactId>
-        <version>1.7.10</version>
-
-        <executions>
-          <execution>
-            <id>l4j-clui</id>
-            <phase>package</phase>
-
-            <goals>
-              <goal>launch4j</goal>
-            </goals>
-
-            <configuration>
-              <headerType>gui</headerType>
-              <outfile>${project.build.directory}/${project.build.finalName}.exe</outfile>
-              <jar>${project.build.directory}/${project.build.finalName}.jar</jar>
-              <errTitle>Beacon</errTitle>
-              <icon>${project.basedir}/src/main/resources/image/logo.ico</icon>
-
-              <jre>
-                <minVersion>1.8.0</minVersion>
-              </jre>
-
-              <versionInfo>
-                <fileVersion>1.0.0.0</fileVersion>
-                <txtFileVersion>${project.version}</txtFileVersion>
-                <fileDescription>${project.description}</fileDescription>
-                <copyright>Copyright (C) 2016 Johannes Donath</copyright>
-                <productVersion>1.0.0.0</productVersion>
-                <txtProductVersion>${project.version}</txtProductVersion>
-                <productName>${project.name}</productName>
-                <internalName>${project.artifactId}</internalName>
-                <originalFilename>${project.build.finalName}.exe</originalFilename>
-              </versionInfo>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-source-plugin</artifactId>
-        <version>2.4</version>
-
-        <executions>
-          <execution>
-            <id>attach-sources</id>
-
-            <goals>
-              <goal>jar-no-fork</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.10.3</version>
-
-        <executions>
-          <execution>
-            <id>attach-javadocs</id>
-
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
+              <goals>
+                <goal>shade</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+      </plugins>
+    </pluginManagement>
   </build>
 
-  <profiles>
-    <profile>
-      <id>deployment</id>
+  <modules>
+    <module>ui</module>
 
-      <build>
-        <plugins>
-          <!-- GPG Signatures -->
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-gpg-plugin</artifactId>
-            <version>1.6</version>
-
-            <executions>
-              <execution>
-                <id>sign-artifacts</id>
-                <phase>verify</phase>
-
-                <goals>
-                  <goal>sign</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
+    <module>repository-model</module>
+    <module>repository-compiler</module>
+  </modules>
 </project>

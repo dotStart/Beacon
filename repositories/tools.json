@@ -1,0 +1,38 @@
+{
+  "revision": 1,
+  "services": [
+    {
+      "id": "tool+generic://ftpd",
+      "title": "FTP Server",
+      "category": "TOOL",
+      "ports": [
+        {
+          "protocol": "TCP",
+          "number": 21
+        }
+      ]
+    },
+    {
+      "id": "tool+generic://httpd",
+      "title": "HTTP Server",
+      "category": "TOOL",
+      "ports": [
+        {
+          "protocol": "TCP",
+          "number": 80
+        }
+      ]
+    },
+    {
+      "id": "tool+generic://sshd",
+      "title": "SSH Server",
+      "category": "TOOL",
+      "ports": [
+        {
+          "protocol": "TCP",
+          "number": 22
+        }
+      ]
+    }
+  ]
+}

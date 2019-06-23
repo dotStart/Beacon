@@ -1,0 +1,83 @@
+syntax = "proto3";
+package model;
+option java_package = "tv.dotstart.beacon.repository";
+
+/**
+ * Represents a complete listing of services.
+ */
+message Repository {
+
+  /**
+   * Stores a human readable identifier with which this repository will be referenced (for instance,
+   * as a copyright at the bottom of a service definition).
+   *
+   * When this value is omitted, no such information will be displayed. This is, however, typically
+   * only the case when dealing with system repositories.
+   */
+  string displayName = 1;
+
+  /**
+   * Stores a revision number with which this repository is versioned.
+   *
+   * This value is currently not used by the client in any useful way apart from identifying
+   * specific repository versions when debugging issues (including caching related issues).
+   */
+  uint64 revision = 2;
+
+  /**
+   * Stores a complete listing of known services and their respective ports.
+   */
+  repeated ServiceDefinition service = 3;
+}
+
+message ServiceDefinition {
+
+  /**
+   * Stores a globally unique identifier for this particular service definition.
+   *
+   * This value is used to prevent the duplicate definition of the same service when multiple
+   * repositories are merged.
+   */
+  string id = 1;
+
+  /**
+   * Identifies the category in which this program is to be placed.
+   */
+  Category category = 2;
+
+  /**
+   * Stores an encoded PNG image which is to be displayed along with the title for identification
+   * purposes.
+   *
+   * When this field is omitted, a default image is displayed instead.
+   */
+  bytes icon = 3;
+
+  /**
+   * Stores a human readable title for this service (typically a trademark).
+   */
+  string title = 4;
+
+  /**
+   * Stores the port definitions which need to be exposed in order to use this service.
+   */
+  repeated PortDefinition port = 5;
+}
+
+enum Category {
+  GAME = 0;
+  TOOL = 1;
+}
+
+/**
+ * Represents a port definition.
+ */
+message PortDefinition {
+  Protocol protocol = 1;
+  uint32 port = 2;
+}
+
+enum Protocol {
+  TCP = 0;
+  UDP = 1;
+}

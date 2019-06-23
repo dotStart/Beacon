@@ -1,0 +1,33 @@
+{
+  "displayName": "Test Repository",
+  "revision": 42,
+  "services": [
+    {
+      "id": "game+steam://730",
+      "title": "Counter Strike: Global Offensive",
+      "icon": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/730/69f7ebe2735c366c65c0b33dae00e12dc40edbe4.jpg",
+      "category": "GAME",
+      "ports": [
+        {
+          "protocol": "TCP",
+          "number": 27015
+        },
+        {
+          "protocol": "UDP",
+          "number": 27015
+        }
+      ]
+    },
+    {
+      "id": "tool+generic://httpd",
+      "title": "HTTP Server",
+      "category": "TOOL",
+      "ports": [
+        {
+          "protocol": "TCP",
+          "number": 80
+        }
+      ]
+    }
+  ]
+}

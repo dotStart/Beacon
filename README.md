@@ -1,5 +1,6 @@
 [![License](https://img.shields.io/github/license/dotStart/Beacon.svg?style=flat-square)](https://www.apache.org/licenses/LICENSE-2.0.txt)
 [![GitHub Release](https://img.shields.io/github/release/dotStart/Beacon.svg?style=flat-square)](https://github.com/dotStart/Beacon/releases)
+[![CircleCI](https://img.shields.io/circleci/project/github/dotStart/Beacon.svg?style=flat-square)](https://circleci.com/gh/dotStart/Beacon)
 
 # Beacon
 
