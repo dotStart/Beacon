@@ -43,6 +43,7 @@ object Preloader {
       ServiceRegistry.SystemRepositoryLoader,
       ServiceRegistry.UserRepositoryLoader,
       UPnP.ServiceLoader,
+      Gateway.FuseLoader,
       PortMapper.ScheduleLoader
   )
 

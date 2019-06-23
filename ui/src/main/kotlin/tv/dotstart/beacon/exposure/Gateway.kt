@@ -33,7 +33,10 @@ import org.fourthline.cling.support.igd.callback.PortMappingAdd
 import org.fourthline.cling.support.igd.callback.PortMappingDelete
 import org.fourthline.cling.support.model.PortMapping
 import tv.dotstart.beacon.preload.Loader
+import tv.dotstart.beacon.preload.error.PreloadError
 import tv.dotstart.beacon.upnp.UPnP
+import tv.dotstart.beacon.util.Localization
+import tv.dotstart.beacon.util.errorDialog
 import tv.dotstart.beacon.util.logger
 import java.net.InetAddress
 import java.util.concurrent.locks.ReentrantLock
@@ -45,6 +48,8 @@ import kotlin.concurrent.withLock
  * @author <a href="mailto:johannesd@torchmind.com">Johannes Donath</a>
  */
 object Gateway {
+
+  private const val GATEWAY_DISCOVERY_TIMEOUT = 30000L
 
   private val igdDeviceType = UDADeviceType("InternetGatewayDevice", 1)
   private val connectionDeviceType = UDADeviceType("WANConnectionDevice", 1)
@@ -124,7 +129,8 @@ object Gateway {
 
       override fun failure(invocation: ActionInvocation<out Service<*, *>>, operation: UpnpResponse,
           defaultMsg: String) {
-        logger.error("Port mapping registration for ${mapping.internalPort} (${mapping.protocol}) has failed")
+        logger.error(
+            "Port mapping registration for ${mapping.internalPort} (${mapping.protocol}) has failed")
       }
     })
   }
@@ -140,7 +146,8 @@ object Gateway {
 
       override fun failure(invocation: ActionInvocation<out Service<*, *>>, operation: UpnpResponse,
           defaultMsg: String) {
-        logger.error("Port mapping removal for ${mapping.internalPort} (${mapping.protocol}) has failed")
+        logger.error(
+            "Port mapping removal for ${mapping.internalPort} (${mapping.protocol}) has failed")
       }
     })
   }
@@ -151,7 +158,7 @@ object Gateway {
   // TODO: This registration method is ugly
   object RegistrationLoader : Loader {
 
-    override val description = "registration.gateway"
+    override val description = "gateway"
 
     override fun load() {
       UPnP.device
@@ -194,6 +201,30 @@ object Gateway {
               doRefresh()
             }
           }
+    }
+  }
+
+  object FuseLoader : Loader {
+
+    override val description = "gateway.fuse"
+
+    override fun load() {
+      logger.info("Delaying application startup for gateway discovery")
+
+      val startTime = System.currentTimeMillis()
+      while (true) {
+        Gateway.externalAddress?.let {
+          logger.info("Gateway at $it is ready")
+          return
+        }
+
+        if (System.currentTimeMillis() - startTime > GATEWAY_DISCOVERY_TIMEOUT) {
+          throw PreloadError("gateway-fuse", "Failed to locate UPnP capable internet gateway")
+        }
+
+        logger.trace("Gateway not yet discovered - Waiting a little bit longer")
+        Thread.sleep(500)
+      }
     }
   }
 }
