@@ -16,8 +16,6 @@
  */
 package tv.dotstart.beacon
 
-import java.nio.file.Files
-import java.nio.file.Paths
 import java.util.*
 
 /**
@@ -30,8 +28,7 @@ object BeaconMetadata {
   val version: String
 
   init {
-    val location = BeaconMetadata::class.java.getResource("/beacon.properties")
-    val properties = Files.newInputStream(Paths.get(location.toURI())).use {
+    val properties = BeaconMetadata::class.java.getResourceAsStream("/beacon.properties").use {
       val tmp = Properties()
       tmp.load(it)
       tmp

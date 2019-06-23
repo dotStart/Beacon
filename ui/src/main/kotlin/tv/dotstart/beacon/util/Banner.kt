@@ -16,9 +16,8 @@
  */
 package tv.dotstart.beacon.util
 
+import java.io.BufferedInputStream
 import java.nio.charset.StandardCharsets
-import java.nio.file.Files
-import java.nio.file.Paths
 
 /**
  * Writes an application banner to the command line.
@@ -33,14 +32,13 @@ object Banner {
   private val logger = Banner::class.logger
 
   operator fun invoke() {
-    val path = this.javaClass.getResource("/banner.txt")
-        ?.let { Paths.get(it.toURI()) }
-    if (path == null) {
-      logger.error("Failed to load application banner: No such file or directory")
-      return
+    val banner = this.javaClass.getResourceAsStream("/banner.txt").use {
+      BufferedInputStream(it).use {
+        String(it.readAllBytes(), StandardCharsets.UTF_8)
+      }
     }
 
-    Files.readAllLines(path, StandardCharsets.UTF_8)
-        .forEach { println(it) }
+    banner.lineSequence()
+        .forEach(::println)
   }
 }

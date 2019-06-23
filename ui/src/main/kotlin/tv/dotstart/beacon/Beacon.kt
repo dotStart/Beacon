@@ -25,8 +25,6 @@ import tv.dotstart.beacon.util.OperatingSystem
 import tv.dotstart.beacon.util.logger
 import tv.dotstart.beacon.util.splashWindow
 import java.nio.file.Files
-import java.nio.file.NoSuchFileException
-import java.nio.file.Paths
 
 
 /**
@@ -44,11 +42,8 @@ class Beacon : Application() {
 
     private const val iconPath = "image/logo.png"
     val icon: Image by lazy {
-      val resource = Thread.currentThread().contextClassLoader.getResource(iconPath)
-          ?.let { Paths.get(it.toURI()) }
-          ?: throw NoSuchFileException("No such file or directory: $iconPath")
-
-      Files.newInputStream(resource).use(::Image)
+      Thread.currentThread().contextClassLoader.getResourceAsStream(iconPath)
+          .use(::Image)
     }
   }
 
