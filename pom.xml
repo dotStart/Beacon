@@ -282,6 +282,21 @@
             </execution>
           </executions>
         </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>license-maven-plugin</artifactId>
+          <version>1.20</version>
+
+          <executions>
+            <execution>
+              <id>default-cli</id>
+
+              <goals>
+                <goal>add-third-party</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
 
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
