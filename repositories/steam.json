@@ -1,0 +1,141 @@
+{
+  "revision": 1,
+  "services": [
+    {
+      "id": "game+steam://33900",
+      "title": "Arma 2",
+      "icon": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/33900/7fd2d12d3f91ee3e69955121323bb89063ea304e.jpg",
+      "category": "GAME",
+      "ports": [
+        {
+          "protocol": "UDP",
+          "number": 2302
+        },
+        {
+          "protocol": "UDP",
+          "number": 2303
+        },
+        {
+          "protocol": "UDP",
+          "number": 2305
+        }
+      ]
+    },
+    {
+      "id": "game+steam://10",
+      "title": "Counter Strike",
+      "icon": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/10/6b0312cda02f5f777efa2f3318c307ff9acafbb5.jpg",
+      "category": "GAME",
+      "ports": [
+        {
+          "protocol": "TCP",
+          "number": 27015
+        },
+        {
+          "protocol": "UDP",
+          "number": 27015
+        }
+      ]
+    },
+    {
+      "id": "game+steam://730",
+      "title": "Counter Strike: Global Offensive",
+      "icon": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/730/69f7ebe2735c366c65c0b33dae00e12dc40edbe4.jpg",
+      "category": "GAME",
+      "ports": [
+        {
+          "protocol": "TCP",
+          "number": 27015
+        },
+        {
+          "protocol": "UDP",
+          "number": 27015
+        }
+      ]
+    },
+    {
+      "id": "game+steam://240",
+      "title": "Counter Strike: Source",
+      "icon": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/240/9052fa60c496a1c03383b27687ec50f4bf0f0e10.jpg",
+      "category": "GAME",
+      "ports": [
+        {
+          "protocol": "TCP",
+          "number": 27015
+        },
+        {
+          "protocol": "UDP",
+          "number": 27015
+        }
+      ]
+    },
+    {
+      "id": "game+steam://4000",
+      "title": "Garry's Mod",
+      "icon": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/4000/4a6f25cfa2426445d0d9d6e233408de4d371ce8b.jpg",
+      "category": "GAME",
+      "ports": [
+        {
+          "protocol": "TCP",
+          "number": 27015
+        },
+        {
+          "protocol": "UDP",
+          "number": 27015
+        }
+      ]
+    },
+    {
+      "id": "game+steam://232090",
+      "title": "Killing Floor 2",
+      "icon": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/232090/15837cefb378766e9916548f8591b6eb490b9e52.jpg",
+      "category": "GAME",
+      "ports": [
+        {
+          "protocol": "UDP",
+          "number": 7777
+        }
+      ]
+    },
+    {
+      "id": "game+steam://550",
+      "title": "Left 4 Dead 2",
+      "icon": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/550/7d5a243f9500d2f8467312822f8af2a2928777ed.jpg",
+      "category": "GAME",
+      "ports": [
+        {
+          "protocol": "TCP",
+          "number": 27015
+        },
+        {
+          "protocol": "UDP",
+          "number": 27015
+        }
+      ]
+    },
+    {
+      "id": "game+steam://252490",
+      "title": "Rust",
+      "icon": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/252490/820be4782639f9c4b64fa3ca7e6c26a95ae4fd1c.jpg",
+      "category": "GAME",
+      "ports": [
+        {
+          "protocol": "UDP",
+          "number": 28015
+        }
+      ]
+    },
+    {
+      "id": "game+steam://211820",
+      "title": "Starbound",
+      "icon": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/211820/4dbf4041c33eb2edfc41f552320a2e584519134c.jpg",
+      "category": "GAME",
+      "ports": [
+        {
+          "protocol": "TCP",
+          "number": 21025
+        }
+      ]
+    }
+  ]
+}
