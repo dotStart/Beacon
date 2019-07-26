@@ -32,6 +32,8 @@ import tv.dotstart.beacon.util.OperatingSystem
 import java.net.URI
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
 import java.time.Duration
 
 
@@ -79,6 +81,17 @@ object BeaconCli : CliktCommand(name = "Beacon") {
       help = "Specifies the duration for which repositories will be cached locally")
       .convert { Duration.parse(it) }
       .default(Duration.ofMinutes(10))
+
+  /**
+   * Defines the location in which log files shall be placed by the application.
+   *
+   * Defaults to the operating system dependent storage directory (e.g. APPDATA on Windows, Home on
+   * NIX based systems, etc).
+   */
+  val logDirectory: Path by option("--log-dir",
+      help = "Specifies the log storage directory")
+      .convert { Paths.get(it) }
+      .defaultLazy { OperatingSystem.current.storage.resolve("log") }
 
   /**
    * Enables global debug logging.
@@ -147,16 +160,14 @@ object BeaconCli : CliktCommand(name = "Beacon") {
     val cfg = ctx.configuration
     val layout = PatternLayout.createLayout("[%d{HH:mm:ss}] [%25.25t] [%level]: %msg%n", null, cfg,
         null, StandardCharsets.UTF_8, true, false, null, null)
-
-    val logDirectory = OperatingSystem.current.storage.resolve("log")
-    Files.createDirectories(logDirectory)
+    Files.createDirectories(this.logDirectory)
 
     val policy = OnStartupTriggeringPolicy.createPolicy()
     val strategy = DefaultRolloverStrategy.createStrategy("10", "1", "min", null, null, true, cfg)
 
     val fileAppender = RollingFileAppender.createAppender(
-        logDirectory.resolve("latest.log").toAbsolutePath().toString(),
-        logDirectory.resolve("beacon.log").toAbsolutePath().toString() + ".%i",
+        this.logDirectory.resolve("latest.log").toAbsolutePath().toString(),
+        this.logDirectory.resolve("beacon.log").toAbsolutePath().toString() + ".%i",
         "true", "File", null, null, "true",
         policy, strategy, layout, null, null, null, null, cfg
     )
