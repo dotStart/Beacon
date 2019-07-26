@@ -53,4 +53,5 @@
   <Pane VBox.vgrow="ALWAYS"/>
 
   <JFXButton text="%about.licenses" onAction="#onShowLicenses"/>
+  <JFXButton text="%about.logs" onAction="#onShowLogs"/>
 </VBox>

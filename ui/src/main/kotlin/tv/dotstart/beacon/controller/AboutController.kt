@@ -20,6 +20,7 @@ import javafx.event.ActionEvent
 import javafx.fxml.FXML
 import javafx.fxml.Initializable
 import javafx.scene.control.Label
+import tv.dotstart.beacon.BeaconCli
 import tv.dotstart.beacon.BeaconMetadata
 import tv.dotstart.beacon.util.OperatingSystem
 import java.awt.Desktop
@@ -59,5 +60,10 @@ class AboutController : Initializable {
     }
 
     Desktop.getDesktop().open(targetFile.toFile())
+  }
+
+  @FXML
+  private fun onShowLogs(actionEvent: ActionEvent) {
+    Desktop.getDesktop().open(BeaconCli.logDirectory.toFile())
   }
 }
