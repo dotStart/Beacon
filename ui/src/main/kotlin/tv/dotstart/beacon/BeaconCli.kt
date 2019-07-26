@@ -21,11 +21,19 @@ import com.github.ajalt.clikt.parameters.options.*
 import javafx.application.Application
 import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.core.LoggerContext
+import org.apache.logging.log4j.core.appender.RollingFileAppender
+import org.apache.logging.log4j.core.appender.rolling.DefaultRolloverStrategy
+import org.apache.logging.log4j.core.appender.rolling.OnStartupTriggeringPolicy
 import org.apache.logging.log4j.core.config.Configurator
+import org.apache.logging.log4j.core.layout.PatternLayout
 import tv.dotstart.beacon.util.Banner
 import tv.dotstart.beacon.util.OperatingSystem
 import java.net.URI
+import java.nio.charset.StandardCharsets
+import java.nio.file.Files
 import java.time.Duration
+
 
 /**
  * Provides a CLI entry point which permits the customization of application parameters.
@@ -92,6 +100,7 @@ object BeaconCli : CliktCommand(name = "Beacon") {
 
   override fun run() {
     Banner()
+    registerFileAppender()
 
     val logger = LogManager.getLogger(Beacon::class.java)
 
@@ -130,6 +139,32 @@ object BeaconCli : CliktCommand(name = "Beacon") {
 
     // we do not pass any of our arguments to JavaFX since there's nothing special to handle here
     Application.launch(Beacon::class.java)
+  }
+
+  private fun registerFileAppender() {
+    val ctx = LoggerContext.getContext(false)
+    val root = ctx.rootLogger
+    val cfg = ctx.configuration
+    val layout = PatternLayout.createLayout("[%d{HH:mm:ss}] [%25.25t] [%level]: %msg%n", null, cfg,
+        null, StandardCharsets.UTF_8, true, false, null, null)
+
+    val logDirectory = OperatingSystem.current.storage.resolve("log")
+    Files.createDirectories(logDirectory)
+
+    val policy = OnStartupTriggeringPolicy.createPolicy()
+    val strategy = DefaultRolloverStrategy.createStrategy("10", "1", "min", null, null, true, cfg)
+
+    val fileAppender = RollingFileAppender.createAppender(
+        logDirectory.resolve("latest.log").toAbsolutePath().toString(),
+        logDirectory.resolve("beacon.log").toAbsolutePath().toString() + ".%i",
+        "true", "File", null, null, "true",
+        policy, strategy, layout, null, null, null, null, cfg
+    )
+
+    fileAppender.start()
+
+    cfg.addAppender(fileAppender)
+    root.addAppender(fileAppender)
   }
 }
 
