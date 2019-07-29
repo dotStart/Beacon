@@ -35,6 +35,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.time.Duration
+import javax.swing.JOptionPane
 
 
 /**
@@ -112,11 +113,25 @@ object BeaconCli : CliktCommand(name = "Beacon") {
   }
 
   override fun run() {
-    Banner()
     registerFileAppender()
 
     val logger = LogManager.getLogger(Beacon::class.java)
 
+    val bytecodeVersion = System.getProperty("java.class.version", "").toFloatOrNull() ?: 53f
+    if (bytecodeVersion < 53) {
+      logger.error("Detected native Bytecode version $bytecodeVersion which is incompatible")
+      logger.error("Launch has been aborted - Cannot recover")
+
+      JOptionPane.showMessageDialog(null,
+          "You are running an outdated version of Java\nYou will need Java 9 or newer to run this application",
+          "Outdated Java Version",
+          JOptionPane.ERROR_MESSAGE);
+      return
+    }
+
+    Banner()
+
+    logger.info("Native Bytecode Version: $bytecodeVersion")
     logger.info("Operating System: ${OperatingSystem.current}")
     logger.info("Persistence Directory: ${OperatingSystem.current.storage}")
 
