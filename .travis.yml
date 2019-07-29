@@ -1,2 +1,14 @@
 language: java
 script: mvn clean package
+
+deploy:
+  provider: releases
+  api_key:
+    secure: k5cJ6sJAC4WdVa/l4+tTeLHYDroSFNz31+X98U2q7Iqyp0/gc3hYB7Iv22Z1PTm7/4mWMVieGh2Nvj/s82FTws3F2QxnE0RbVUYW/yq6H6sKKWwNoK5CMwxomrEZHutLyRsCIlQ6XmkyMABavjJ6kaeY6H7S7dJwWRZfmi3g3xlgVIGVd1hZ7ppxA2PfcxJxm+cPRw+jfKH5jkJWyPuuU/WvnVcr4TgIC8B/rG87jIHr1oPlkQqFG+fryHb9C0Zw0F6VkTNkeXfHC7jt7S919GbmbzypIIqggz4y5XlePXFAObd8q+T3vs57aw7Y0fVJPfEsoZm5Y8WfMumOWEcgmCiTU8aOE4MB2/YghPtJntm70KUpOTVtEa6lr4kPp2VVK4AeH5mukRmVOnwvUvVLP673AqaSCljnLyY5obBJfSgvwQr3r8FZPqjx/ZqF6XnSmJP1gnoFjGfS6QWzJ6SC3+G6MvWY5JLihfrySPsqpASM+edkgWdzO4yKTgnJd3tKjejshOhncxkO31FZvSpQ7Esae392HNyEWSm+Xpevuq+s1lA5F9C/hikxO3V949yahHiT/tNAHiBVQT7vFbNAIcVP1OrXTjyMUuG43Fzkl6/sXE9HHliNGavh29PdaIlypopEmcfgMki7gTy5dmr6TObSCVD5jXaX0eVaQ0hV+T0=
+  file:
+    - "ui/target/Beacon.exe"
+    - "ui/target/Beacon.jar"
+  skip_cleanup: true
+  draft: true
+  on:
+    tags: true
