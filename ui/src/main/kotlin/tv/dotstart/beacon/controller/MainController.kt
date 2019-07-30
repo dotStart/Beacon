@@ -38,6 +38,7 @@ import tv.dotstart.beacon.exposure.PortMapper
 import tv.dotstart.beacon.repository.Model
 import tv.dotstart.beacon.repository.ServiceRegistry
 import tv.dotstart.beacon.repository.model.Port
+import tv.dotstart.beacon.util.Localization
 import tv.dotstart.beacon.util.splashWindow
 import java.net.URL
 import java.nio.file.Files
@@ -83,7 +84,7 @@ class MainController : Initializable {
         .addListener({ _, _, new -> this.onServiceSelect(new.value) })
     this.externalAddress.textProperty().bind(Bindings.createObjectBinding(
         Callable {
-          Gateway.externalAddress?.hostAddress
+          Gateway.externalAddress?.hostAddress ?: Localization("address.unknown")
         },
         Gateway.externalAddressProperty
     ))
