@@ -22,11 +22,11 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import com.jfoenix.controls.JFXTextField?>
 <HBox prefWidth="800" prefHeight="400" styleClass="content"
   fx:controller="tv.dotstart.beacon.controller.MainController" xmlns:fx="http://javafx.com/fxml">
   <stylesheets>
@@ -37,8 +37,14 @@
     <JFXTreeView fx:id="serviceList" prefWidth="250" showRoot="false"/>
 
     <VBox styleClass="global-actions">
-      <JFXTextField fx:id="externalAddress" styleClass="external-address" editable="false" />
-      <JFXButton text="%action.about" onAction="#onAboutOpen" styleClass="brand" maxWidth="Infinity" />
+      <!--
+        FIXME: Not using JFoenix style here due to Java 12 compatibility issue
+               Restore functionality once https://github.com/jfoenixadmin/JFoenix/issues/976 has
+               been resolved.
+        -->
+      <TextField fx:id="externalAddress" styleClass="external-address" editable="false"/>
+      <JFXButton text="%action.about" onAction="#onAboutOpen" styleClass="brand"
+        maxWidth="Infinity"/>
     </VBox>
   </VBox>
   <StackPane HBox.hgrow="ALWAYS">
@@ -51,7 +57,8 @@
       <HBox styleClass="service-actions">
         <JFXButton fx:id="serviceOpenButton" text="%service.action.open" onAction="#onServiceOpen"
           styleClass="green-800"/>
-        <JFXButton fx:id="serviceCloseButton" text="%service.action.close" onAction="#onServiceClose"
+        <JFXButton fx:id="serviceCloseButton" text="%service.action.close"
+          onAction="#onServiceClose"
           styleClass="red-500"/>
       </HBox>
 
