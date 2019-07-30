@@ -22,10 +22,7 @@ import javafx.beans.binding.Bindings
 import javafx.event.ActionEvent
 import javafx.fxml.FXML
 import javafx.fxml.Initializable
-import javafx.scene.control.Button
-import javafx.scene.control.Label
-import javafx.scene.control.TableView
-import javafx.scene.control.TreeItem
+import javafx.scene.control.*
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.stage.Stage
@@ -55,7 +52,7 @@ class MainController : Initializable {
   @FXML
   private lateinit var serviceList: JFXTreeView<ServiceListNode>
   @FXML
-  private lateinit var externalAddress: JFXTextField
+  private lateinit var externalAddress: TextField
 
   @FXML
   private lateinit var serviceIcon: ImageView
