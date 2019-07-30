@@ -19,6 +19,7 @@ package tv.dotstart.beacon
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.*
 import javafx.application.Application
+import javafx.application.Platform
 import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.core.LoggerContext
@@ -28,7 +29,9 @@ import org.apache.logging.log4j.core.appender.rolling.OnStartupTriggeringPolicy
 import org.apache.logging.log4j.core.config.Configurator
 import org.apache.logging.log4j.core.layout.PatternLayout
 import tv.dotstart.beacon.util.Banner
+import tv.dotstart.beacon.util.Localization
 import tv.dotstart.beacon.util.OperatingSystem
+import tv.dotstart.beacon.util.detailedErrorDialog
 import java.net.URI
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
@@ -130,6 +133,16 @@ object BeaconCli : CliktCommand(name = "Beacon") {
     }
 
     Banner()
+
+    Thread.setDefaultUncaughtExceptionHandler { thread, ex ->
+      logger.error("Uncaught exception on thread \"${thread.name}\" (#${thread.id})", ex)
+
+      Platform.runLater {
+        detailedErrorDialog(Localization("error.unknown.title"),
+            Localization("error.unknown.body"), ex)
+        System.exit(128)
+      }
+    }
 
     logger.info("Native Bytecode Version: $bytecodeVersion")
     logger.info("Operating System: ${OperatingSystem.current}")

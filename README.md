@@ -1,6 +1,8 @@
 [![License](https://img.shields.io/github/license/dotStart/Beacon.svg?style=flat-square)](https://www.apache.org/licenses/LICENSE-2.0.txt)
 [![GitHub Release](https://img.shields.io/github/release/dotStart/Beacon.svg?style=flat-square)](https://github.com/dotStart/Beacon/releases)
-[![CircleCI](https://img.shields.io/circleci/project/github/dotStart/Beacon.svg?style=flat-square)](https://circleci.com/gh/dotStart/Beacon)
+[![TravisCI](https://img.shields.io/travis/dotStart/Beacon?style=flat-square)](https://travis-ci.org/dotStart/Beacon)
+[![Discord](https://img.shields.io/discord/252100053093711872?style=flat-square)][discord]
+
 
 # Beacon
 
@@ -15,7 +17,7 @@ Beacon is a lightweight and easy to use UPnP assistant to open arbitrary ports.
 ## Need Help?
 
 The [official documentation][wiki] has help articles and specifications on the implementation. If, however, you still
-require assistance with the application, you are welcome to join our [Gitter Channel][gitter] and ask veteran users and
+require assistance with the application, you are welcome to join our [Discord][discord] and ask veteran users and
 developers. Make sure to include a detailed description of your problem when asking questions though:
 
 1. Include a complete error message along with its stack trace when applicable.
@@ -27,6 +29,6 @@ developers. Make sure to include a detailed description of your problem when ask
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for information on working on Beacon and submitting patches. You can also join
-the [project's chat room][gitter] to discuss future improvements or to get your custom implementation listed.
+the [project's chat room][discord] to discuss future improvements or to get your custom implementation listed.
 
-[gitter]: https://gitter.im/dotStart/Beacon
+[discord]: https://discord.gg/RdFqysd

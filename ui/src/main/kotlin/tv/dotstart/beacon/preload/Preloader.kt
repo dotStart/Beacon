@@ -116,7 +116,14 @@ object Preloader {
         this._description.set("")
         this._completed.set(true)
 
-        onComplete()
+        try {
+          onComplete()
+        } catch (ex: Throwable) {
+          logger.error("Preload completion listener failed - Aborting application startup", ex)
+          detailedErrorDialog(Localization("error.unknown.title"),
+              Localization("error.unknown.body"), ex)
+          System.exit(128)
+        }
       }
     }
   }
