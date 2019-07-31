@@ -185,6 +185,8 @@ object Gateway {
             }
           }
           .filter { it is RemoteService }
+          .filter { it.getAction("AddPortMapping") != null }
+          .filter { it.getAction("DeletePortMapping") != null }
           .subscribe {
             val device = it.device as RemoteDevice
             val gatewayHost = InetAddress.getByName(device.identity.descriptorURL.host)
