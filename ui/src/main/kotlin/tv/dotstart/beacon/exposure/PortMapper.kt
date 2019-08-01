@@ -114,7 +114,7 @@ object PortMapper {
           Model.Protocol.UDP -> PortMapping.Protocol.UDP
           else -> throw IllegalArgumentException("Unsupported protocol: ${port.protocol}")
         },
-        "Beacon Service ({$service.id})"
+        "Beacon Service (${service.id})"
     )
     mapping.leaseDurationSeconds = UnsignedIntegerFourBytes(LEASE_DURATION)
     return mapping
