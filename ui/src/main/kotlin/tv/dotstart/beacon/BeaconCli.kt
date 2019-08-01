@@ -22,19 +22,8 @@ import javafx.application.Application
 import javafx.application.Platform
 import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.LogManager
-import org.apache.logging.log4j.core.LoggerContext
-import org.apache.logging.log4j.core.appender.RollingFileAppender
-import org.apache.logging.log4j.core.appender.rolling.DefaultRolloverStrategy
-import org.apache.logging.log4j.core.appender.rolling.OnStartupTriggeringPolicy
-import org.apache.logging.log4j.core.config.Configurator
-import org.apache.logging.log4j.core.layout.PatternLayout
-import tv.dotstart.beacon.util.Banner
-import tv.dotstart.beacon.util.Localization
-import tv.dotstart.beacon.util.OperatingSystem
-import tv.dotstart.beacon.util.detailedErrorDialog
+import tv.dotstart.beacon.util.*
 import java.net.URI
-import java.nio.charset.StandardCharsets
-import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.time.Duration
@@ -116,7 +105,7 @@ object BeaconCli : CliktCommand(name = "Beacon") {
   }
 
   override fun run() {
-    registerFileAppender()
+    configureLogStorage(this.logDirectory)
 
     val logger = LogManager.getLogger(Beacon::class.java)
 
@@ -157,19 +146,14 @@ object BeaconCli : CliktCommand(name = "Beacon") {
         "System Repositories (${systemRepositories.size}): ${systemRepositories.joinToString()}")
 
     if (this.verbose || this.debug) {
-      Configurator.setRootLevel(
-          if (this.verbose) {
-            Level.ALL
-          } else {
-            Level.DEBUG
-          }
-      )
-
-      if (this.verbose) {
-        logger.warn("Enabled VERBOSE logging - This may cause significant log output")
+      val level = if (this.verbose) {
+        Level.ALL
       } else {
-        logger.warn("Enabled DEBUG logging")
+        Level.DEBUG
       }
+
+      rootLevel = level
+      logger.info("Adjusted the application log level to $level")
     }
 
     if (this.disableCache) {
@@ -180,30 +164,6 @@ object BeaconCli : CliktCommand(name = "Beacon") {
 
     // we do not pass any of our arguments to JavaFX since there's nothing special to handle here
     Application.launch(Beacon::class.java)
-  }
-
-  private fun registerFileAppender() {
-    val ctx = LoggerContext.getContext(false)
-    val root = ctx.rootLogger
-    val cfg = ctx.configuration
-    val layout = PatternLayout.createLayout("[%d{HH:mm:ss}] [%25.25t] [%level]: %msg%n", null, cfg,
-        null, StandardCharsets.UTF_8, true, false, null, null)
-    Files.createDirectories(this.logDirectory)
-
-    val policy = OnStartupTriggeringPolicy.createPolicy()
-    val strategy = DefaultRolloverStrategy.createStrategy("10", "1", "min", null, null, true, cfg)
-
-    val fileAppender = RollingFileAppender.createAppender(
-        this.logDirectory.resolve("latest.log").toAbsolutePath().toString(),
-        this.logDirectory.resolve("beacon.log").toAbsolutePath().toString() + ".%i",
-        "true", "File", null, null, "true",
-        policy, strategy, layout, null, null, null, null, cfg
-    )
-
-    fileAppender.start()
-
-    cfg.addAppender(fileAppender)
-    root.addAppender(fileAppender)
   }
 }
 
