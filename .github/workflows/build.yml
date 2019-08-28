@@ -1,5 +1,5 @@
 name: Test JDK Builds
-on: [push]
+on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
