@@ -236,49 +236,61 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
       </plugin>
-
-
-      <plugin>
-        <groupId>com.akathist.maven.plugins.launch4j</groupId>
-        <artifactId>launch4j-maven-plugin</artifactId>
-        <version>1.7.25</version>
-
-        <executions>
-          <execution>
-            <id>l4j-clui</id>
-            <phase>package</phase>
-
-            <goals>
-              <goal>launch4j</goal>
-            </goals>
-
-            <configuration>
-              <headerType>gui</headerType>
-              <outfile>${project.build.directory}/${project.build.finalName}.exe</outfile>
-              <jar>${project.build.directory}/${project.build.finalName}.jar</jar>
-              <errTitle>Beacon</errTitle>
-              <icon>${project.basedir}/src/main/resources/image/logo.ico</icon>
-
-              <jre>
-                <minVersion>9</minVersion>
-              </jre>
-              <downloadUrl>https://www.oracle.com/technetwork/java/javase/downloads/index.html</downloadUrl>
-
-              <versionInfo>
-                <fileVersion>1.0.0.0</fileVersion>
-                <txtFileVersion>${project.version}</txtFileVersion>
-                <fileDescription>${project.description}</fileDescription>
-                <copyright>Copyright (C) 2019 Johannes Donath</copyright>
-                <productVersion>${project.version}.0</productVersion>
-                <txtProductVersion>${project.version}</txtProductVersion>
-                <productName>${project.name}</productName>
-                <internalName>${project.artifactId}</internalName>
-                <originalFilename>${project.build.finalName}.exe</originalFilename>
-              </versionInfo>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>launch4j</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.akathist.maven.plugins.launch4j</groupId>
+            <artifactId>launch4j-maven-plugin</artifactId>
+            <version>1.7.25</version>
+
+            <executions>
+              <execution>
+                <id>l4j-clui</id>
+                <phase>package</phase>
+
+                <goals>
+                  <goal>launch4j</goal>
+                </goals>
+
+                <configuration>
+                  <headerType>gui</headerType>
+                  <outfile>${project.build.directory}/${project.build.finalName}.exe</outfile>
+                  <jar>${project.build.directory}/${project.build.finalName}.jar</jar>
+                  <errTitle>Beacon</errTitle>
+                  <icon>${project.basedir}/src/main/resources/image/logo.ico</icon>
+
+                  <jre>
+                    <minVersion>9</minVersion>
+                  </jre>
+                  <downloadUrl>https://www.oracle.com/technetwork/java/javase/downloads/index.html</downloadUrl>
+
+                  <versionInfo>
+                    <fileVersion>1.0.0.0</fileVersion>
+                    <txtFileVersion>${project.version}</txtFileVersion>
+                    <fileDescription>${project.description}</fileDescription>
+                    <copyright>Copyright (C) 2019 Johannes Donath</copyright>
+                    <productVersion>${project.version}.0</productVersion>
+                    <txtProductVersion>${project.version}</txtProductVersion>
+                    <productName>${project.name}</productName>
+                    <internalName>${project.artifactId}</internalName>
+                    <originalFilename>${project.build.finalName}.exe</originalFilename>
+                  </versionInfo>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>
