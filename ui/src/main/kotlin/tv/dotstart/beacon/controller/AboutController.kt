@@ -49,15 +49,16 @@ class AboutController : Initializable {
     val classLoader = Thread.currentThread().contextClassLoader
     val targetFile = OperatingSystem.current.storage.resolve("THIRD-PARTY.txt")
 
-    classLoader.getResourceAsStream("THIRD-PARTY.txt").use {
-      Channels.newChannel(it!!).use { input ->
-        FileChannel.open(targetFile, StandardOpenOption.CREATE,
-            StandardOpenOption.TRUNCATE_EXISTING,
-            StandardOpenOption.WRITE).use {
-          it.transferFrom(input, 0, Long.MAX_VALUE)
+    classLoader.getResourceAsStream("THIRD-PARTY.txt")
+        .use {
+          Channels.newChannel(it!!).use { input ->
+            FileChannel.open(targetFile, StandardOpenOption.CREATE,
+                             StandardOpenOption.TRUNCATE_EXISTING,
+                             StandardOpenOption.WRITE).use {
+              it.transferFrom(input, 0, Long.MAX_VALUE)
+            }
+          }
         }
-      }
-    }
 
     Desktop.getDesktop().open(targetFile.toFile())
   }

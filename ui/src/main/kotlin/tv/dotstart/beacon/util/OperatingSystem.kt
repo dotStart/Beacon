@@ -28,15 +28,19 @@ import java.nio.file.Paths
 enum class OperatingSystem {
 
   LINUX {
+
     override fun match(value: String) = value.containsAny("linux", ignoreCase = true)
   },
   MAC_OS {
+
     override fun match(value: String) = value.containsAny("mac", ignoreCase = true)
   },
   UNIX {
+
     override fun match(value: String) = value.containsAny("nix", ignoreCase = true)
   },
   WINDOWS {
+
     override val storage: Path by lazy {
       val userDirectory = Paths.get(System.getenv("APPDATA"))
       userDirectory.resolve("Beacon")
@@ -94,7 +98,7 @@ enum class OperatingSystem {
      */
     val current: OperatingSystem by lazy {
       values()
-          .find { it.executing }
+          .find(OperatingSystem::executing)
           ?: UNKNOWN
     }
   }

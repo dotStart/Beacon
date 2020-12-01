@@ -22,6 +22,7 @@ import javafx.collections.ObservableList
 import tv.dotstart.beacon.config.storage.Config
 import tv.dotstart.beacon.util.OperatingSystem
 import tv.dotstart.beacon.util.logger
+import java.io.OutputStream
 import java.net.URI
 import java.nio.file.Files
 import java.nio.file.StandardOpenOption
@@ -57,8 +58,8 @@ object Configuration {
     get() = Config.UserConfiguration.newBuilder()
         .setVersion(Config.Version.V1_0)
         .addAllRepository(this.userRepositoryIndex
-            .map { it.toString() }
-            .toList())
+                              .map(URI::toString)
+                              .toList())
         .build()
 
   init {
@@ -88,8 +89,8 @@ object Configuration {
     }
 
     this.userRepositoryIndex.setAll(serialized.repositoryList
-        .map { URI.create(it) }
-        .toList())
+                                        .map { URI.create(it) }
+                                        .toList())
 
     logger.info("Discovered ${this.userRepositoryIndex.size} user repositories")
   }
@@ -102,8 +103,7 @@ object Configuration {
 
     val serialized = this.persistable
     Files.newOutputStream(this.file, StandardOpenOption.CREATE, StandardOpenOption.WRITE,
-        StandardOpenOption.TRUNCATE_EXISTING).use {
-      serialized.writeTo(it)
-    }
+                          StandardOpenOption.TRUNCATE_EXISTING)
+        .use<OutputStream?, Unit>(serialized::writeTo)
   }
 }

@@ -69,6 +69,6 @@ data class Service(
         }
       },
       model.title,
-      model.portList.map { Port(it) }
+      model.portList.map(::Port)
   )
 }

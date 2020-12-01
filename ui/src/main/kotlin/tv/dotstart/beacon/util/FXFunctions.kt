@@ -62,7 +62,7 @@ fun Stage.splashWindow(path: String): Scene {
  * Creates a decorated window from the given FXML resource.
  */
 fun Stage.window(path: String, fullScreen: Boolean = false, maximizable: Boolean = true,
-    minimizable: Boolean = true): Scene {
+                 minimizable: Boolean = true): Scene {
   val classLoader = Thread.currentThread().contextClassLoader
   val node = fxml<Node>(path)
 
@@ -72,7 +72,7 @@ fun Stage.window(path: String, fullScreen: Boolean = false, maximizable: Boolean
   scene.stylesheets.addAll(
       JFoenixResources.load("css/jfoenix-fonts.css").toExternalForm(),
       JFoenixResources.load("css/jfoenix-design.css").toExternalForm(),
-      classLoader.getResource("style/application.css").toExternalForm()
+      classLoader.getResource("style/application.css")!!.toExternalForm()
   )
   this.scene = scene
   return scene
