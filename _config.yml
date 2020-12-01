@@ -5,3 +5,8 @@ repository: dotStart/Beacon
 markdown: kramdown
 plugins:
   - jekyll-feed
+
+# Social Links
+social:
+  discord: 'https://discord.gg/VTvSvN4ZQJ'
+  twitter: 'https://twitter.com/dot_start'
