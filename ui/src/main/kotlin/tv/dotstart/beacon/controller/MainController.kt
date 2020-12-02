@@ -32,6 +32,7 @@ import tv.dotstart.beacon.forwarding.PortExposureProvider
 import tv.dotstart.beacon.repository.Model
 import tv.dotstart.beacon.repository.ServiceRegistry
 import tv.dotstart.beacon.repository.model.Port
+import tv.dotstart.beacon.util.Localization
 import tv.dotstart.beacon.util.splashWindow
 import java.net.URL
 import java.nio.file.Files
@@ -83,6 +84,9 @@ class MainController : Initializable {
     this.serviceOpenButton.managedProperty().bind(this.serviceOpenButton.visibleProperty())
     this.serviceCloseButton.managedProperty().bind(this.serviceCloseButton.visibleProperty())
     this.serviceCloseButton.visibleProperty().bind(this.serviceOpenButton.visibleProperty().not())
+
+    this.externalAddress.text = PortExposureProvider.externalAddress
+        ?: Localization("address.unknown")
 
     this.rebuildServiceList()
   }
