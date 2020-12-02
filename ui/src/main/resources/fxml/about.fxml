@@ -37,12 +37,12 @@
   <VBox styleClass="dependencies">
     <Label styleClass="header" text="%about.dependencies"/>
     <Label text="Apache Commons"/>
-    <Label text="cling"/>
     <Label text="clikt"/>
     <Label text="Jackson"/>
     <Label text="JFoenix"/>
     <Label text="Kotlin"/>
     <Label text="Log4j2"/>
+    <Label text="mmupnp"/>
     <Label text="Murmur"/>
     <Label text="OpenJFX"/>
     <Label text="ProtoBuffers"/>
