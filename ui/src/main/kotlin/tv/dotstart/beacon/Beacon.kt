@@ -38,6 +38,7 @@ import java.nio.file.Files
 class Beacon : Application() {
 
   companion object {
+
     private val logger = Beacon::class.logger
 
     private const val iconPath = "image/logo.png"
