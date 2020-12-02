@@ -25,6 +25,8 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.TimeUnit
 
 /**
+ * Locates compatible internet gateway devices within the local network.
+ *
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
  * @date 01/12/2020
  */

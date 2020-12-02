@@ -23,6 +23,9 @@ import tv.dotstart.beacon.repository.Model
 import java.io.Closeable
 
 /**
+ * Represents a previously discovered internet gateway device along with its profile defined
+ * capabilities.
+ *
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
  * @date 01/12/2020
  */
