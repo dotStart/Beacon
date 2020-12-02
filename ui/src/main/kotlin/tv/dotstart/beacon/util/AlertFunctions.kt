@@ -58,7 +58,10 @@ fun detailedErrorDialog(title: String, description: String, ex: Throwable) {
 
   val reportButton = JFXButton(Localization("action.report"))
   reportButton.isDisable = !ErrorReporter.available
-  reportButton.onAction = EventHandler { ErrorReporter(ex) }
+  reportButton.onAction = EventHandler {
+    reportButton.isDisable = true
+    ErrorReporter(ex)
+  }
 
   val closeButton = JFXButton(Localization("action.close"))
   closeButton.onAction = EventHandler { alert.close() }
