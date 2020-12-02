@@ -154,6 +154,15 @@
         </includes>
       </resource>
       <resource>
+        <directory>${project.basedir}/src/main/resources/META-INF</directory>
+        <targetPath>META-INF</targetPath>
+        <filtering>false</filtering>
+
+        <includes>
+          <include>services/*</include>
+        </includes>
+      </resource>
+      <resource>
         <directory>${project.basedir}/src/main/resources/fxml</directory>
         <targetPath>fxml/</targetPath>
         <filtering>false</filtering>

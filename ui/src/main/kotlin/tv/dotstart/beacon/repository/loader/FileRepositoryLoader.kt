@@ -30,7 +30,7 @@ import java.nio.file.*
  *
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
  */
-object FileRepositoryLoader : RepositoryLoader {
+class FileRepositoryLoader : RepositoryLoader {
 
   override val schemes = listOf("file")
 

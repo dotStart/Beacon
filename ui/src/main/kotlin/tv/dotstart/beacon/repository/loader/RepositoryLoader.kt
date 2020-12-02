@@ -19,6 +19,7 @@ package tv.dotstart.beacon.repository.loader
 import tv.dotstart.beacon.repository.error.IllegalRepositorySchemeException
 import java.net.URI
 import java.nio.file.Path
+import java.util.*
 
 /**
  * Provides the logic necessary for retrieving a repository through a specific interface.
@@ -40,22 +41,15 @@ interface RepositoryLoader {
   operator fun invoke(uri: URI, target: Path)
 
   companion object {
-    private val loaders = mutableMapOf<String, RepositoryLoader>()
 
-    init {
-      this += FileRepositoryLoader
-      this += HttpRepositoryLoader
-      this += GitHubRepositoryLoader
-    }
-
-    /**
-     * Registers a new loader with this implementation.
-     */
-    operator fun plusAssign(loader: RepositoryLoader) {
-      loader.schemes.forEach {
-        this.loaders[it] = loader
-      }
-    }
+    private val loaders: Map<String, RepositoryLoader>
+      get() = ServiceLoader.load(
+          RepositoryLoader::class.java, Thread.currentThread().contextClassLoader)
+          .flatMap { loader ->
+            loader.schemes
+                .map { it to loader }
+          }
+          .toMap()
 
     /**
      * Retrieves the repository loader for a given URI.

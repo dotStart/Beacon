@@ -32,9 +32,11 @@ import java.net.URL
 import java.nio.file.Path
 
 /**
+ * Retrieves artifacts from GitHub.
+ *
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
  */
-object GitHubRepositoryLoader : RepositoryLoader {
+class GitHubRepositoryLoader : RepositoryLoader {
 
   private val logger = GitHubRepositoryLoader::class.logger
 
