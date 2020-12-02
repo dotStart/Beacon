@@ -52,7 +52,7 @@ object BeaconCli : CliktCommand(name = "Beacon") {
    * an unpublished system repository).
    */
   val systemRepositories: List<URI> by option(
-      names = *arrayOf("--repository", "-r"),
+      names = arrayOf("--repository", "-r"),
       help = "Specifies a custom system repository (Overrides any default system repositories)")
       .convert { URI.create(it) }
       .multiple(defaultSystemRepositories)

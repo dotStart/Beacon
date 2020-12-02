@@ -83,6 +83,11 @@
     </dependency>
 
     <dependency>
+      <groupId>com.mindscapehq</groupId>
+      <artifactId>core</artifactId>
+    </dependency>
+
+    <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-compress</artifactId>
     </dependency>
@@ -151,6 +156,7 @@
 
         <includes>
           <include>beacon.properties</include>
+          <include>raygun.token</include>
         </includes>
       </resource>
       <resource>

@@ -56,6 +56,10 @@ fun detailedErrorDialog(title: String, description: String, ex: Throwable) {
   val alert = JFXAlert<Any>()
   alert.title = title
 
+  val reportButton = JFXButton(Localization("action.report"))
+  reportButton.isDisable = !ErrorReporter.available
+  reportButton.onAction = EventHandler { ErrorReporter(ex) }
+
   val closeButton = JFXButton(Localization("action.close"))
   closeButton.onAction = EventHandler { alert.close() }
 
@@ -68,7 +72,7 @@ fun detailedErrorDialog(title: String, description: String, ex: Throwable) {
   val layout = JFXDialogLayout()
   layout.setHeading(Label(title))
   layout.setBody(body)
-  layout.setActions(closeButton)
+  layout.setActions(reportButton, closeButton)
   alert.setContent(layout)
 
   alert.showAndWait()
@@ -81,8 +85,10 @@ fun errorReport(ex: Throwable) = buildString {
   append("Date: ${DateTimeFormatter.ISO_DATE_TIME.format(OffsetDateTime.now())}\r\n")
   append("""Java Version: ${System.getProperty("java.version")}""").append("\r\n")
   append("""Java Architecture: ${System.getProperty("os.arch")}""").append("\r\n")
-  append("""Operating System: ${System.getProperty("os.name")} (${System.getProperty(
-      "os.version")})""").append("\r\n")
+  append("""Operating System: ${System.getProperty("os.name")} (${
+    System.getProperty(
+        "os.version")
+  })""").append("\r\n")
   append("\r\n")
   append("Stack Trace:\r\n")
   append("------------\r\n")

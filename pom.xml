@@ -34,6 +34,8 @@
     <log4j.version>2.12.0</log4j.version>
     <openjfx.version>11</openjfx.version>
     <protobuf.version>3.9.0</protobuf.version>
+
+    <raygun.token/>
   </properties>
 
   <licenses>
@@ -142,6 +144,12 @@
         <groupId>net.mm2d</groupId>
         <artifactId>mmupnp</artifactId>
         <version>${mmupnp.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.mindscapehq</groupId>
+        <artifactId>core</artifactId>
+        <version>3.0.0</version>
       </dependency>
 
       <dependency>
