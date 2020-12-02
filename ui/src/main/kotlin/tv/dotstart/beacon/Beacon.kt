@@ -62,9 +62,14 @@ class Beacon : Application() {
 
     Configuration.load()
 
-    logger.info("Displaying splash screen")
-    stage.splashWindow("splash.fxml")
-    stage.show()
+    try {
+      logger.info("Displaying splash screen")
+      stage.splashWindow("splash.fxml")
+      stage.show()
+    } catch (ex: Throwable) {
+      logger.error("Application startup failed due to unknown error", ex)
+      throw ex
+    }
   }
 
   override fun stop() {
