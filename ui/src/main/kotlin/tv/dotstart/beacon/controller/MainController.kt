@@ -16,9 +16,7 @@
  */
 package tv.dotstart.beacon.controller
 
-import com.jfoenix.controls.JFXTextField
 import com.jfoenix.controls.JFXTreeView
-import javafx.beans.binding.Bindings
 import javafx.event.ActionEvent
 import javafx.fxml.FXML
 import javafx.fxml.Initializable
@@ -30,17 +28,14 @@ import tv.dotstart.beacon.cell.ServiceListTreeCell
 import tv.dotstart.beacon.cell.model.CategoryNode
 import tv.dotstart.beacon.cell.model.ServiceListNode
 import tv.dotstart.beacon.cell.model.ServiceNode
-import tv.dotstart.beacon.exposure.Gateway
-import tv.dotstart.beacon.exposure.PortMapper
+import tv.dotstart.beacon.forwarding.PortExposureProvider
 import tv.dotstart.beacon.repository.Model
 import tv.dotstart.beacon.repository.ServiceRegistry
 import tv.dotstart.beacon.repository.model.Port
-import tv.dotstart.beacon.util.Localization
 import tv.dotstart.beacon.util.splashWindow
 import java.net.URL
 import java.nio.file.Files
 import java.util.*
-import java.util.concurrent.Callable
 
 /**
  * Manages the components and interactions of the main application window.
@@ -51,20 +46,25 @@ class MainController : Initializable {
 
   @FXML
   private lateinit var serviceList: JFXTreeView<ServiceListNode>
+
   @FXML
   private lateinit var externalAddress: TextField
 
   @FXML
   private lateinit var serviceIcon: ImageView
+
   @FXML
   private lateinit var serviceTitle: Label
+
   @FXML
   private lateinit var servicePorts: TableView<Port>
+
   @FXML
   private lateinit var serviceCopyright: Label
 
   @FXML
   private lateinit var serviceOpenButton: Button
+
   @FXML
   private lateinit var serviceCloseButton: Button
 
@@ -79,12 +79,6 @@ class MainController : Initializable {
 
     this.serviceList.selectionModel.selectedItemProperty()
         .addListener({ _, _, new -> this.onServiceSelect(new.value) })
-    this.externalAddress.textProperty().bind(Bindings.createObjectBinding(
-        Callable {
-          Gateway.externalAddress?.hostAddress ?: Localization("address.unknown")
-        },
-        Gateway.externalAddressProperty
-    ))
 
     this.serviceOpenButton.managedProperty().bind(this.serviceOpenButton.visibleProperty())
     this.serviceCloseButton.managedProperty().bind(this.serviceCloseButton.visibleProperty())
@@ -127,8 +121,8 @@ class MainController : Initializable {
     this.serviceIcon.image = service.icon?.let {
       Files.newInputStream(it).use(::Image)
     }
-    this.serviceOpenButton.isVisible = service !in PortMapper
 
+    this.serviceOpenButton.isVisible = service !in PortExposureProvider
     this.servicePorts.items.setAll(service.ports)
   }
 
@@ -140,7 +134,7 @@ class MainController : Initializable {
         as? ServiceNode ?: return
     val service = node.service
 
-    PortMapper += service
+    PortExposureProvider.expose(service)
 
     this.serviceOpenButton.isVisible = false
   }
@@ -153,7 +147,7 @@ class MainController : Initializable {
         as? ServiceNode ?: return
     val service = node.service
 
-    PortMapper -= service
+    PortExposureProvider.close(service)
 
     this.serviceOpenButton.isVisible = true
   }
@@ -161,11 +155,13 @@ class MainController : Initializable {
   @FXML
   private fun onAboutOpen(actionEvent: ActionEvent) {
     val stage = Stage()
-    stage.focusedProperty().addListener({ _, _, n ->
-      if (!n) {
-        stage.close()
-      }
-    })
+    stage.focusedProperty()
+        .addListener({ _, _, n ->
+                       if (!n) {
+                         stage.close()
+                       }
+                     })
+
     stage.splashWindow("about.fxml")
     stage.show()
   }
