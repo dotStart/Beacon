@@ -18,11 +18,9 @@ package tv.dotstart.beacon.preload
 
 import javafx.application.Platform
 import javafx.beans.property.*
-import tv.dotstart.beacon.exposure.Gateway
-import tv.dotstart.beacon.exposure.PortMapper
+import tv.dotstart.beacon.forwarding.PortExposureProvider
 import tv.dotstart.beacon.preload.error.PreloadError
 import tv.dotstart.beacon.repository.ServiceRegistry
-import tv.dotstart.beacon.upnp.UPnP
 import tv.dotstart.beacon.util.Localization
 import tv.dotstart.beacon.util.detailedErrorDialog
 import tv.dotstart.beacon.util.errorDialog
@@ -39,12 +37,9 @@ object Preloader {
   val logger = Preloader::class.logger
 
   private val loaders = listOf(
-      Gateway.RegistrationLoader,
+      PortExposureProvider,
       ServiceRegistry.SystemRepositoryLoader,
-      ServiceRegistry.UserRepositoryLoader,
-      UPnP.ServiceLoader,
-      Gateway.FuseLoader,
-      PortMapper.ScheduleLoader
+      ServiceRegistry.UserRepositoryLoader
   )
 
   private val _description = SimpleStringProperty()
@@ -100,7 +95,7 @@ object Preloader {
           logger.error("Preloading failed - Aborting application startup", ex)
           Platform.runLater {
             detailedErrorDialog(Localization("error.unknown.title"),
-                Localization("error.unknown.body"), ex)
+                                Localization("error.unknown.body"), ex)
             System.exit(128)
           }
           return@thread
@@ -121,7 +116,7 @@ object Preloader {
         } catch (ex: Throwable) {
           logger.error("Preload completion listener failed - Aborting application startup", ex)
           detailedErrorDialog(Localization("error.unknown.title"),
-              Localization("error.unknown.body"), ex)
+                              Localization("error.unknown.body"), ex)
           System.exit(128)
         }
       }

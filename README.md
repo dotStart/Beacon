@@ -31,4 +31,4 @@ developers. Make sure to include a detailed description of your problem when ask
 See [CONTRIBUTING.md](CONTRIBUTING.md) for information on working on Beacon and submitting patches. You can also join
 the [project's chat room][discord] to discuss future improvements or to get your custom implementation listed.
 
-[discord]: https://discord.gg/RdFqysd
+[discord]: https://discord.gg/VTvSvN4ZQJ

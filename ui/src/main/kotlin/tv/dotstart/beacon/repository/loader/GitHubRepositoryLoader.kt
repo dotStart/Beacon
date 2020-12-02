@@ -26,6 +26,7 @@ import tv.dotstart.beacon.repository.error.IllegalRepositorySpecificationExcepti
 import tv.dotstart.beacon.repository.error.RepositoryAvailabilityException
 import tv.dotstart.beacon.util.Cache
 import tv.dotstart.beacon.util.logger
+import java.io.IOException
 import java.net.URI
 import java.net.URL
 import java.nio.file.Path
@@ -61,11 +62,15 @@ object GitHubRepositoryLoader : RepositoryLoader {
     val releaseFile = Cache(apiUri) {
       logger.debug("Fetching release information for $owner:$repository ($asset)")
 
-      Request.Get(apiUri)
-          .setHeader("User-Agent", BeaconMetadata.userAgent)
-          .setHeader("Accept", "application/vnd.github.v3+json")
-          .execute()
-          .saveContent(it.toFile())
+      try {
+        Request.Get(apiUri)
+            .setHeader("User-Agent", BeaconMetadata.userAgent)
+            .setHeader("Accept", "application/vnd.github.v3+json")
+            .execute()
+            .saveContent(it.toFile())
+      } catch (ex: IOException) {
+        throw RepositoryAvailabilityException("Failed to establish communication with GitHub", ex)
+      }
     }
 
     val (release, file) = jacksonObjectMapper()

@@ -2,14 +2,30 @@
   "revision": 1,
   "services": [
     {
-      "id": "game+indie://mojang.com/minecraft",
-      "title": "Minecraft",
+      "id": "game+indie://mojang.com/minecraft-java",
+      "title": "Minecraft: Java Edition",
       "icon": "https://www.minecraft.net/etc.clientlibs/minecraft/clientlibs/main/resources/android-icon-192x192.png",
       "category": "GAME",
       "ports": [
         {
           "protocol": "TCP",
           "number": 25565
+        }
+      ]
+    },
+    {
+      "id": "game+indie://mojang.com/minecraft-bedrock",
+      "title": "Minecraft: Bedrock Edition",
+      "icon": "https://www.minecraft.net/etc.clientlibs/minecraft/clientlibs/main/resources/android-icon-192x192.png",
+      "category": "GAME",
+      "ports": [
+        {
+          "protocol": "UDP",
+          "number": "19132"
+        },
+        {
+          "protocol": "UDP",
+          "number": "19133"
         }
       ]
     }
