@@ -38,8 +38,10 @@ object Preloader {
 
   private val loaders = listOf(
       PortExposureProvider,
+
       ServiceRegistry.SystemRepositoryLoader,
-      ServiceRegistry.UserRepositoryLoader
+      ServiceRegistry.UserRepositoryLoader,
+      ServiceRegistry.CustomRepositoryLoader
   )
 
   private val _description = SimpleStringProperty()
