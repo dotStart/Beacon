@@ -25,6 +25,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <HBox prefWidth="800" prefHeight="400" styleClass="content"
@@ -57,6 +58,13 @@
         <JFXButton fx:id="serviceCloseButton" text="%service.action.close"
           onAction="#onServiceClose"
           styleClass="red-500"/>
+
+        <Pane HBox.hgrow="ALWAYS"/>
+
+        <JFXButton fx:id="serviceEditButton" text="%service.action.edit" onAction="#onServiceEdit"
+          styleClass="blue-800"/>
+        <JFXButton fx:id="serviceRemoveButton" text="%service.action.remove"
+          onAction="#onServiceRemove" styleClass="red-500"/>
       </HBox>
 
       <TableView fx:id="servicePorts">
