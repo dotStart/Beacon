@@ -33,6 +33,10 @@
   <dependencies>
     <dependency>
       <groupId>tv.dotstart.beacon</groupId>
+      <artifactId>core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>tv.dotstart.beacon</groupId>
       <artifactId>repository-model</artifactId>
     </dependency>
 

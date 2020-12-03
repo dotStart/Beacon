@@ -29,6 +29,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
     <kotlin.version>1.4.20</kotlin.version>
+    <kotlin-coroutines.version>1.4.2</kotlin-coroutines.version>
     <mmupnp.version>3.1.1</mmupnp.version>
     <jackson.version>2.10.0.pr1</jackson.version>
     <log4j.version>2.12.0</log4j.version>
@@ -86,6 +87,11 @@
     <dependencies>
       <dependency>
         <groupId>tv.dotstart.beacon</groupId>
+        <artifactId>core</artifactId>
+        <version>2.4.0</version>
+      </dependency>
+      <dependency>
+        <groupId>tv.dotstart.beacon</groupId>
         <artifactId>repository-model</artifactId>
         <version>2.4.0</version>
       </dependency>
@@ -94,6 +100,21 @@
         <groupId>org.jetbrains.kotlin</groupId>
         <artifactId>kotlin-stdlib-jdk8</artifactId>
         <version>${kotlin.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jetbrains.kotlin</groupId>
+        <artifactId>kotlin-reflect</artifactId>
+        <version>${kotlin.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jetbrains.kotlinx</groupId>
+        <artifactId>kotlinx-coroutines-core</artifactId>
+        <version>${kotlin-coroutines.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jetbrains.kotlinx</groupId>
+        <artifactId>kotlinx-coroutines-jdk8</artifactId>
+        <version>${kotlin-coroutines.version}</version>
       </dependency>
 
       <dependency>
@@ -213,6 +234,12 @@
         <groupId>org.apache.logging.log4j</groupId>
         <artifactId>log4j-jul</artifactId>
         <version>${log4j.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.jetbrains.kotlin</groupId>
+        <artifactId>kotlin-test-junit5</artifactId>
+        <version>${kotlin.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -369,9 +396,10 @@
   </build>
 
   <modules>
-    <module>ui</module>
-
+    <module>core</module>
     <module>repository-model</module>
+
+    <module>ui</module>
     <module>repository-compiler</module>
   </modules>
 </project>
