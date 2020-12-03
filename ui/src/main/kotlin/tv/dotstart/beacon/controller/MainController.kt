@@ -16,6 +16,7 @@
  */
 package tv.dotstart.beacon.controller
 
+import com.jfoenix.controls.JFXTextField
 import com.jfoenix.controls.JFXTreeView
 import javafx.event.ActionEvent
 import javafx.fxml.FXML
@@ -49,7 +50,7 @@ class MainController : Initializable {
   private lateinit var serviceList: JFXTreeView<ServiceListNode>
 
   @FXML
-  private lateinit var externalAddress: TextField
+  private lateinit var externalAddress: JFXTextField
 
   @FXML
   private lateinit var serviceIcon: ImageView

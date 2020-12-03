@@ -16,13 +16,13 @@
   ~ limitations under the License.
   -->
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXTreeView?>
 <?import java.net.URL?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
@@ -37,12 +37,9 @@
     <JFXTreeView fx:id="serviceList" prefWidth="250" showRoot="false"/>
 
     <VBox styleClass="global-actions">
-      <!--
-        FIXME: Not using JFoenix style here due to Java 12 compatibility issue
-               Restore functionality once https://github.com/jfoenixadmin/JFoenix/issues/976 has
-               been resolved.
-        -->
-      <TextField fx:id="externalAddress" styleClass="external-address" editable="false"/>
+      <JFXTextField fx:id="externalAddress" styleClass="external-address" editable="false"/>
+      <JFXButton text="%action.addService" onAction="#onAddService" styleClass="brand"
+        maxWidth="Infinity"/>
       <JFXButton text="%action.about" onAction="#onAboutOpen" styleClass="brand"
         maxWidth="Infinity"/>
     </VBox>
