@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2020 Johannes Donath <johannesd@torchmind.com>
+  ~ and other copyright owners as documented in the project's IP log.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ 	http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import java.net.URL?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.VBox?>
+<VBox fx:id="root" styleClass="wrapper" xmlns:fx="http://javafx.com/fxml"
+  fx:controller="tv.dotstart.beacon.controller.ServiceEditorController">
+  <stylesheets>
+    <URL value="@/style/service.css"/>
+  </stylesheets>
+
+  <GridPane styleClass="form">
+    <Label text="%editor.name" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+    <JFXTextField fx:id="nameTextField" GridPane.rowIndex="0" GridPane.columnIndex="1"
+      maxWidth="Infinity"/>
+
+    <TableView fx:id="portTableView" GridPane.rowIndex="1" GridPane.columnIndex="0">
+      <columns>
+        <TableColumn text="Protocol">
+          <cellValueFactory>
+            <PropertyValueFactory property="protocol"/>
+          </cellValueFactory>
+        </TableColumn>
+        <TableColumn text="Port">
+          <cellValueFactory>
+            <PropertyValueFactory property="number"/>
+          </cellValueFactory>
+        </TableColumn>
+      </columns>
+    </TableView>
+    <VBox styleClass="port-actions" GridPane.rowIndex="1" GridPane.columnIndex="1">
+      <JFXButton text="%editor.port.add" onAction="#onAddPort" styleClass="brand"
+        maxWidth="Infinity"/>
+      <JFXButton fx:id="removePortButton" onAction="#onRemovePort" text="%editor.port.remove"
+        styleClass="brand" maxWidth="Infinity"/>
+    </VBox>
+  </GridPane>
+
+  <JFXButton fx:id="saveButton" text="%editor.save" onAction="#onSave" styleClass="brand"
+    maxWidth="Infinity"/>
+</VBox>
