@@ -31,7 +31,7 @@ import java.nio.file.Path
  *
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
  */
-object HttpRepositoryLoader : RepositoryLoader {
+class HttpRepositoryLoader : RepositoryLoader {
 
   override val schemes = listOf("http", "https")
 

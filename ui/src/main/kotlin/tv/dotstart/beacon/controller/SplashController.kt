@@ -41,12 +41,15 @@ class SplashController : Initializable {
 
   @FXML
   lateinit var statusLabel: Label
+
   @FXML
   lateinit var versionLabel: Label
+
   @FXML
   lateinit var progressBar: ProgressBar
 
   companion object {
+
     private val logger = SplashController::class.logger
   }
 
@@ -74,7 +77,7 @@ class SplashController : Initializable {
       val stage = Stage()
       stage.title = "Beacon v${BeaconMetadata.version}"
       stage.icons += Beacon.icon
-      stage.window("main.fxml", maximizable = false)
+      stage.window<MainController>("main.fxml", maximizable = false)
       stage.show()
 
       // we're always spawned in primary

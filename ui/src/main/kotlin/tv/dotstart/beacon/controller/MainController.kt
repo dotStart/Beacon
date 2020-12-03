@@ -16,11 +16,18 @@
  */
 package tv.dotstart.beacon.controller
 
+import com.jfoenix.controls.JFXTextField
 import com.jfoenix.controls.JFXTreeView
+import javafx.beans.binding.Bindings
+import javafx.beans.property.ObjectProperty
+import javafx.beans.property.SimpleObjectProperty
 import javafx.event.ActionEvent
 import javafx.fxml.FXML
 import javafx.fxml.Initializable
-import javafx.scene.control.*
+import javafx.scene.control.Button
+import javafx.scene.control.Label
+import javafx.scene.control.TableView
+import javafx.scene.control.TreeItem
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.stage.Stage
@@ -32,8 +39,8 @@ import tv.dotstart.beacon.forwarding.PortExposureProvider
 import tv.dotstart.beacon.repository.Model
 import tv.dotstart.beacon.repository.ServiceRegistry
 import tv.dotstart.beacon.repository.model.Port
-import tv.dotstart.beacon.util.Localization
-import tv.dotstart.beacon.util.splashWindow
+import tv.dotstart.beacon.repository.model.Service
+import tv.dotstart.beacon.util.*
 import java.net.URL
 import java.nio.file.Files
 import java.util.*
@@ -49,7 +56,7 @@ class MainController : Initializable {
   private lateinit var serviceList: JFXTreeView<ServiceListNode>
 
   @FXML
-  private lateinit var externalAddress: TextField
+  private lateinit var externalAddress: JFXTextField
 
   @FXML
   private lateinit var serviceIcon: ImageView
@@ -69,26 +76,52 @@ class MainController : Initializable {
   @FXML
   private lateinit var serviceCloseButton: Button
 
+  @FXML
+  private lateinit var serviceEditButton: Button
+
+  @FXML
+  private lateinit var serviceRemoveButton: Button
+
   private val root = TreeItem<ServiceListNode>()
   private val categoryMap = Model.Category.values()
       .map { it to TreeItem<ServiceListNode>(CategoryNode(it)) }
       .toMap()
+
+  private var currentServiceProperty: ObjectProperty<Service> = SimpleObjectProperty()
+  private var currentService: Service?
+    get() = this.currentServiceProperty.value
+    set(value) {
+      this.currentServiceProperty.value = value
+    }
 
   override fun initialize(p0: URL, p1: ResourceBundle?) {
     this.serviceList.cellFactory = ServiceListTreeCell.Factory
     this.serviceList.root = this.root
 
     this.serviceList.selectionModel.selectedItemProperty()
-        .addListener({ _, _, new -> this.onServiceSelect(new.value) })
+        .addListener({ _, _, new -> this.onServiceSelect(new?.value) })
 
     this.serviceOpenButton.managedProperty().bind(this.serviceOpenButton.visibleProperty())
     this.serviceCloseButton.managedProperty().bind(this.serviceCloseButton.visibleProperty())
     this.serviceCloseButton.visibleProperty().bind(this.serviceOpenButton.visibleProperty().not())
 
+    val selectedCategory = Bindings.select<Model.Category>(this.currentServiceProperty, "category")
+    val customSelected = selectedCategory.isEqualTo(Model.Category.CUSTOM)
+
+    this.serviceEditButton.managedProperty().bind(this.serviceEditButton.visibleProperty())
+    this.serviceRemoveButton.managedProperty().bind(this.serviceRemoveButton.visibleProperty())
+    this.serviceEditButton.visibleProperty().bind(customSelected)
+    this.serviceRemoveButton.visibleProperty().bind(customSelected)
+
     this.externalAddress.text = PortExposureProvider.externalAddress
         ?: Localization("address.unknown")
 
     this.rebuildServiceList()
+  }
+
+  companion object {
+
+    private val logger = MainController::class.logger
   }
 
   /**
@@ -114,12 +147,13 @@ class MainController : Initializable {
     this.serviceList.selectionModel.select(1)
   }
 
-  private fun onServiceSelect(node: ServiceListNode) {
-    if (node !is ServiceNode) {
+  private fun onServiceSelect(node: ServiceListNode?) {
+    if (node == null || node !is ServiceNode) {
       return
     }
 
     val service = node.service
+    this.currentService = service
 
     this.serviceTitle.text = service.title
     this.serviceIcon.image = service.icon?.let {
@@ -128,6 +162,29 @@ class MainController : Initializable {
 
     this.serviceOpenButton.isVisible = service !in PortExposureProvider
     this.servicePorts.items.setAll(service.ports)
+  }
+
+  private fun selectService(definition: Service) {
+    val (node, _) = this.categoryMap.values
+        .flatMap { it.children }
+        .mapNotNull { node ->
+          (node.value as? ServiceNode)
+              ?.let { node to it.service }
+        }
+        .find { (_, service) -> service == definition }
+        ?: return
+
+    this.serviceList.selectionModel.select(node)
+  }
+
+  private fun persistCustomServices() {
+    try {
+      ServiceRegistry.persist()
+    } catch (ex: Throwable) {
+      logger.error("Failed to persist custom services", ex)
+
+      errorDialog(Localization("error.custom.title"), Localization("error.custom.body"))
+    }
   }
 
   @FXML
@@ -157,6 +214,69 @@ class MainController : Initializable {
   }
 
   @FXML
+  private fun onAddService(actionEvent: ActionEvent) {
+    val stage = Stage()
+    val controller =
+        stage.window<ServiceEditorController>("service-editor.fxml",
+                                              maximizable = false,
+                                              minimizable = false)
+
+    stage.title = Localization("editor.title")
+    stage.isResizable = false
+
+    stage.showAndWait()
+
+    val definition = controller.service
+        ?: return
+
+    ServiceRegistry += definition
+    this.persistCustomServices()
+
+    this.rebuildServiceList()
+    this.selectService(definition)
+  }
+
+  @FXML
+  private fun onServiceEdit(actionEvent: ActionEvent) {
+    val previous = this.currentService
+        ?.takeIf { it.category == Model.Category.CUSTOM }
+        ?: return
+
+    val stage = Stage()
+    val controller =
+        stage.window<ServiceEditorController>("service-editor.fxml",
+                                              maximizable = false,
+                                              minimizable = false)
+    controller.service = previous
+
+    stage.title = Localization("editor.title")
+    stage.isResizable = false
+
+    stage.showAndWait()
+
+    val new = controller.service
+    if (new != null) {
+      ServiceRegistry += new
+      this.persistCustomServices()
+
+      this.rebuildServiceList()
+      this.selectService(new)
+    }
+  }
+
+  @FXML
+  private fun onServiceRemove(actionEvent: ActionEvent) {
+    val selected = this.currentService
+        ?.takeIf { it.category == Model.Category.CUSTOM }
+        ?: return
+
+    ServiceRegistry -= selected
+
+    ServiceRegistry.persist()
+    this.rebuildServiceList()
+  }
+
+  @FXML
   private fun onAboutOpen(actionEvent: ActionEvent) {
     val stage = Stage()
     stage.focusedProperty()
@@ -166,7 +286,7 @@ class MainController : Initializable {
                        }
                      })
 
-    stage.splashWindow("about.fxml")
+    stage.splashWindow<AboutController>("about.fxml")
     stage.show()
   }
 }

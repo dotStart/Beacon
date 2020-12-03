@@ -52,7 +52,7 @@ object BeaconCli : CliktCommand(name = "Beacon") {
    * an unpublished system repository).
    */
   val systemRepositories: List<URI> by option(
-      names = *arrayOf("--repository", "-r"),
+      names = arrayOf("--repository", "-r"),
       help = "Specifies a custom system repository (Overrides any default system repositories)")
       .convert { URI.create(it) }
       .multiple(defaultSystemRepositories)
@@ -105,6 +105,8 @@ object BeaconCli : CliktCommand(name = "Beacon") {
   }
 
   override fun run() {
+    // stash the desired logging path as early as possible to make sure Logger construction does not
+    // fail due to missing system properties
     configureLogStorage(this.logDirectory)
 
     val logger = LogManager.getLogger(Beacon::class.java)

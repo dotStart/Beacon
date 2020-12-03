@@ -67,6 +67,14 @@ message ServiceDefinition {
 enum Category {
   GAME = 0;
   TOOL = 1;
+
+  /**
+   * Service Editor Marker Category
+   *
+   * This category enables editor features within the Beacon UIs. It should thus be avoided in
+   * distributed repositories as changes cannot be persisted.
+   */
+  CUSTOM = 999;
 }
 
 /**

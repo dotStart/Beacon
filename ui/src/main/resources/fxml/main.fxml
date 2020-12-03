@@ -16,15 +16,16 @@
   ~ limitations under the License.
   -->
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXTreeView?>
 <?import java.net.URL?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <HBox prefWidth="800" prefHeight="400" styleClass="content"
@@ -37,12 +38,9 @@
     <JFXTreeView fx:id="serviceList" prefWidth="250" showRoot="false"/>
 
     <VBox styleClass="global-actions">
-      <!--
-        FIXME: Not using JFoenix style here due to Java 12 compatibility issue
-               Restore functionality once https://github.com/jfoenixadmin/JFoenix/issues/976 has
-               been resolved.
-        -->
-      <TextField fx:id="externalAddress" styleClass="external-address" editable="false"/>
+      <JFXTextField fx:id="externalAddress" styleClass="external-address" editable="false"/>
+      <JFXButton text="%action.addService" onAction="#onAddService" styleClass="brand"
+        maxWidth="Infinity"/>
       <JFXButton text="%action.about" onAction="#onAboutOpen" styleClass="brand"
         maxWidth="Infinity"/>
     </VBox>
@@ -60,6 +58,13 @@
         <JFXButton fx:id="serviceCloseButton" text="%service.action.close"
           onAction="#onServiceClose"
           styleClass="red-500"/>
+
+        <Pane HBox.hgrow="ALWAYS"/>
+
+        <JFXButton fx:id="serviceEditButton" text="%service.action.edit" onAction="#onServiceEdit"
+          styleClass="blue-800"/>
+        <JFXButton fx:id="serviceRemoveButton" text="%service.action.remove"
+          onAction="#onServiceRemove" styleClass="red-500"/>
       </HBox>
 
       <TableView fx:id="servicePorts">

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2016 Johannes Donath <johannesd@torchmind.com>
+  ~ Copyright 2020 Johannes Donath <johannesd@torchmind.com>
   ~ and other copyright owners as documented in the project's IP log.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,31 +17,17 @@
   -->
 <Configuration status="WARN">
   <Properties>
-    <Property name="CONSOLE_LOG_PATTERN">
+    <Property name="LOG_PATTERN">
       <![CDATA[%style{[%d{HH:mm:ss}]}{dim,blue} %style{[%25.25t]}{dim,cyan} %highlight{[%level]}: %highlight{%msg}%n]]></Property>
-    <Property name="FILE_LOG_PATTERN">[%d{HH:mm:ss}] [%25.25t] [%level]: %msg%n</Property>
   </Properties>
   <Appenders>
     <Console name="Console" target="SYSTEM_OUT" follow="true">
-      <PatternLayout pattern="${CONSOLE_LOG_PATTERN}"/>
+      <PatternLayout pattern="${LOG_PATTERN}"/>
     </Console>
-    <RollingFile name="File"
-      fileName="${sys:logPath}/latest.log"
-      filePattern="${sys:logPath}/lantern.log.%i"
-      immediateFlush="true">
-
-      <PatternLayout pattern="${FILE_LOG_PATTERN}"/>
-
-      <DefaultRolloverStrategy max="10"/>
-      <Policies>
-        <OnStartupTriggeringPolicy/>
-      </Policies>
-    </RollingFile>
   </Appenders>
   <Loggers>
     <Root level="info">
       <AppenderRef ref="Console"/>
-      <AppenderRef ref="File"/>
     </Root>
   </Loggers>
 </Configuration>

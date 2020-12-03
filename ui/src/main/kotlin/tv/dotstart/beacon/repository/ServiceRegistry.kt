@@ -17,6 +17,7 @@
 package tv.dotstart.beacon.repository
 
 import org.apache.commons.compress.compressors.CompressorStreamFactory
+import org.apache.commons.compress.compressors.xz.XZCompressorOutputStream
 import tv.dotstart.beacon.BeaconCli
 import tv.dotstart.beacon.config.Configuration
 import tv.dotstart.beacon.preload.Loader
@@ -24,10 +25,15 @@ import tv.dotstart.beacon.repository.error.*
 import tv.dotstart.beacon.repository.loader.RepositoryLoader
 import tv.dotstart.beacon.repository.model.Service
 import tv.dotstart.beacon.util.Cache
+import tv.dotstart.beacon.util.OperatingSystem
 import tv.dotstart.beacon.util.logger
 import java.io.BufferedInputStream
+import java.io.IOException
 import java.net.URI
 import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.StandardCopyOption
+import java.nio.file.StandardOpenOption
 
 /**
  * Manages the listing of available service definitions as well as the download of remote service
@@ -39,7 +45,13 @@ object ServiceRegistry : Iterable<Service> {
 
   private val logger = ServiceRegistry::class.logger
 
+  private val customPath = OperatingSystem.current.storage
+      .resolve("custom.dat")
+  private val customBackupPath = OperatingSystem.current.storage
+      .resolve("custom.dat.bak")
+
   private val services = mutableMapOf<URI, Service>()
+  private val customServices = mutableMapOf<URI, Service>()
 
   /**
    * Refreshes all services within the given list at once.
@@ -80,6 +92,49 @@ object ServiceRegistry : Iterable<Service> {
       RepositoryLoader(location, it)
     }
 
+    this.refresh(path)
+  }
+
+  /**
+   * Refreshes all custom service definitions (if any).
+   */
+  fun refreshCustom() {
+    logger.info("Loading custom services from $customPath")
+
+    if (!Files.exists(this.customPath)) {
+      logger.warn("No custom service definitions defined")
+      return
+    }
+
+    try {
+      this.refresh(this.customPath)
+    } catch (ex: Throwable) {
+      logger.error("Failed to decode custom service definitions - Removing file", ex)
+
+      try {
+        Files.delete(this.customPath)
+
+        if (Files.exists(this.customBackupPath)) {
+          logger.info("Attempting to restore custom definitions from prior backup file at $customBackupPath")
+
+          try {
+            this.refresh(this.customBackupPath)
+            this.persist()
+          } catch (ex: Throwable) {
+            logger.error("Failed to persist restored custom service definitions", ex)
+          }
+        }
+      } catch (e: IOException) {
+        logger.error("Failed to replace corrupted service definition file", e)
+        return
+      }
+    }
+  }
+
+  /**
+   * Refreshes a repository which has previously been stored as a local file.
+   */
+  fun refresh(path: Path) {
     val repository = Files.newInputStream(path).use {
       BufferedInputStream(it).use { buffered ->
         val compressor = CompressorStreamFactory.detect(buffered)
@@ -122,12 +177,54 @@ object ServiceRegistry : Iterable<Service> {
   }
 
   /**
+   * Persists all custom service definitions.
+   */
+  fun persist() {
+    if (Files.exists(this.customPath)) {
+      logger.info("Moving prior version of custom service definitions to $customBackupPath")
+      Files.move(this.customPath, this.customBackupPath, StandardCopyOption.REPLACE_EXISTING)
+    }
+
+    logger.info("Persisting custom service definitions to $customPath")
+
+    val repository = Model.Repository.newBuilder()
+        .setRevision(0)
+        .setDisplayName("Custom Services")
+        .addAllService(
+            this.customServices.values
+                .map {
+                  Model.ServiceDefinition.newBuilder()
+                      .setId(it.id.toASCIIString())
+                      .setCategory(Model.Category.CUSTOM)
+                      .setTitle(it.title)
+                      .addAllPort(
+                          it.ports
+                              .map {
+                                Model.PortDefinition.newBuilder()
+                                    .setProtocol(it.protocol)
+                                    .setPort(it.number)
+                                    .build()
+                              })
+                      .build()
+                })
+        .build()
+
+    Files.newOutputStream(this.customPath)
+        .let(::XZCompressorOutputStream)
+        .use(repository::writeTo)
+  }
+
+  /**
    * Registers a new service with this registry.
    */
   operator fun plusAssign(service: Service) {
     logger.info("""Registered service "${service.id}"""")
     logger.debug(service)
     this.services[service.id] = service
+
+    if (service.category == Model.Category.CUSTOM) {
+      this.customServices[service.id] = service
+    }
   }
 
   /**
@@ -135,6 +232,7 @@ object ServiceRegistry : Iterable<Service> {
    */
   operator fun minusAssign(service: Service) {
     this.services.remove(service.id)
+    this.customServices.remove(service.id)
   }
 
   override fun iterator(): Iterator<Service> = this.services.values.iterator()
@@ -162,6 +260,16 @@ object ServiceRegistry : Iterable<Service> {
     override fun load() {
       logger.info("Refreshing user repositories")
       refresh(Configuration.userRepositoryIndex)
+    }
+  }
+
+  object CustomRepositoryLoader : Loader {
+
+    override val description = "service.custom"
+
+    override fun load() {
+      logger.info("Refreshing custom repository")
+      refreshCustom()
     }
   }
 }
