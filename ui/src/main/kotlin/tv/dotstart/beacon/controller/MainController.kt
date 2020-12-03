@@ -167,7 +167,7 @@ class MainController : Initializable {
                        }
                      })
 
-    stage.splashWindow("about.fxml")
+    stage.splashWindow<AboutController>("about.fxml")
     stage.show()
   }
 }

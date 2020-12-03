@@ -34,7 +34,7 @@ import java.nio.charset.StandardCharsets
 /**
  * Loads an FXML resource from the given location.
  */
-fun <T : Any> fxml(path: String): T {
+internal fun <C : Any, N : Any> fxml(path: String): Pair<C, N> {
   val classLoader = Thread.currentThread().contextClassLoader
   val resource = classLoader.getResource("fxml/$path")
       ?: throw FileNotFoundException("No such FXML resource: $path")
@@ -42,29 +42,33 @@ fun <T : Any> fxml(path: String): T {
   val loader = FXMLLoader(resource)
   loader.charset = StandardCharsets.UTF_8
   loader.resources = Localization.Bundle
-  return loader.load()
+
+  val node = loader.load<N>()
+  return loader.getController<C>() to node
 }
 
 /**
  * Creates an undecorated window from the given FXML resource.
  */
-fun Stage.splashWindow(path: String): Scene {
+fun <C : Any> Stage.splashWindow(path: String): C {
   this.initStyle(StageStyle.UNDECORATED)
 
-  val node = fxml<Parent>(path)
+  val (controller, node) = fxml<C, Parent>(path)
 
   val scene = Scene(node)
   this.scene = scene
-  return scene
+  return controller
 }
 
 /**
  * Creates a decorated window from the given FXML resource.
  */
-fun Stage.window(path: String, fullScreen: Boolean = false, maximizable: Boolean = true,
-                 minimizable: Boolean = true): Scene {
+fun <C : Any> Stage.window(path: String,
+                           fullScreen: Boolean = false,
+                           maximizable: Boolean = true,
+                           minimizable: Boolean = true): C {
   val classLoader = Thread.currentThread().contextClassLoader
-  val node = fxml<Node>(path)
+  val (controller, node) = fxml<C, Node>(path)
 
   val decorator = JFXDecorator(this, node, fullScreen, maximizable, minimizable)
 
@@ -75,5 +79,5 @@ fun Stage.window(path: String, fullScreen: Boolean = false, maximizable: Boolean
       classLoader.getResource("style/application.css")!!.toExternalForm()
   )
   this.scene = scene
-  return scene
+  return controller
 }

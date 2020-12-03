@@ -20,6 +20,7 @@ import javafx.application.Application
 import javafx.scene.image.Image
 import javafx.stage.Stage
 import tv.dotstart.beacon.config.Configuration
+import tv.dotstart.beacon.controller.SplashController
 import tv.dotstart.beacon.preload.Preloader
 import tv.dotstart.beacon.util.OperatingSystem
 import tv.dotstart.beacon.util.logger
@@ -64,7 +65,7 @@ class Beacon : Application() {
 
     try {
       logger.info("Displaying splash screen")
-      stage.splashWindow("splash.fxml")
+      stage.splashWindow<SplashController>("splash.fxml")
       stage.show()
     } catch (ex: Throwable) {
       logger.error("Application startup failed due to unknown error", ex)
