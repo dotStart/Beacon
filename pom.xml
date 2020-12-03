@@ -241,6 +241,12 @@
         <artifactId>kotlin-test-junit5</artifactId>
         <version>${kotlin.version}</version>
       </dependency>
+      <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-core</artifactId>
+        <version>3.6.28</version>
+        <scope>test</scope>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
