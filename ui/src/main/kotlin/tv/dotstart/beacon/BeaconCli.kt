@@ -105,6 +105,8 @@ object BeaconCli : CliktCommand(name = "Beacon") {
   }
 
   override fun run() {
+    // stash the desired logging path as early as possible to make sure Logger construction does not
+    // fail due to missing system properties
     configureLogStorage(this.logDirectory)
 
     val logger = LogManager.getLogger(Beacon::class.java)
