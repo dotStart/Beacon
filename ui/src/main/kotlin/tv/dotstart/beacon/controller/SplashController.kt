@@ -58,7 +58,7 @@ class SplashController : Initializable {
         Bindings.createStringBinding(
             Callable {
               val key = Preloader.description
-              if (key.isEmpty) {
+              if (key.isEmpty()) {
                 return@Callable ""
               }
 

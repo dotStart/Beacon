@@ -63,7 +63,7 @@ class PortEditorController : Initializable {
     this.portNumberTextField.textFormatter = TextFormatter<String>(UnaryOperator {
       val newValue = it.controlNewText
 
-      if (newValue.isEmpty) {
+      if (newValue.isEmpty()) {
         return@UnaryOperator it
       }
 
