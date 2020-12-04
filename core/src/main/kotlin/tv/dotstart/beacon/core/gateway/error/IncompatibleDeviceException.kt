@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tv.dotstart.beacon.forwarding.error
+package tv.dotstart.beacon.core.gateway.error
 
 import net.mm2d.upnp.Device
 
