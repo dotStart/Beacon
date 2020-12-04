@@ -16,7 +16,9 @@
  */
 package tv.dotstart.beacon.repository.model
 
+import tv.dotstart.beacon.core.model.Protocol
 import tv.dotstart.beacon.repository.Model
+import tv.dotstart.beacon.core.model.Port as CorePort
 
 /**
  * Represents a port numbe definition along with its respective protocol.
@@ -31,12 +33,20 @@ data class Port(
      * Note that the service will express all possible protocols when multiple are possible (or
      * permanently in use).
      */
-    val protocol: Model.Protocol,
+    override val protocol: Protocol,
 
     /**
      * Identifies the actual port number on which this particular service listens.
      */
-    val number: Int) {
+    override val number: Int) : CorePort {
 
-  constructor(model: Model.PortDefinition) : this(model.protocol, model.port)
+  constructor(model: Model.PortDefinition) : this(model.protocol.toCoreProtocol(), model.port)
+
+  /**
+   * Converts this model into its respective repository model representation.
+   */
+  fun toRepositoryDefinition(): Model.PortDefinition = Model.PortDefinition.newBuilder()
+      .setProtocol(this.protocol.toRepositoryDefinition())
+      .setPort(this.number)
+      .build()
 }

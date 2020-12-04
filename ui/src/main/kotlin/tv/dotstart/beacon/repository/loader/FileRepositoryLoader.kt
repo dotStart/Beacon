@@ -19,7 +19,10 @@ package tv.dotstart.beacon.repository.loader
 import tv.dotstart.beacon.repository.error.RepositoryAvailabilityException
 import java.io.IOException
 import java.net.URI
-import java.nio.file.*
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
+import java.nio.file.StandardCopyOption
 
 /**
  * Provides a simple file based loader which access a file from the local file system and copies it

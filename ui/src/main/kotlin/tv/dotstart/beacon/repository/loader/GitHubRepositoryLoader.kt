@@ -47,15 +47,15 @@ class GitHubRepositoryLoader : RepositoryLoader {
     val repository = uri.path.substring(1)
     val asset = uri.fragment
 
-    if (owner.isEmpty()) {
+    if (owner.isEmpty) {
       throw IllegalRepositorySpecificationException(
           "Invalid GitHub asset identifier: Owner cannot be empty")
     }
-    if (repository.isEmpty()) {
+    if (repository.isEmpty) {
       throw IllegalRepositorySpecificationException(
           "Invalid GitHub asset identifier: Repository cannot be empty")
     }
-    if (asset.isEmpty()) {
+    if (asset.isEmpty) {
       throw IllegalRepositorySpecificationException(
           "Invalid GitHub asset identifier: Asset cannot be empty")
     }

@@ -16,11 +16,13 @@
  */
 package tv.dotstart.beacon.repository.model
 
+import com.google.protobuf.ByteString
 import tv.dotstart.beacon.repository.Model
 import tv.dotstart.beacon.util.Cache
 import java.net.URI
 import java.nio.file.Files
 import java.nio.file.Path
+import tv.dotstart.beacon.core.model.Service as CoreService
 
 /**
  * Represents a service along with its human readable identification and port definitions.
@@ -35,7 +37,7 @@ data class Service(
      * This is most likely a store identifier (such as "game+steam://<id>") but may also be a
      * reference to the website of a game's developer (such as "game://example.org/game")
      */
-    val id: URI,
+    override val id: URI,
 
     /**
      * Identifies the category in which this service is to be organized.
@@ -53,12 +55,12 @@ data class Service(
     /**
      * Provides a human readable name with which this service is identified.
      */
-    val title: String,
+    override val title: String,
 
     /**
      * Identifies the ports on which this service will typically listen.
      */
-    val ports: List<Port>) {
+    override val ports: List<Port>) : CoreService {
 
   constructor(model: Model.ServiceDefinition) : this(
       URI.create(model.id),
@@ -71,4 +73,21 @@ data class Service(
       model.title,
       model.portList.map(::Port)
   )
+
+  fun toRepositoryDefinition(): Model.ServiceDefinition {
+    val icon = this.icon
+        ?.let { Files.readAllBytes(it) }
+
+    return Model.ServiceDefinition.newBuilder()
+        .setId(this.id.toASCIIString())
+        .setTitle(this.title)
+        .setCategory(this.category)
+        .addAllPort(this.ports.map(Port::toRepositoryDefinition))
+        .also {
+          if (icon != null) {
+            it.icon = ByteString.copyFrom(icon)
+          }
+        }
+        .build()
+  }
 }

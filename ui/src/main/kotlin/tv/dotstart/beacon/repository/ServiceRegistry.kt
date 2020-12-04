@@ -33,7 +33,6 @@ import java.net.URI
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardCopyOption
-import java.nio.file.StandardOpenOption
 
 /**
  * Manages the listing of available service definitions as well as the download of remote service
@@ -115,7 +114,8 @@ object ServiceRegistry : Iterable<Service> {
         Files.delete(this.customPath)
 
         if (Files.exists(this.customBackupPath)) {
-          logger.info("Attempting to restore custom definitions from prior backup file at $customBackupPath")
+          logger.info(
+              "Attempting to restore custom definitions from prior backup file at $customBackupPath")
 
           try {
             this.refresh(this.customBackupPath)
@@ -192,21 +192,7 @@ object ServiceRegistry : Iterable<Service> {
         .setDisplayName("Custom Services")
         .addAllService(
             this.customServices.values
-                .map {
-                  Model.ServiceDefinition.newBuilder()
-                      .setId(it.id.toASCIIString())
-                      .setCategory(Model.Category.CUSTOM)
-                      .setTitle(it.title)
-                      .addAllPort(
-                          it.ports
-                              .map {
-                                Model.PortDefinition.newBuilder()
-                                    .setProtocol(it.protocol)
-                                    .setPort(it.number)
-                                    .build()
-                              })
-                      .build()
-                })
+                .map(Service::toRepositoryDefinition))
         .build()
 
     Files.newOutputStream(this.customPath)

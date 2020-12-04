@@ -82,7 +82,7 @@ object BeaconCli : CliktCommand(name = "Beacon") {
    * NIX based systems, etc).
    */
   val logDirectory: Path by option("--log-dir",
-      help = "Specifies the log storage directory")
+                                   help = "Specifies the log storage directory")
       .convert { Paths.get(it) }
       .defaultLazy { OperatingSystem.current.storage.resolve("log") }
 
@@ -90,14 +90,14 @@ object BeaconCli : CliktCommand(name = "Beacon") {
    * Enables global debug logging.
    */
   val debug: Boolean by option("--debug",
-      help = "Enables debug logging")
+                               help = "Enables debug logging")
       .flag()
 
   /**
    * Enables global trace logging.
    */
   val verbose: Boolean by option("--verbose",
-      help = "Enables verbose logging")
+                                 help = "Enables verbose logging")
       .flag()
 
   init {
@@ -117,9 +117,9 @@ object BeaconCli : CliktCommand(name = "Beacon") {
       logger.error("Launch has been aborted - Cannot recover")
 
       JOptionPane.showMessageDialog(null,
-          "You are running an outdated version of Java\nYou will need Java 9 or newer to run this application",
-          "Outdated Java Version",
-          JOptionPane.ERROR_MESSAGE);
+                                    "You are running an outdated version of Java\nYou will need Java 9 or newer to run this application",
+                                    "Outdated Java Version",
+                                    JOptionPane.ERROR_MESSAGE)
       return
     }
 
@@ -130,7 +130,7 @@ object BeaconCli : CliktCommand(name = "Beacon") {
 
       Platform.runLater {
         detailedErrorDialog(Localization("error.unknown.title"),
-            Localization("error.unknown.body"), ex)
+                            Localization("error.unknown.body"), ex)
         System.exit(128)
       }
     }

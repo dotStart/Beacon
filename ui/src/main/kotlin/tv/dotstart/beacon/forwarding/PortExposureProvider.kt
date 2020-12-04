@@ -17,7 +17,11 @@
 package tv.dotstart.beacon.forwarding
 
 import javafx.application.Platform
-import tv.dotstart.beacon.forwarding.error.IncompatibleDeviceException
+import kotlinx.coroutines.runBlocking
+import tv.dotstart.beacon.core.gateway.InternetGatewayDevice
+import tv.dotstart.beacon.core.gateway.InternetGatewayDeviceLocator
+import tv.dotstart.beacon.core.gateway.PortMapping
+import tv.dotstart.beacon.core.gateway.error.IncompatibleDeviceException
 import tv.dotstart.beacon.preload.Loader
 import tv.dotstart.beacon.preload.error.PreloadError
 import tv.dotstart.beacon.repository.model.Service
@@ -55,26 +59,28 @@ object PortExposureProvider : Loader {
     private set
 
   override fun load() {
-    this.device = this.locator.locate().blockingFirst()
-        ?: throw PreloadError(
-            "gateway",
-            "Failed to locate UPnP compatible internet gateway")
+    device = runBlocking {
+      locator.locate()
+          ?: throw PreloadError(
+              "gateway",
+              "Failed to locate UPnP compatible internet gateway")
+    }
 
     logger.info(
         "Discovered gateway device \"${device.friendlyName}\" (${device.modelName}) provided by ${device.manufacturer} <${device.manufacturerUrl}>")
 
-    this.externalAddress = this.device.getExternalAddress()
+    externalAddress = device.getExternalAddress()
     logger.info("Discovered external address: $externalAddress")
 
     logger.info("Initializing lease refresh task")
-    this.scheduledExecutor = Executors.newSingleThreadScheduledExecutor()
-    this.scheduledExecutor.scheduleAtFixedRate(
-        { this.refreshPeriod }, refreshPeriod, refreshPeriod, TimeUnit.SECONDS)
+    scheduledExecutor = Executors.newSingleThreadScheduledExecutor()
+    scheduledExecutor.scheduleAtFixedRate(
+        { refreshPeriod }, refreshPeriod, refreshPeriod, TimeUnit.SECONDS)
   }
 
   fun expose(spec: Service) {
-    this.mappingLock.withLock {
-      val existing = this.mappings[spec]
+    mappingLock.withLock {
+      val existing = mappings[spec]
       if (existing != null) {
         return
       }
@@ -83,11 +89,10 @@ object PortExposureProvider : Loader {
         logger.info("Performing mapping registration for specification: $spec")
         val mappings = spec.ports
             .map {
-              this.device.forwardPort(
-                  it.protocol, it.number, "Beacon Mapping for ${spec.title}", leaseDuration)
+              device.forward(it, "Beacon Mapping for ${spec.title}", leaseDuration)
             }
 
-        this.mappings[spec] = mappings
+        PortExposureProvider.mappings[spec] = mappings
       } catch (ex: IncompatibleDeviceException) {
         logger.error("Failed to register port mapping: Incompatible device", ex)
 
@@ -107,8 +112,8 @@ object PortExposureProvider : Loader {
   }
 
   private fun refreshLeases() {
-    this.mappingLock.withLock {
-      this.mappings
+    mappingLock.withLock {
+      mappings
           .forEach { spec, mappings ->
             logger.error("Refreshing mapping registrations for specification: $spec")
 
@@ -128,13 +133,13 @@ object PortExposureProvider : Loader {
     }
   }
 
-  operator fun contains(spec: Service): Boolean = this.mappingLock.withLock {
-    spec in this.mappings
+  operator fun contains(spec: Service): Boolean = mappingLock.withLock {
+    spec in mappings
   }
 
   fun close(spec: Service) {
-    this.mappingLock.withLock {
-      val mappings = this.mappings.remove(spec)
+    mappingLock.withLock {
+      val mappings = mappings.remove(spec)
           ?: return
 
       try {
@@ -160,18 +165,18 @@ object PortExposureProvider : Loader {
 
   override fun shutdown() {
     logger.info("Cancelling lease refresh task")
-    this.scheduledExecutor.shutdownNow()
-    this.scheduledExecutor.awaitTermination(30, TimeUnit.SECONDS)
+    scheduledExecutor.shutdownNow()
+    scheduledExecutor.awaitTermination(30, TimeUnit.SECONDS)
 
     logger.info("Removing remaining port mappings")
-    this.mappingLock.withLock {
-      this.mappings.forEach { spec, mappings ->
+    mappingLock.withLock {
+      mappings.forEach { spec, mappings ->
         logger.info("Removing mapping for port specification: $spec")
 
         mappings.forEach(PortMapping::remove)
       }
     }
 
-    this.device.close()
+    device.close()
   }
 }

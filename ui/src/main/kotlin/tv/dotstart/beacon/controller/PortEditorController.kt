@@ -25,7 +25,7 @@ import javafx.fxml.Initializable
 import javafx.scene.control.TextFormatter
 import javafx.scene.control.ToggleGroup
 import javafx.stage.Stage
-import tv.dotstart.beacon.repository.Model
+import tv.dotstart.beacon.core.model.Protocol
 import tv.dotstart.beacon.repository.model.Port
 import java.net.URL
 import java.util.*
@@ -63,7 +63,7 @@ class PortEditorController : Initializable {
     this.portNumberTextField.textFormatter = TextFormatter<String>(UnaryOperator {
       val newValue = it.controlNewText
 
-      if (newValue.isEmpty()) {
+      if (newValue.isEmpty) {
         return@UnaryOperator it
       }
 
@@ -85,8 +85,8 @@ class PortEditorController : Initializable {
     val port = this.port
     if (port != null) {
       val selectedButton = when (port.protocol) {
-        Model.Protocol.TCP -> this.tcpProtocolButton
-        Model.Protocol.UDP -> this.udpProtocolButton
+        Protocol.TCP -> this.tcpProtocolButton
+        Protocol.UDP -> this.udpProtocolButton
         else -> null
       }
       selectedButton?.let(this.protocolToggleGroup::selectToggle)
@@ -99,9 +99,9 @@ class PortEditorController : Initializable {
   private fun onSave(event: ActionEvent) {
     this.port = Port(
         if (this.protocolToggleGroup.selectedToggle == this.tcpProtocolButton) {
-          Model.Protocol.TCP
+          Protocol.TCP
         } else {
-          Model.Protocol.UDP
+          Protocol.UDP
         },
         this.portNumberTextField.text.toInt(10)
     )
