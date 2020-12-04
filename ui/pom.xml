@@ -82,11 +82,6 @@
     </dependency>
 
     <dependency>
-      <groupId>net.mm2d</groupId>
-      <artifactId>mmupnp</artifactId>
-    </dependency>
-
-    <dependency>
       <groupId>com.mindscapehq</groupId>
       <artifactId>core</artifactId>
     </dependency>
