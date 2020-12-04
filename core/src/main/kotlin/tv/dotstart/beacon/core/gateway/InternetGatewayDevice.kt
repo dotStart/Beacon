@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tv.dotstart.beacon.forwarding
+package tv.dotstart.beacon.core.gateway
 
 import net.mm2d.upnp.ControlPoint
 import net.mm2d.upnp.Device
-import tv.dotstart.beacon.forwarding.error.IncompatibleDeviceException
-import tv.dotstart.beacon.repository.Model
+import tv.dotstart.beacon.core.gateway.error.IncompatibleDeviceException
+import tv.dotstart.beacon.core.model.Port
 import java.io.Closeable
 
 /**
@@ -42,9 +42,29 @@ class InternetGatewayDevice internal constructor(
   val manufacturerUrl: String?
     get() = this.device.manufactureUrl
 
+  private val externalAddressAction = this.device.findAction(externalAddressActionName)
+  private val portRegistrationAction = this.device.findAction(portRegistrationActionName)
+  private val portRemovalAction = this.device.findAction(portRemovalActionName)
+
+  /**
+   * Evaluates whether the external address may be acquired from this device.
+   */
+  val externalAddressAvailable: Boolean
+    get() = this.externalAddressAction != null
+
+  /**
+   * Evaluates whether port mapping is available on this device.
+   */
+  val portMappingAvailable: Boolean
+    get() = this.portRegistrationAction != null && this.portRemovalAction != null
+
   companion object {
 
-    private const val externalAddressField = "NewExternalIPAddress"
+    internal const val externalAddressActionName = "GetExternalIPAddress"
+    internal const val portRegistrationActionName = "AddPortMapping"
+    internal const val portRemovalActionName = "DeletePortMapping"
+
+    internal const val externalAddressField = "NewExternalIPAddress"
   }
 
   /**
@@ -55,9 +75,9 @@ class InternetGatewayDevice internal constructor(
    * @throws IncompatibleDeviceException when the device does not expose the necessary action.
    */
   fun getExternalAddress(): String? {
-    val action = this.device.findAction("GetExternalIPAddress")
+    val action = this.externalAddressAction
         ?: throw IncompatibleDeviceException(
-            this.device, "Device does not support GetExternalIPAddress")
+            this.device, "Device does not support $externalAddressAction")
 
     return action {
       it[externalAddressField]
@@ -75,9 +95,15 @@ class InternetGatewayDevice internal constructor(
    * When a lease duration is given, [PortMapping.refresh] must be invoked on a regular basis in
    * order to retain ownership of the forwarded port.
    */
-  fun forwardPort(protocol: Model.Protocol, port: Int, description: String? = null,
-                  duration: Long = 0): PortMapping {
-    return PortMapping(this.device, protocol, port, description, duration)
+  fun forward(port: Port, description: String? = null, duration: Long = 0): PortMapping {
+    val registerAction = this.portRegistrationAction
+        ?: throw IncompatibleDeviceException(
+            this.device, "Device does not support $portRegistrationActionName")
+    val removeAction = this.portRemovalAction
+        ?: throw IncompatibleDeviceException(
+            this.device, "Device does not support $portRemovalActionName")
+
+    return PortMapping(this.device, registerAction, removeAction, port, description, duration)
         .also(PortMapping::refresh)
   }
 

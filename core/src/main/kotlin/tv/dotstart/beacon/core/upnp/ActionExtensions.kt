@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tv.dotstart.beacon.forwarding
+package tv.dotstart.beacon.core.gateway
 
 import net.mm2d.upnp.Action
 import java.util.concurrent.CompletableFuture
@@ -40,9 +40,7 @@ operator fun <T> Action.invoke(parameters: Map<String, String?> = emptyMap(),
         val result = converter(it)
         future.complete(result)
       },
-      onError = {
-        future.completeExceptionally(it)
-      }
+      onError = future::completeExceptionally
   )
 
   return future.join()
