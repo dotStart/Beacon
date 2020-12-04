@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tv.dotstart.beacon.forwarding
+package tv.dotstart.beacon.core.util
 
 import java.net.DatagramSocket
 import java.net.InetAddress
@@ -26,6 +26,16 @@ import java.net.InetAddress
  * @date 02/12/2020
  */
 
+/**
+ * Retrieves the local address for a given target route.
+ *
+ * This method will effectively establish a temporary datagram socket in order to identify the local
+ * address used in order to establish communication with a given target.
+ *
+ * Note: This implementation is pretty ugly, however, Java does not provide any methods for
+ * interacting with the routing table directly thus preventing the application from discovering its
+ * local address without prior knowledge of the target network interface.
+ */
 fun getLocalAddressFor(target: InetAddress): InetAddress = DatagramSocket(0)
     .also { it.connect(target, 1) }
     .localAddress
