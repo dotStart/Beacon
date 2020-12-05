@@ -74,6 +74,11 @@
       <groupId>net.mm2d</groupId>
       <artifactId>mmupnp</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.google.protobuf</groupId>
+      <artifactId>protobuf-java</artifactId>
+      <optional>true</optional>
+    </dependency>
 
     <dependency>
       <groupId>org.jetbrains.kotlin</groupId>
