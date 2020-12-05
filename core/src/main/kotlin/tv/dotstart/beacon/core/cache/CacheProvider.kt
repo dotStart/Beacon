@@ -86,6 +86,25 @@ interface CacheProvider {
    * @throws CacheException when a key cannot be stored or its retrieval fails in a way that would
    * prevent future storage operations.
    */
+  fun getOrPopulate(key: String, lifespan: Duration? = null, provider: () -> ByteArray): ByteArray {
+    val cached = this.get(key, lifespan)
+    if (cached != null) {
+      return cached
+    }
+
+    val populated = provider()
+    this.store(key, populated)
+
+    return populated
+  }
+
+  /**
+   * Attempts to retrieve a cached value with a given key or populates its contents when it is not
+   * present.
+   *
+   * @throws CacheException when a key cannot be stored or its retrieval fails in a way that would
+   * prevent future storage operations.
+   */
   fun <V : Any> getOrPopulate(key: String, serializer: Serializer<V>,
                               lifespan: Duration? = null, provider: () -> V): V {
     val cached = this.get(key, serializer, lifespan)
