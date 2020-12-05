@@ -16,6 +16,7 @@
  */
 package tv.dotstart.beacon.core.cache
 
+import tv.dotstart.beacon.core.cache.error.CacheException
 import tv.dotstart.beacon.core.cache.serialize.Serializer
 import java.time.Duration
 
@@ -35,6 +36,8 @@ interface CacheProvider {
    *
    * Callers may optionally include a custom expiration duration. When no expiration duration is
    * given, the provider default is chosen.
+   *
+   * @throws CacheException when a key cannot be stored.
    */
   fun get(key: String, expirationPeriod: Duration? = null): ByteArray?
 
@@ -46,35 +49,46 @@ interface CacheProvider {
    *
    * Callers may optionally include a custom expiration duration. When no expiration duration is
    * given, the provider default is chosen.
+   *
+   * @throws CacheException when a key cannot be retrieved potentially preventing future operations.
    */
   fun <V : Any> get(key: String,
                     serializer: Serializer<V>,
-                    expirationPeriod: Duration? = null): V? = get(key, expirationPeriod)
+                    lifespan: Duration? = null): V? = get(key, lifespan)
       ?.let(serializer::decode)
 
   /**
    * Stores a value with a given key within this cache provider.
+   *
+   * @throws CacheException when a key cannot be stored.
    */
   fun store(key: String, value: ByteArray)
 
   /**
    * Stores a value with a given key within this cache provider.
+   *
+   * @throws CacheException when a key cannot be stored.
    */
   fun <V : Any> store(key: String, serializer: Serializer<V>, value: V) =
       store(key, serializer.encode(value))
 
   /**
    * Purges a given key from this cache provider.
+   *
+   * @throws CacheException when a key cannot be stored.
    */
   fun purge(key: String)
 
   /**
    * Attempts to retrieve a cached value with a given key or populates its contents when it is not
    * present.
+   *
+   * @throws CacheException when a key cannot be stored or its retrieval fails in a way that would
+   * prevent future storage operations.
    */
   fun <V : Any> getOrPopulate(key: String, serializer: Serializer<V>,
-                              expirationPeriod: Duration? = null, provider: () -> V): V {
-    val cached = this.get(key, serializer, expirationPeriod)
+                              lifespan: Duration? = null, provider: () -> V): V {
+    val cached = this.get(key, serializer, lifespan)
     if (cached != null) {
       return cached
     }

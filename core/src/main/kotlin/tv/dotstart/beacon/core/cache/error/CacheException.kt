@@ -14,21 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tv.dotstart.beacon.core.cache
-
-import java.time.Duration
+package tv.dotstart.beacon.core.cache.error
 
 /**
- * Provides a cache provider which does not store or retrieve any values.
+ * Notifies callers about cache related errors from which the application cannot recover.
  *
- * @author Johannes Donath
+ * @author [Johannes Donath](mailto:johannesd@torchmind.com)
  * @date 05/12/2020
  */
-object NoopCacheProvider : CacheProvider {
-
-  override fun get(key: String, lifespan: Duration?): ByteArray? = null
-
-  override fun store(key: String, value: ByteArray) = Unit
-
-  override fun purge(key: String) = Unit
-}
+class CacheException(message: String? = null, cause: Throwable? = null)
+  : Exception(message, cause)
