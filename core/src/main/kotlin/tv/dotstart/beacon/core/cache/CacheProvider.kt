@@ -39,7 +39,7 @@ interface CacheProvider {
    *
    * @throws CacheException when a key cannot be stored.
    */
-  fun get(key: String, expirationPeriod: Duration? = null): ByteArray?
+  fun get(key: String, lifespan: Duration? = null): ByteArray?
 
   /**
    * Attempts to retrieve a cached value with a given key.
