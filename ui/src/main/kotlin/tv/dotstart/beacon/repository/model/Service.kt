@@ -17,11 +17,14 @@
 package tv.dotstart.beacon.repository.model
 
 import com.google.protobuf.ByteString
+import tv.dotstart.beacon.core.delegate.logManager
 import tv.dotstart.beacon.repository.Model
-import tv.dotstart.beacon.util.Cache
+import java.awt.image.BufferedImage
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
+import java.io.IOException
 import java.net.URI
-import java.nio.file.Files
-import java.nio.file.Path
+import javax.imageio.ImageIO
 import tv.dotstart.beacon.core.model.Service as CoreService
 
 /**
@@ -50,7 +53,7 @@ data class Service(
      * When no icon has been assigned for this particular icon, null is returned instead. In this
      * case, the icon is to be substituted with a standard fallback icon.
      */
-    val icon: Path?,
+    val icon: BufferedImage?,
 
     /**
      * Provides a human readable name with which this service is identified.
@@ -62,21 +65,41 @@ data class Service(
      */
     override val ports: List<Port>) : CoreService {
 
+  companion object {
+
+    private val logger by logManager()
+  }
+
   constructor(model: Model.ServiceDefinition) : this(
       URI.create(model.id),
       model.category,
-      model.icon?.let { iconData ->
-        Cache("icon-${model.id}") {
-          Files.write(it, iconData.toByteArray())
-        }
-      },
+      model.icon
+          ?.let { iconData ->
+            try {
+              ByteArrayInputStream(iconData.toByteArray())
+                  .let { ImageIO.read(it) }
+            } catch (ex: IOException) {
+              logger.error("Failed to decode icon for service \"${model.id}\"", ex)
+              null
+            }
+          },
       model.title,
       model.portList.map(::Port)
   )
 
   fun toRepositoryDefinition(): Model.ServiceDefinition {
     val icon = this.icon
-        ?.let { Files.readAllBytes(it) }
+        ?.let {
+          ByteArrayOutputStream().use { stream ->
+            try {
+              ImageIO.write(it, "PNG", stream)
+              stream.toByteArray()
+            } catch (ex: IOException) {
+              logger.error("Failed to encode icon for service \"$id\"", ex)
+              null
+            }
+          }
+        }
 
     return Model.ServiceDefinition.newBuilder()
         .setId(this.id.toASCIIString())

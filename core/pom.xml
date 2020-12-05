@@ -102,6 +102,11 @@
         <targetPath>META-INF/metadata</targetPath>
         <filtering>true</filtering>
       </resource>
+      <resource>
+        <directory>${project.basedir}/src/main/resources/META-INF/services</directory>
+        <targetPath>META-INF/services</targetPath>
+        <filtering>false</filtering>
+      </resource>
     </resources>
 
     <plugins>

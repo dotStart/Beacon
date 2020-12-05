@@ -16,15 +16,28 @@
  */
 package tv.dotstart.beacon.cell.model
 
+import javafx.scene.image.Image
 import tv.dotstart.beacon.repository.model.Service
 
 /**
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
  */
-data class ServiceNode(val service: Service) : ServiceListNode {
+data class ServiceNode(
+
+    /**
+     * Identifies the service with which this node is directly associated.
+     */
+    val service: Service,
+
+    /**
+     * Defines the icon which is to be displayed within this service node.
+     */
+    override val icon: Image?,
+
+    /**
+     * Defines the title which is to be displayed within this service node.
+     */
+    override val title: String) : ServiceListNode {
 
   override val styleClass = "service"
-
-  override val icon = this.service.icon
-  override val title = this.service.title
 }

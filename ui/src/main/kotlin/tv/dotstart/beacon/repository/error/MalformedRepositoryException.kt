@@ -25,4 +25,4 @@ package tv.dotstart.beacon.repository.error
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
  */
 class MalformedRepositoryException(message: String? = null, cause: Throwable? = null) :
-    IllegalRepositoryException(message, cause)
+    RepositoryException(message, cause)

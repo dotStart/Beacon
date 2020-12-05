@@ -20,15 +20,18 @@ import org.apache.commons.compress.compressors.CompressorStreamFactory
 import org.apache.commons.compress.compressors.xz.XZCompressorOutputStream
 import tv.dotstart.beacon.BeaconCli
 import tv.dotstart.beacon.config.Configuration
+import tv.dotstart.beacon.core.artifact.ArtifactProvider
 import tv.dotstart.beacon.preload.Loader
-import tv.dotstart.beacon.repository.error.*
-import tv.dotstart.beacon.repository.loader.RepositoryLoader
+import tv.dotstart.beacon.core.artifact.error.*
 import tv.dotstart.beacon.repository.model.Service
+import tv.dotstart.beacon.repository.error.MalformedRepositoryException
 import tv.dotstart.beacon.util.Cache
 import tv.dotstart.beacon.util.OperatingSystem
 import tv.dotstart.beacon.util.logger
 import java.io.BufferedInputStream
+import java.io.ByteArrayInputStream
 import java.io.IOException
+import java.io.InputStream
 import java.net.URI
 import java.nio.file.Files
 import java.nio.file.Path
@@ -43,6 +46,8 @@ import java.nio.file.StandardCopyOption
 object ServiceRegistry : Iterable<Service> {
 
   private val logger = ServiceRegistry::class.logger
+
+  private val artifactProvider = ArtifactProvider.forDiscoveredLoaders()
 
   private val customPath = OperatingSystem.current.storage
       .resolve("custom.dat")
@@ -64,17 +69,17 @@ object ServiceRegistry : Iterable<Service> {
     repositories.forEach {
       try {
         this.refresh(it)
-      } catch (ex: IllegalRepositorySchemeException) {
+      } catch (ex: ArtifactSchemeException) {
         logger.warn("""Failed to refresh repository "$it": Unknown repository scheme""")
-      } catch (ex: IllegalRepositorySpecificationException) {
+      } catch (ex: ArtifactSpecificationException) {
         logger.warn("""Failed to refresh repository "$it": Malformed provider URI""")
       } catch (ex: MalformedRepositoryException) {
         logger.warn("""Failed to parse repository "$it"""", ex)
-      } catch (ex: NoSuchRepositoryException) {
+      } catch (ex: NoSuchArtifactException) {
         logger.warn("""Failed to refresh repository "$it": No such repository""")
-      } catch (ex: RepositoryAvailabilityException) {
+      } catch (ex: ArtifactAvailabilityException) {
         logger.warn("""Failed to refresh repository "$it": Temporarily unavailable""", ex)
-      } catch (ex: IllegalRepositoryException) {
+      } catch (ex: ArtifactException) {
         logger.warn("""Failed to refresh repository "$it": Unknown Error""", ex)
       }
     }
@@ -86,12 +91,11 @@ object ServiceRegistry : Iterable<Service> {
   fun refresh(location: URI) {
     logger.info("Loading repository $location")
 
-    val path = Cache(location.toString()) {
-      logger.trace("Retrieving updated version of $location")
-      RepositoryLoader(location, it)
+    val repository = Cache.getOrPopulate(location.toString()) {
+      this.artifactProvider.retrieve(location)
     }
 
-    this.refresh(path)
+    this.refresh(repository)
   }
 
   /**
@@ -135,18 +139,24 @@ object ServiceRegistry : Iterable<Service> {
    * Refreshes a repository which has previously been stored as a local file.
    */
   fun refresh(path: Path) {
-    val repository = Files.newInputStream(path).use {
-      BufferedInputStream(it).use { buffered ->
-        val compressor = CompressorStreamFactory.detect(buffered)
-            ?: throw MalformedRepositoryException(
-                "Cannot detect repository compression type")
-        logger.trace("Detected $compressor compression")
+    Files.newInputStream(path).use<InputStream, Unit>(this::refresh)
+  }
 
-        CompressorStreamFactory().createCompressorInputStream(compressor, buffered)
-            .use { compressed ->
-              Model.Repository.parseFrom(compressed)
-            }
-      }
+  private fun refresh(payload: ByteArray) {
+    ByteArrayInputStream(payload).use(this::refresh)
+  }
+
+  private fun refresh(stream: InputStream) {
+    val repository = BufferedInputStream(stream).use { buffered ->
+      val compressor = CompressorStreamFactory.detect(buffered)
+          ?: throw MalformedRepositoryException(
+              "Cannot detect repository compression type")
+      logger.trace("Detected $compressor compression")
+
+      CompressorStreamFactory().createCompressorInputStream(compressor, buffered)
+          .use { compressed ->
+            Model.Repository.parseFrom(compressed)
+          }
     }
 
     this.refresh(repository)

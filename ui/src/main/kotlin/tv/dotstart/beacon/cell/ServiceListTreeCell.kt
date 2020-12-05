@@ -18,11 +18,9 @@ package tv.dotstart.beacon.cell
 
 import javafx.scene.control.TreeCell
 import javafx.scene.control.TreeView
-import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.util.Callback
 import tv.dotstart.beacon.cell.model.ServiceListNode
-import java.nio.file.Files
 
 /**
  * Provides a list cell which displays service nodes (e.g. service definitions or categories).
@@ -43,11 +41,8 @@ class ServiceListTreeCell : TreeCell<ServiceListNode>() {
     this.styleClass.add(node.styleClass)
 
     this.text = node.title
-    this.graphic = node.icon?.let {
-      Files.newInputStream(it).use {
-        ImageView(Image(it))
-      }
-    }
+    this.graphic = node.icon
+        ?.let(::ImageView)
   }
 
   /**

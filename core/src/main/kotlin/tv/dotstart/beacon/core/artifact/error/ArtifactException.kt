@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tv.dotstart.beacon.repository.error
+package tv.dotstart.beacon.core.artifact.error
 
 /**
  * Notifies callers about an issue which is caused by the illegal configuration of a repository.
  *
- * This may refer to either a server side misconfiguration (such as the lack of a repository on the
- * server side) or a client side misconfiguration (such as an unrecognized repository loader URI).
+ * This may refer to either a server side misconfiguration (such as the lack of a artifact on the
+ * server side) or a client side misconfiguration (such as an unrecognized artifact loader URI).
  *
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
  */
-open class IllegalRepositoryException(message: String? = null, cause: Throwable? = null) :
+abstract class ArtifactException(message: String? = null, cause: Throwable? = null) :
     Exception(message, cause)

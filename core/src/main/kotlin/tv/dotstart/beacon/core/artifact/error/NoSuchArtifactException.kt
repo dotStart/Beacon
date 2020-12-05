@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tv.dotstart.beacon.repository.error
+package tv.dotstart.beacon.core.artifact.error
 
 /**
- * Notifies the caller about a repository availability problem.
+ * Notifies a caller about the lack of a repository at the given location.
  *
- * This issue is typically thrown when the server returns an otherwise unknown error code when the
- * repository or some of its metadata is queried.
+ * This typically occurs when the given repository file does not actually exist on the server side
+ * and thus cannot be fetched.
  *
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
  */
-class RepositoryAvailabilityException(message: String? = null, cause: Throwable? = null) :
-    IllegalRepositoryException(message, cause)
+class NoSuchArtifactException(message: String? = null, cause: Throwable? = null) :
+    ArtifactException(message, cause)

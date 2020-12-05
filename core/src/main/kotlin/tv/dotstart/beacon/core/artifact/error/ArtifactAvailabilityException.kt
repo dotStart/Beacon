@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tv.dotstart.beacon.repository.error
+package tv.dotstart.beacon.core.artifact.error
 
 /**
- * Notifies a caller about an issue related to the protocol specific part of the repository URI.
+ * Notifies the caller about an artifact availability problem.
  *
- * This typically occurs when the payload is entirely malformed (e.g. does not fit the expected
- * format or is otherwise invalid).
+ * This exception is typically thrown when the server returns an otherwise unknown error code when
+ * the artifact or some of its metadata is queried.
  *
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
  */
-class IllegalRepositorySpecificationException(message: String? = null, cause: Throwable? = null) :
-    IllegalRepositoryException(message, cause)
+class ArtifactAvailabilityException(message: String? = null, cause: Throwable? = null) :
+    ArtifactException(message, cause)

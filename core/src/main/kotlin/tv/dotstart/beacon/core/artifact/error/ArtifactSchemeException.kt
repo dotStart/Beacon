@@ -14,20 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tv.dotstart.beacon.util
-
-import tv.dotstart.beacon.core.cache.filesystem.FileSystemCache
-import tv.dotstart.beacon.core.cache.filesystem.path.Murmur3PathProvider
+package tv.dotstart.beacon.core.artifact.error
 
 /**
- * Provides a caching solution for arbitrary blobs.
+ * Notifies a caller about an issue related to the artifact scheme.
  *
- * This solution is primarily used in order to speed up the retrieval of repositories and extraction
- * of icons into a JavaFX compatible directory layout.
+ * This error typically occurs when the given artifact scheme is not known to the application.
  *
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
  */
-// TODO: Replace with configurable implementation
-object Cache : FileSystemCache(
-    OperatingSystem.current.storage.resolve("cache"),
-    pathProvider = Murmur3PathProvider(424242L))
+class ArtifactSchemeException(message: String? = null, cause: Throwable? = null) :
+    ArtifactException(message, cause)

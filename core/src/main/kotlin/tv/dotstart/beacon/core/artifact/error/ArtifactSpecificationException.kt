@@ -14,14 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tv.dotstart.beacon.repository.error
+package tv.dotstart.beacon.core.artifact.error
 
 /**
- * Notifies a caller about an issue related to the repository scheme.
+ * Notifies a caller about an issue related to the protocol specific part of the artifact URI.
  *
- * This error typically occurs when the given repository scheme is not known to the application.
+ * This typically occurs when the payload is entirely malformed (e.g. does not fit the expected
+ * format or is otherwise invalid).
  *
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
  */
-class IllegalRepositorySchemeException(message: String? = null, cause: Throwable? = null) :
-    IllegalRepositoryException(message, cause)
+class ArtifactSpecificationException(message: String? = null, cause: Throwable? = null) :
+    ArtifactException(message, cause)

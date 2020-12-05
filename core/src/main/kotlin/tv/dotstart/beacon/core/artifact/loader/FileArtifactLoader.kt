@@ -14,35 +14,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tv.dotstart.beacon.repository.loader
+package tv.dotstart.beacon.core.artifact.loader
 
-import tv.dotstart.beacon.repository.error.RepositoryAvailabilityException
+import tv.dotstart.beacon.core.artifact.error.ArtifactAvailabilityException
+import tv.dotstart.beacon.core.artifact.error.NoSuchArtifactException
+import tv.dotstart.beacon.core.cache.CacheProvider
 import java.io.IOException
 import java.net.URI
 import java.nio.file.Files
-import java.nio.file.Path
 import java.nio.file.Paths
-import java.nio.file.StandardCopyOption
 
 /**
- * Provides a simple file based loader which access a file from the local file system and copies it
- * to the desired cache location.
- *
- * Note that this loader implementation is most useful when the caching system has been explicitly
- * disabled via the command line.
+ * Provides a simple file based loader which access a file from the local file system.
  *
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
  */
-class FileRepositoryLoader : RepositoryLoader {
+object FileArtifactLoader : ArtifactLoader {
 
-  override val schemes = listOf("file")
-
-  override fun invoke(uri: URI, target: Path) {
-    try {
-      val source = Paths.get(uri)
-      Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING)
-    } catch (ex: IOException) {
-      throw RepositoryAvailabilityException("Failed to copy repository", ex)
+  override fun retrieve(uri: URI): ByteArray {
+    val source = Paths.get(uri)
+    if (!Files.exists(source)) {
+      throw NoSuchArtifactException("No such artifact")
     }
+
+    try {
+      return Files.readAllBytes(source)
+    } catch (ex: IOException) {
+      throw ArtifactAvailabilityException("Failed to copy artifact", ex)
+    }
+  }
+
+  class Factory : ArtifactLoader.Factory {
+
+    override val schemes = listOf("file")
+
+    override fun create(cache: CacheProvider) = FileArtifactLoader
   }
 }

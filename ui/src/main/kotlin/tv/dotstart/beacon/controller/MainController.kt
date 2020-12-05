@@ -28,7 +28,6 @@ import javafx.scene.control.Button
 import javafx.scene.control.Label
 import javafx.scene.control.TableView
 import javafx.scene.control.TreeItem
-import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.stage.Stage
 import tv.dotstart.beacon.cell.ServiceListTreeCell
@@ -42,7 +41,6 @@ import tv.dotstart.beacon.repository.model.Port
 import tv.dotstart.beacon.repository.model.Service
 import tv.dotstart.beacon.util.*
 import java.net.URL
-import java.nio.file.Files
 import java.util.*
 
 /**
@@ -133,7 +131,7 @@ class MainController : Initializable {
 
     ServiceRegistry.forEach {
       val parent = this.categoryMap[it.category]!!
-      parent.children.add(TreeItem(ServiceNode(it)))
+      parent.children.add(TreeItem(ServiceNode(it, it.icon?.toImage(), it.title)))
     }
 
     this.categoryMap.values
@@ -156,9 +154,7 @@ class MainController : Initializable {
     this.currentService = service
 
     this.serviceTitle.text = service.title
-    this.serviceIcon.image = service.icon?.let {
-      Files.newInputStream(it).use(::Image)
-    }
+    this.serviceIcon.image = node.icon
 
     this.serviceOpenButton.isVisible = service !in PortExposureProvider
     this.servicePorts.items.setAll(service.ports)

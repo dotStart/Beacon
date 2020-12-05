@@ -16,7 +16,7 @@
  */
 package tv.dotstart.beacon.cell.model
 
-import java.nio.file.Path
+import javafx.scene.image.Image
 
 /**
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
@@ -34,7 +34,7 @@ interface ServiceListNode {
    *
    * When this value is omitted, no icon will be displayed for this node.
    */
-  val icon: Path?
+  val icon: Image?
 
   /**
    * Exposes the title with which this particular node will be referred to.
