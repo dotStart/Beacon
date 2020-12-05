@@ -36,12 +36,32 @@ interface CacheProvider {
    * Callers may optionally include a custom expiration duration. When no expiration duration is
    * given, the provider default is chosen.
    */
-  fun <V : Any> get(key: String, serializer: Serializer<V>, expirationPeriod: Duration? = null): V?
+  fun get(key: String, expirationPeriod: Duration? = null): ByteArray?
+
+  /**
+   * Attempts to retrieve a cached value with a given key.
+   *
+   * When no value with the given key is present within the cache provider, null is returned
+   * instead.
+   *
+   * Callers may optionally include a custom expiration duration. When no expiration duration is
+   * given, the provider default is chosen.
+   */
+  fun <V : Any> get(key: String,
+                    serializer: Serializer<V>,
+                    expirationPeriod: Duration? = null): V? = get(key, expirationPeriod)
+      ?.let(serializer::decode)
 
   /**
    * Stores a value with a given key within this cache provider.
    */
-  fun <V : Any> store(key: String, serializer: Serializer<V>, value: V)
+  fun store(key: String, value: ByteArray)
+
+  /**
+   * Stores a value with a given key within this cache provider.
+   */
+  fun <V : Any> store(key: String, serializer: Serializer<V>, value: V) =
+      store(key, serializer.encode(value))
 
   /**
    * Purges a given key from this cache provider.
@@ -52,8 +72,8 @@ interface CacheProvider {
    * Attempts to retrieve a cached value with a given key or populates its contents when it is not
    * present.
    */
-  fun <V : Any> retrieveOrPopulate(key: String, serializer: Serializer<V>,
-                                   expirationPeriod: Duration? = null, provider: () -> V): V {
+  fun <V : Any> getOrPopulate(key: String, serializer: Serializer<V>,
+                              expirationPeriod: Duration? = null, provider: () -> V): V {
     val cached = this.get(key, serializer, expirationPeriod)
     if (cached != null) {
       return cached

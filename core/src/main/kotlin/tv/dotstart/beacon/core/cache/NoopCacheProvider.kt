@@ -16,7 +16,6 @@
  */
 package tv.dotstart.beacon.core.cache
 
-import tv.dotstart.beacon.core.cache.serialize.Serializer
 import java.time.Duration
 
 /**
@@ -27,10 +26,9 @@ import java.time.Duration
  */
 object NoopCacheProvider : CacheProvider {
 
-  override fun <V : Any> get(key: String, serializer: Serializer<V>,
-                             expirationPeriod: Duration?): V? = null
+  override fun get(key: String, expirationPeriod: Duration?): ByteArray? = null
 
-  override fun <V : Any> store(key: String, serializer: Serializer<V>, value: V) = Unit
+  override fun store(key: String, value: ByteArray) = Unit
 
   override fun purge(key: String) = Unit
 }
