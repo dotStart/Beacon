@@ -18,6 +18,7 @@ package tv.dotstart.beacon.util
 
 import tv.dotstart.beacon.core.cache.filesystem.FileSystemCache
 import tv.dotstart.beacon.core.cache.filesystem.path.Murmur3PathProvider
+import tv.dotstart.beacon.core.util.OperatingSystem
 
 /**
  * Provides a caching solution for arbitrary blobs.
@@ -29,5 +30,5 @@ import tv.dotstart.beacon.core.cache.filesystem.path.Murmur3PathProvider
  */
 // TODO: Replace with configurable implementation
 object Cache : FileSystemCache(
-    OperatingSystem.current.storage.resolve("cache"),
+    OperatingSystem.current.storageDirectory.resolve("cache"),
     pathProvider = Murmur3PathProvider(424242L))

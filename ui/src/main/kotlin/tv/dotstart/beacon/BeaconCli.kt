@@ -23,6 +23,7 @@ import javafx.application.Platform
 import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.LogManager
 import tv.dotstart.beacon.core.util.Banner
+import tv.dotstart.beacon.core.util.OperatingSystem
 import tv.dotstart.beacon.util.*
 import java.net.URI
 import java.nio.file.Path
@@ -85,7 +86,7 @@ object BeaconCli : CliktCommand(name = "Beacon") {
   val logDirectory: Path by option("--log-dir",
                                    help = "Specifies the log storage directory")
       .convert { Paths.get(it) }
-      .defaultLazy { OperatingSystem.current.storage.resolve("log") }
+      .defaultLazy { OperatingSystem.current.storageDirectory.resolve("log") }
 
   /**
    * Enables global debug logging.
@@ -138,7 +139,7 @@ object BeaconCli : CliktCommand(name = "Beacon") {
 
     logger.info("Native Bytecode Version: $bytecodeVersion")
     logger.info("Operating System: ${OperatingSystem.current}")
-    logger.info("Persistence Directory: ${OperatingSystem.current.storage}")
+    logger.info("Persistence Directory: ${OperatingSystem.current.storageDirectory}")
 
     if (this.defaultSystemRepositories != this.systemRepositories) {
       logger.warn(

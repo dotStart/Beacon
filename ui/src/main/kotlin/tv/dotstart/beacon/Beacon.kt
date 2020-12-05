@@ -22,7 +22,7 @@ import javafx.stage.Stage
 import tv.dotstart.beacon.config.Configuration
 import tv.dotstart.beacon.controller.SplashController
 import tv.dotstart.beacon.preload.Preloader
-import tv.dotstart.beacon.util.OperatingSystem
+import tv.dotstart.beacon.core.util.OperatingSystem
 import tv.dotstart.beacon.util.logger
 import tv.dotstart.beacon.util.splashWindow
 import java.nio.file.Files
@@ -56,9 +56,9 @@ class Beacon : Application() {
       logger.warn("Failed to load application icon", ex)
     }
 
-    if (Files.notExists(OperatingSystem.current.storage)) {
+    if (Files.notExists(OperatingSystem.current.storageDirectory)) {
       logger.info("Creating persistence directory")
-      Files.createDirectories(OperatingSystem.current.storage)
+      Files.createDirectories(OperatingSystem.current.storageDirectory)
     }
 
     Configuration.load()

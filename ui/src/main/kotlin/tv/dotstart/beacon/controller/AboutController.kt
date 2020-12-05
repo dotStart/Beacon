@@ -22,7 +22,7 @@ import javafx.fxml.Initializable
 import javafx.scene.control.Label
 import tv.dotstart.beacon.BeaconCli
 import tv.dotstart.beacon.BeaconMetadata
-import tv.dotstart.beacon.util.OperatingSystem
+import tv.dotstart.beacon.core.util.OperatingSystem
 import java.awt.Desktop
 import java.net.URL
 import java.nio.channels.Channels
@@ -47,7 +47,7 @@ class AboutController : Initializable {
   @FXML
   private fun onShowLicenses(actionEvent: ActionEvent) {
     val classLoader = Thread.currentThread().contextClassLoader
-    val targetFile = OperatingSystem.current.storage.resolve("THIRD-PARTY.txt")
+    val targetFile = OperatingSystem.current.storageDirectory.resolve("THIRD-PARTY.txt")
 
     classLoader.getResourceAsStream("THIRD-PARTY.txt")
         .use {

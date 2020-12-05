@@ -26,7 +26,7 @@ import tv.dotstart.beacon.core.artifact.error.*
 import tv.dotstart.beacon.repository.model.Service
 import tv.dotstart.beacon.repository.error.MalformedRepositoryException
 import tv.dotstart.beacon.util.Cache
-import tv.dotstart.beacon.util.OperatingSystem
+import tv.dotstart.beacon.core.util.OperatingSystem
 import tv.dotstart.beacon.util.logger
 import java.io.BufferedInputStream
 import java.io.ByteArrayInputStream
@@ -49,9 +49,9 @@ object ServiceRegistry : Iterable<Service> {
 
   private val artifactProvider = ArtifactProvider.forDiscoveredLoaders()
 
-  private val customPath = OperatingSystem.current.storage
+  private val customPath = OperatingSystem.current.storageDirectory
       .resolve("custom.dat")
-  private val customBackupPath = OperatingSystem.current.storage
+  private val customBackupPath = OperatingSystem.current.storageDirectory
       .resolve("custom.dat.bak")
 
   private val services = mutableMapOf<URI, Service>()
