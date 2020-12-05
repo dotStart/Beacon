@@ -91,6 +91,14 @@
   </dependencies>
 
   <build>
+    <resources>
+      <resource>
+        <directory>${project.basedir}/src/main/resources/META-INF/metadata</directory>
+        <targetPath>META-INF/metadata</targetPath>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
+
     <plugins>
       <plugin>
         <groupId>org.jetbrains.kotlin</groupId>
