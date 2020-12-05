@@ -75,6 +75,11 @@
       <artifactId>mmupnp</artifactId>
     </dependency>
     <dependency>
+      <groupId>com.sangupta</groupId>
+      <artifactId>murmur</artifactId>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
       <groupId>com.google.protobuf</groupId>
       <artifactId>protobuf-java</artifactId>
       <optional>true</optional>
