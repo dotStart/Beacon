@@ -1,12 +1,12 @@
 /*
- * Copyright (C) 2019 Johannes Donath <johannesd@torchmind.com>
+ * Copyright 2020 Johannes Donath <johannesd@torchmind.com>
  * and other copyright owners as documented in the project's IP log.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * 	http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tv.dotstart.beacon.util
+package tv.dotstart.beacon.core.util
 
 import java.io.BufferedInputStream
 import java.nio.charset.StandardCharsets
@@ -28,8 +28,6 @@ import java.nio.charset.StandardCharsets
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
  */
 object Banner {
-
-  private val logger = Banner::class.logger
 
   operator fun invoke() {
     val banner = this.javaClass.getResourceAsStream("/banner.txt").use {

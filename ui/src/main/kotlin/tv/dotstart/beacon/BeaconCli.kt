@@ -22,6 +22,7 @@ import javafx.application.Application
 import javafx.application.Platform
 import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.LogManager
+import tv.dotstart.beacon.core.util.Banner
 import tv.dotstart.beacon.util.*
 import java.net.URI
 import java.nio.file.Path
