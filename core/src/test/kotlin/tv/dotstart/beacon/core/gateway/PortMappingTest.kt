@@ -16,6 +16,7 @@
  */
 package tv.dotstart.beacon.core.gateway
 
+import kotlinx.coroutines.runBlocking
 import net.mm2d.upnp.Action
 import net.mm2d.upnp.Device
 import org.junit.jupiter.api.BeforeEach
@@ -78,7 +79,9 @@ internal class PortMappingTest {
    */
   @Test
   fun `It sends registration requests`() {
-    this.mapping.refresh()
+    runBlocking {
+      mapping.refresh()
+    }
 
     val parameterCaptor = captor<Map<String, String?>>()
     verify(this.registrationAction) {
@@ -102,7 +105,9 @@ internal class PortMappingTest {
    */
   @Test
   fun `It sends removal requests`() {
-    this.mapping.remove()
+    runBlocking {
+      mapping.remove()
+    }
 
     val parameterCaptor = captor<Map<String, String?>>()
     verify(this.removalAction) {
