@@ -76,7 +76,7 @@ class PortMapping internal constructor(
   /**
    * Refreshes the port mapping lease for the desired duration.
    */
-  fun refresh() {
+  suspend fun refresh() {
     val localAddress = getLocalAddressFor(InetAddress.getByName(this.device.ipAddress))
 
     val params = mutableMapOf(
@@ -96,7 +96,7 @@ class PortMapping internal constructor(
   /**
    * Permanently removes a port mapping.
    */
-  fun remove() {
+  suspend fun remove() {
     val params = mutableMapOf(
         protocolParameterName to this.port.protocol.toString(),
         externalPortParameterName to this.port.number.toString()

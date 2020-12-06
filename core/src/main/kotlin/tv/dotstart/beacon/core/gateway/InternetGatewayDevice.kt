@@ -75,7 +75,7 @@ class InternetGatewayDevice internal constructor(
    *
    * @throws IncompatibleDeviceException when the device does not expose the necessary action.
    */
-  fun getExternalAddress(): String? {
+  suspend fun getExternalAddress(): String? {
     val action = this.externalAddressAction
         ?: throw IncompatibleDeviceException(
             this.device, "Device does not support $externalAddressAction")
@@ -96,7 +96,7 @@ class InternetGatewayDevice internal constructor(
    * When a lease duration is given, [PortMapping.refresh] must be invoked on a regular basis in
    * order to retain ownership of the forwarded port.
    */
-  fun forward(port: Port, description: String? = null, duration: Long = 0): PortMapping {
+  suspend fun forward(port: Port, description: String? = null, duration: Long = 0): PortMapping {
     val registerAction = this.portRegistrationAction
         ?: throw IncompatibleDeviceException(
             this.device, "Device does not support $portRegistrationActionName")
@@ -105,7 +105,7 @@ class InternetGatewayDevice internal constructor(
             this.device, "Device does not support $portRemovalActionName")
 
     return PortMapping(this.device, registerAction, removeAction, port, description, duration)
-        .also(PortMapping::refresh)
+        .also { it.refresh() }
   }
 
   override fun close() {

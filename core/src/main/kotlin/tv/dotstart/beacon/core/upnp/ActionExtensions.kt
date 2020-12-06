@@ -16,9 +16,12 @@
  */
 package tv.dotstart.beacon.core.upnp
 
+import kotlinx.coroutines.future.await
 import net.mm2d.upnp.Action
 import tv.dotstart.beacon.core.upnp.error.*
+import java.util.concurrent.CancellationException
 import java.util.concurrent.CompletableFuture
+import java.util.concurrent.CompletionException
 
 /**
  * Provides functions which simplify the interaction with devices.
@@ -39,9 +42,10 @@ private const val errorDescriptionFieldName = "UPnPError/errorDescription"
  * @throws HumanInterventionRequiredException when the action requires human intervention.
  * @throws InvalidActionArgumentException when the given set of arguments has been rejected.
  * @throws UnknownActionErrorException when an unknown error occurs.
+ * @throws CancellationException when the thread is interrupted while awaiting the action result.
  */
-operator fun <T> Action.invoke(parameters: Map<String, String?> = emptyMap(),
-                               converter: (Map<String, String>) -> T): T {
+operator suspend fun <T> Action.invoke(parameters: Map<String, String?> = emptyMap(),
+                                       converter: (Map<String, String>) -> T): T {
   val future = CompletableFuture<T>()
 
   this.invoke(
@@ -81,5 +85,15 @@ operator fun <T> Action.invoke(parameters: Map<String, String?> = emptyMap(),
       returnErrorResponse = true,
   )
 
-  return future.join()
+  return try {
+    future.await()
+  } catch (ex: CompletionException) {
+    val cause = ex.cause
+    if (cause is ActionException) {
+      throw cause
+    }
+
+    throw UnknownActionErrorException(
+        "Unknown error occurred while invoking device action", cause ?: ex)
+  }
 }
