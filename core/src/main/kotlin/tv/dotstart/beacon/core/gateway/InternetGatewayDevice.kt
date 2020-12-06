@@ -20,6 +20,7 @@ import net.mm2d.upnp.ControlPoint
 import net.mm2d.upnp.Device
 import tv.dotstart.beacon.core.gateway.error.IncompatibleDeviceException
 import tv.dotstart.beacon.core.model.Port
+import tv.dotstart.beacon.core.upnp.invoke
 import java.io.Closeable
 
 /**

@@ -14,9 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tv.dotstart.beacon.core.gateway
+package tv.dotstart.beacon.core.upnp
 
 import net.mm2d.upnp.Action
+import tv.dotstart.beacon.core.upnp.error.*
 import java.util.concurrent.CompletableFuture
 
 /**
@@ -26,9 +27,18 @@ import java.util.concurrent.CompletableFuture
  * @date 02/12/2020
  */
 
+private const val errorCodeFieldName = "UPnPError/errorCode"
+private const val errorDescriptionFieldName = "UPnPError/errorDescription"
+
 /**
  * Invokes a given UPnP operation with a given set of parameters and synchronously returns a
  * converted response.
+ *
+ * @throws ActionFailedException when the action failed to execute as desired.
+ * @throws DeviceOutOfMemoryException when the device ran out of memory while processing the action.
+ * @throws HumanInterventionRequiredException when the action requires human intervention.
+ * @throws InvalidActionArgumentException when the given set of arguments has been rejected.
+ * @throws UnknownActionErrorException when an unknown error occurs.
  */
 operator fun <T> Action.invoke(parameters: Map<String, String?> = emptyMap(),
                                converter: (Map<String, String>) -> T): T {
@@ -36,11 +46,39 @@ operator fun <T> Action.invoke(parameters: Map<String, String?> = emptyMap(),
 
   this.invoke(
       parameters,
-      onResult = {
+      onResult = actionInvocation@{
+        if (errorCodeFieldName in it) {
+          val errorDescription = it[errorDescriptionFieldName]
+              ?.takeIf(String::isNotBlank)
+              ?: "No additional information given"
+
+          val errorCodeStr = it[errorCodeFieldName]
+          val errorCode = errorCodeStr
+              ?.toIntOrNull()
+              ?: throw UnknownActionErrorException(
+                  "Device responded with malformed error code \"$errorCodeStr\": $errorDescription")
+
+          val ex = when (errorCode) {
+            401, 602 -> InvalidActionException("Device rejected action: $errorDescription")
+            402, 600, 601, 605 -> InvalidActionArgumentException(
+                "Device rejected arguments: $errorDescription")
+            501 -> ActionFailedException("Device failed to perform action: $errorDescription")
+            603 -> DeviceOutOfMemoryException("Device ran out of memory: $errorDescription")
+            604 -> HumanInterventionRequiredException(
+                "Device requested human intervention: $errorDescription")
+            else -> UnknownActionErrorException(
+                "Device responded with unknown error code $errorCode: $errorDescription")
+          }
+
+          future.completeExceptionally(ex)
+          return@actionInvocation
+        }
+
         val result = converter(it)
         future.complete(result)
       },
-      onError = future::completeExceptionally
+      onError = future::completeExceptionally,
+      returnErrorResponse = true,
   )
 
   return future.join()

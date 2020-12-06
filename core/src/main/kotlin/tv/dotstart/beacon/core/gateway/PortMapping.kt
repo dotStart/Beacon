@@ -19,6 +19,7 @@ package tv.dotstart.beacon.core.gateway
 import net.mm2d.upnp.Action
 import net.mm2d.upnp.Device
 import tv.dotstart.beacon.core.model.Port
+import tv.dotstart.beacon.core.upnp.invoke
 import tv.dotstart.beacon.core.util.getLocalAddressFor
 import java.net.InetAddress
 
