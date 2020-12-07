@@ -74,7 +74,7 @@ open class FileSystemCache(
     }
 
     val keyLifespan = lifespan ?: this.expirationPeriod
-    if (lifespan != null) {
+    if (keyLifespan != null) {
       val createdAt = Files.getLastModifiedTime(location)
           .toInstant()
       val spentLifetime = Duration.between(createdAt, Instant.now(this.clock))
