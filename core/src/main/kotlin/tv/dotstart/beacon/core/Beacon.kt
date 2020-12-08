@@ -158,8 +158,15 @@ class Beacon(
 
   override fun close() {
     this.runtimeLock.withLock {
+      logger.info("Shutting down renewal loop")
+      runBlocking {
+        renewalJob?.cancelAndJoin()
+      }
+
+      logger.info("Shutting down remaining coroutines")
       dispatcher.cancel()
 
+      logger.info("Removing remaining mappings")
       runBlocking {
         mappings.values
             .forEach { mapping -> mapping.remove() }
