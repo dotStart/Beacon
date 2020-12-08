@@ -14,28 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tv.dotstart.beacon.repository
+package tv.dotstart.beacon.config
 
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
-import tv.dotstart.beacon.preload.Loader
 import java.nio.file.Path
 
 /**
- * Exposes all components within this module to the injection framework.
- *
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
  * @date 08/12/2020
  */
-val repositoryModule = module {
+val configModule = module {
+
   single {
     val storagePath = get<Path>(named("storagePath"))
-    ServiceRegistry(storagePath, get())
+    Configuration(storagePath)
   }
-
-  single<Loader>(named("systemRepositoryLoader")) { ServiceRegistry.SystemRepositoryLoader(get()) }
-  single<Loader>(named("userRepositoryLoader")) {
-    ServiceRegistry.UserRepositoryLoader(get(), get())
-  }
-  single<Loader>(named("customRepositoryLoader")) { ServiceRegistry.CustomRepositoryLoader(get()) }
 }

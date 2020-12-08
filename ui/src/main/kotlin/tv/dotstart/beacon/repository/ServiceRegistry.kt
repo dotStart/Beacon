@@ -24,7 +24,6 @@ import tv.dotstart.beacon.core.artifact.ArtifactProvider
 import tv.dotstart.beacon.core.artifact.error.*
 import tv.dotstart.beacon.core.cache.CacheProvider
 import tv.dotstart.beacon.core.delegate.logManager
-import tv.dotstart.beacon.core.util.OperatingSystem
 import tv.dotstart.beacon.preload.Loader
 import tv.dotstart.beacon.repository.error.MalformedRepositoryException
 import tv.dotstart.beacon.repository.model.Service
@@ -256,7 +255,8 @@ class ServiceRegistry(
   /**
    * Performs a refresh of all user repositories.
    */
-  class UserRepositoryLoader(private val registry: ServiceRegistry) : Loader {
+  class UserRepositoryLoader(private val registry: ServiceRegistry,
+                             private val configuration: Configuration) : Loader {
 
     override val description = "service.user"
 
@@ -264,7 +264,7 @@ class ServiceRegistry(
 
     override fun load() {
       logger.info("Refreshing user repositories")
-      this.registry.refresh(Configuration.userRepositoryIndex)
+      this.registry.refresh(this.configuration.userRepositoryIndex)
     }
   }
 

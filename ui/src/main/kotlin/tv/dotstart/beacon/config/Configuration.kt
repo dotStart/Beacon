@@ -20,11 +20,13 @@ import javafx.beans.InvalidationListener
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import tv.dotstart.beacon.config.storage.Config
+import tv.dotstart.beacon.core.delegate.logManager
 import tv.dotstart.beacon.core.util.OperatingSystem
 import tv.dotstart.beacon.util.logger
 import java.io.OutputStream
 import java.net.URI
 import java.nio.file.Files
+import java.nio.file.Path
 import java.nio.file.StandardOpenOption
 
 /**
@@ -35,15 +37,13 @@ import java.nio.file.StandardOpenOption
  *
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
  */
-object Configuration {
-
-  private val logger = Configuration::class.logger
+class Configuration(root: Path) {
 
   /**
    * Identifies the location of the configuration file which will persistently store all data
    * managed by this type.
    */
-  val file = OperatingSystem.current.storageDirectory.resolve("config.dat")
+  val file = root.resolve("config.dat")
 
   /**
    * Exposes an index of user specified repository URLs which are to be pulled upon application
@@ -61,6 +61,10 @@ object Configuration {
                               .map(URI::toString)
                               .toList())
         .build()
+
+  companion object {
+    private val logger by logManager()
+  }
 
   init {
     this.userRepositoryIndex.addListener(InvalidationListener {

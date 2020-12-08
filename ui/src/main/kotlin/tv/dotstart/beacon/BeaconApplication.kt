@@ -43,6 +43,7 @@ import java.nio.file.Files
 @KoinApiExtension
 class BeaconApplication : Application(), KoinComponent {
 
+  private val configuration by inject<Configuration>()
   private val preloader by inject<Preloader>()
 
   companion object {
@@ -68,7 +69,7 @@ class BeaconApplication : Application(), KoinComponent {
       Files.createDirectories(OperatingSystem.current.storageDirectory)
     }
 
-    Configuration.load()
+    this.configuration.load()
 
     try {
       logger.info("Displaying splash screen")

@@ -26,6 +26,7 @@ import org.koin.core.component.KoinApiExtension
 import org.koin.core.context.startKoin
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
+import tv.dotstart.beacon.config.configModule
 import tv.dotstart.beacon.core.cache.CacheProvider
 import tv.dotstart.beacon.core.cache.NoopCacheProvider
 import tv.dotstart.beacon.core.cache.filesystem.FileSystemCache
@@ -210,6 +211,7 @@ object BeaconCli : CliktCommand(name = "Beacon") {
     }
 
     startKoin {
+      modules(configModule)
       modules(exposureModule)
       modules(repositoryModule)
 
