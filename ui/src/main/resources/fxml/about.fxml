@@ -41,13 +41,13 @@
     <Label text="Jackson"/>
     <Label text="JFoenix"/>
     <Label text="Kotlin"/>
+    <Label text="Koin"/>
     <Label text="Log4j2"/>
     <Label text="mmupnp"/>
     <Label text="Murmur"/>
     <Label text="OpenJFX"/>
     <Label text="ProtoBuffers"/>
-    <Label text="Reactive Java"/>
-    <Label text="%about.dependencies.remaining" />
+    <Label text="%about.dependencies.remaining"/>
   </VBox>
 
   <Pane VBox.vgrow="ALWAYS"/>
