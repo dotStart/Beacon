@@ -124,7 +124,7 @@ class MainController : Initializable, KoinComponent {
     this.rebuildServiceList()
 
     if (BeaconUiMetadata.unstable) {
-      errorDialog(Localization("warning.unstable"), Localization("warning.unstable.body"))
+      dialog(Localization("warning.unstable"), Localization("warning.unstable.body"))
     }
   }
 
@@ -190,7 +190,7 @@ class MainController : Initializable, KoinComponent {
     } catch (ex: Throwable) {
       logger.error("Failed to persist custom services", ex)
 
-      errorDialog(Localization("error.custom.title"), Localization("error.custom.body"))
+      dialog(Localization("error.custom.title"), Localization("error.custom.body"))
     }
   }
 

@@ -29,7 +29,7 @@ import tv.dotstart.beacon.preload.Loader
 import tv.dotstart.beacon.preload.error.PreloadError
 import tv.dotstart.beacon.repository.model.Service
 import tv.dotstart.beacon.util.Localization
-import tv.dotstart.beacon.util.errorDialog
+import tv.dotstart.beacon.util.dialog
 import java.io.Closeable
 
 /**
@@ -93,22 +93,22 @@ class PortExposureProvider : Closeable {
       }
     } catch (ex: ActionFailedException) {
       logger.error("UPnP action failed for service $service", ex)
-      errorDialog(Localization("error.upnp.failed"), Localization("error.upnp.failed.body"))
+      dialog(Localization("error.upnp.failed"), Localization("error.upnp.failed.body"))
     } catch (ex: DeviceOutOfMemoryException) {
       logger.error("UPnP device ran out of memory for service $service", ex)
-      errorDialog(Localization("error.upnp.memory"), Localization("error.upnp.memory.body"))
+      dialog(Localization("error.upnp.memory"), Localization("error.upnp.memory.body"))
     } catch (ex: HumanInterventionRequiredException) {
       logger.error("UPnP device requires human intervention for service $service", ex)
-      errorDialog(Localization("error.upnp.intervention"), Localization("error.upnp.intervention.body"))
+      dialog(Localization("error.upnp.intervention"), Localization("error.upnp.intervention.body"))
     } catch (ex: InvalidActionArgumentException) {
       logger.error("UPnP device rejected action arguments for service $service", ex)
-      errorDialog(Localization("error.upnp.argument"), Localization("error.upnp.argument.body"))
+      dialog(Localization("error.upnp.argument"), Localization("error.upnp.argument.body"))
     } catch (ex: InvalidActionException) {
       logger.error("UPnP device rejected action for service $service", ex)
-      errorDialog(Localization("error.upnp.action"), Localization("error.upnp.action.body"))
+      dialog(Localization("error.upnp.action"), Localization("error.upnp.action.body"))
     } catch (ex: ActionException) {
       logger.error("UPnP action failed for service $service", ex)
-      errorDialog(Localization("error.upnp.unknown"), Localization("error.upnp.unknown.body"))
+      dialog(Localization("error.upnp.unknown"), Localization("error.upnp.unknown.body"))
     }
   }
 

@@ -36,7 +36,7 @@ import java.time.format.DateTimeFormatter
 /**
  * Displays a standard error dialog with the given title and description.
  */
-fun errorDialog(title: String, description: String) {
+fun dialog(title: String, description: String) {
   val alert = JFXAlert<Any>()
   alert.title = title
 

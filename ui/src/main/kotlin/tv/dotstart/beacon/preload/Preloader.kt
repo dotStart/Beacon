@@ -23,7 +23,7 @@ import tv.dotstart.beacon.core.delegate.logManager
 import tv.dotstart.beacon.preload.error.PreloadError
 import tv.dotstart.beacon.util.Localization
 import tv.dotstart.beacon.util.detailedErrorDialog
-import tv.dotstart.beacon.util.errorDialog
+import tv.dotstart.beacon.util.dialog
 import kotlin.concurrent.thread
 
 /**
@@ -86,7 +86,7 @@ class Preloader(loaders: List<Loader>) : KoinComponent {
         } catch (ex: PreloadError) {
           logger.error("Preloading failed - Aborting application startup", ex)
           Platform.runLater {
-            errorDialog(Localization("error.${ex.key}.title"), Localization("error.${ex.key}.body"))
+            dialog(Localization("error.${ex.key}.title"), Localization("error.${ex.key}.body"))
             System.exit(1)
           }
           return@thread
