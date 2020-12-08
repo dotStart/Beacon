@@ -73,6 +73,13 @@ interface CacheProvider {
       store(key, serializer.encode(value))
 
   /**
+   * Purges all keys from this provider.
+   * @throws CacheException when an error occurs which could potential prevent future storage
+   * operations from succeeding.
+   */
+  fun purgeAll()
+
+  /**
    * Purges a given key from this cache provider.
    *
    * @throws CacheException when a key cannot be stored.

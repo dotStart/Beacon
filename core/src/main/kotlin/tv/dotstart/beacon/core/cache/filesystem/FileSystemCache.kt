@@ -27,6 +27,7 @@ import java.nio.file.Path
 import java.time.Clock
 import java.time.Duration
 import java.time.Instant
+import kotlin.streams.asSequence
 
 /**
  * Provides a filesystem based caching solution.
@@ -103,6 +104,12 @@ class FileSystemCache(
       throw CacheException(
           "Failed to store cache entry with key \"$key\" in storage path $location", ex)
     }
+  }
+
+  override fun purgeAll() {
+    Files.walk(this.root).asSequence()
+        .sortedWith(Comparator.reverseOrder())
+        .forEach { Files.deleteIfExists(it) }
   }
 
   override fun purge(key: String) {

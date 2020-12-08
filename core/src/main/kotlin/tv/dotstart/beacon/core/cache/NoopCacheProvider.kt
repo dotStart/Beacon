@@ -30,5 +30,7 @@ object NoopCacheProvider : CacheProvider {
 
   override fun store(key: String, value: ByteArray) = Unit
 
+  override fun purgeAll() = Unit
+
   override fun purge(key: String) = Unit
 }
