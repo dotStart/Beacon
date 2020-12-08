@@ -26,7 +26,7 @@ import org.koin.core.component.KoinApiExtension
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import tv.dotstart.beacon.BeaconApplication
-import tv.dotstart.beacon.BeaconMetadata
+import tv.dotstart.beacon.BeaconUiMetadata
 import tv.dotstart.beacon.preload.Preloader
 import tv.dotstart.beacon.util.Localization
 import tv.dotstart.beacon.util.logger
@@ -73,7 +73,7 @@ class SplashController : Initializable, KoinComponent {
             this.preloader.descriptionProperty
         )
     )
-    this.versionLabel.text = "v${BeaconMetadata.version}"
+    this.versionLabel.text = "v${BeaconUiMetadata.version}"
     this.progressBar.progressProperty().bind(this.preloader.percentageProperty)
 
     logger.info("Starting preloading process")
@@ -81,7 +81,7 @@ class SplashController : Initializable, KoinComponent {
       logger.info("Completed application pre-loading")
 
       val stage = Stage()
-      stage.title = "Beacon v${BeaconMetadata.version}"
+      stage.title = "Beacon v${BeaconUiMetadata.version}"
       stage.icons += BeaconApplication.icon
       stage.window<MainController>("main.fxml", maximizable = false)
       stage.show()

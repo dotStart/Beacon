@@ -17,7 +17,7 @@
 package tv.dotstart.beacon.util
 
 import com.mindscapehq.raygun4java.core.RaygunClient
-import tv.dotstart.beacon.BeaconMetadata
+import tv.dotstart.beacon.BeaconUiMetadata
 
 /**
  * Exports error reports to an external service provider if available.
@@ -58,8 +58,7 @@ object ErrorReporter {
     token?.let {
       RaygunClient(it)
           .apply {
-            setVersion(BeaconMetadata.version)
-            withData("userAgent", BeaconMetadata.userAgent)
+            setVersion(BeaconUiMetadata.version)
 
             withData("javaVersion", System.getProperty("java.version", "unknown"))
             withData("javaVendor", System.getProperty("java.vendor", "unknown"))

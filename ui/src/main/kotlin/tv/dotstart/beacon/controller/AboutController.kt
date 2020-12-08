@@ -21,7 +21,7 @@ import javafx.fxml.FXML
 import javafx.fxml.Initializable
 import javafx.scene.control.Label
 import tv.dotstart.beacon.BeaconCli
-import tv.dotstart.beacon.BeaconMetadata
+import tv.dotstart.beacon.BeaconUiMetadata
 import tv.dotstart.beacon.core.util.OperatingSystem
 import java.awt.Desktop
 import java.net.URL
@@ -41,7 +41,7 @@ class AboutController : Initializable {
   private lateinit var versionLabel: Label
 
   override fun initialize(path: URL, resources: ResourceBundle?) {
-    this.versionLabel.text = BeaconMetadata.version
+    this.versionLabel.text = BeaconUiMetadata.version
   }
 
   @FXML

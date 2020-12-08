@@ -23,7 +23,7 @@ import com.jfoenix.controls.JFXTextArea
 import javafx.event.EventHandler
 import javafx.scene.control.Label
 import javafx.scene.layout.VBox
-import tv.dotstart.beacon.BeaconMetadata
+import tv.dotstart.beacon.BeaconUiMetadata
 import java.io.PrintWriter
 import java.io.StringWriter
 import java.time.OffsetDateTime
@@ -84,7 +84,7 @@ fun detailedErrorDialog(title: String, description: String, ex: Throwable) {
 fun errorReport(ex: Throwable) = buildString {
   append("Beacon Error Report\r\n")
   append("===================\r\n")
-  append("Version: ${BeaconMetadata.version}\r\n")
+  append("Version: ${BeaconUiMetadata.version}\r\n")
   append("Date: ${DateTimeFormatter.ISO_DATE_TIME.format(OffsetDateTime.now())}\r\n")
   append("""Java Version: ${System.getProperty("java.version")}""").append("\r\n")
   append("""Java Architecture: ${System.getProperty("os.arch")}""").append("\r\n")

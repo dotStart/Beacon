@@ -26,7 +26,6 @@ import org.koin.core.component.KoinApiExtension
 import org.koin.core.context.startKoin
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
-import tv.dotstart.beacon.core.Beacon
 import tv.dotstart.beacon.core.cache.CacheProvider
 import tv.dotstart.beacon.core.cache.NoopCacheProvider
 import tv.dotstart.beacon.core.cache.filesystem.FileSystemCache
@@ -121,7 +120,7 @@ object BeaconCli : CliktCommand(name = "Beacon") {
       .flag()
 
   init {
-    versionOption(BeaconMetadata.version)
+    versionOption(BeaconUiMetadata.version)
   }
 
   @KoinApiExtension

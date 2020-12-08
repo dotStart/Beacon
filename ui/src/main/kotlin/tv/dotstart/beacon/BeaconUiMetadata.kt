@@ -16,26 +16,11 @@
  */
 package tv.dotstart.beacon
 
-import java.util.*
+import tv.dotstart.beacon.core.util.VersionMetadata
 
 /**
  * Exposes application versioning information to other application components.
  *
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
  */
-object BeaconMetadata {
-
-  val version: String
-
-  init {
-    val properties = BeaconMetadata::class.java.getResourceAsStream("/beacon.properties").use {
-      val tmp = Properties()
-      tmp.load(it)
-      tmp
-    }
-
-    this.version = properties.getProperty("version", "0.0.0+dev")
-  }
-
-  val userAgent = "Beacon/$version (+https://github.com/dotStart/Beacon)"
-}
+object BeaconUiMetadata : VersionMetadata()
