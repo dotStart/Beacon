@@ -23,4 +23,20 @@ import tv.dotstart.beacon.core.util.VersionMetadata
  *
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
  */
-object BeaconUiMetadata : VersionMetadata()
+object BeaconUiMetadata : VersionMetadata() {
+
+  private val unstableFlags = listOf(
+      "SNAPSHOT",
+      "alpha",
+      "beta",
+      "rc"
+  )
+
+  /**
+   * Identifies whether this version of the UI is considered unstable thus potentially including
+   * application breaking bugs.
+   */
+  val unstable by lazy {
+    unstableFlags.any { this.version.contains(it, ignoreCase = true) }
+  }
+}

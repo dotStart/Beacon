@@ -33,6 +33,7 @@ import javafx.stage.Stage
 import org.koin.core.component.KoinApiExtension
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import tv.dotstart.beacon.BeaconUiMetadata
 import tv.dotstart.beacon.cell.ServiceListTreeCell
 import tv.dotstart.beacon.cell.model.CategoryNode
 import tv.dotstart.beacon.cell.model.ServiceListNode
@@ -121,6 +122,10 @@ class MainController : Initializable, KoinComponent {
     this.externalAddress.textProperty().bind(this.exposureProvider.externalAddressProperty)
 
     this.rebuildServiceList()
+
+    if (BeaconUiMetadata.unstable) {
+      errorDialog(Localization("warning.unstable"), Localization("warning.unstable.body"))
+    }
   }
 
   companion object {
