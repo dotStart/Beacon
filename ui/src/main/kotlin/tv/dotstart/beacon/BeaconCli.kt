@@ -155,6 +155,7 @@ object BeaconCli : CliktCommand(name = "Beacon") {
       }
     }
 
+    logger.info("Application Version: ${BeaconUiMetadata.version}")
     logger.info("Native Bytecode Version: $bytecodeVersion")
     logger.info("Operating System: ${OperatingSystem.current}")
     logger.info("Persistence Directory: ${OperatingSystem.current.storageDirectory}")
