@@ -83,7 +83,9 @@ class Beacon(
       }
 
       dispatcher.ensureActive()
-      renewalJob = GlobalScope.launch(dispatcher) { renewalLoop() }
+      renewalJob = GlobalScope.launch(dispatcher + CoroutineName("beacon-renewal")) {
+        renewalLoop()
+      }
     }
   }
 
