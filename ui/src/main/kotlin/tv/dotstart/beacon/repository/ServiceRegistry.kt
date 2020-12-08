@@ -43,7 +43,9 @@ import java.nio.file.StandardCopyOption
  *
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
  */
-class ServiceRegistry(private val cache: CacheProvider) : Iterable<Service> {
+class ServiceRegistry(
+    root: Path,
+    private val cache: CacheProvider) : Iterable<Service> {
 
   companion object {
 
@@ -52,9 +54,9 @@ class ServiceRegistry(private val cache: CacheProvider) : Iterable<Service> {
 
   private val artifactProvider = ArtifactProvider.forDiscoveredLoaders()
 
-  private val customPath = OperatingSystem.current.storageDirectory
+  private val customPath = root
       .resolve("custom.dat")
-  private val customBackupPath = OperatingSystem.current.storageDirectory
+  private val customBackupPath = root
       .resolve("custom.dat.bak")
 
   private val services = mutableMapOf<URI, Service>()

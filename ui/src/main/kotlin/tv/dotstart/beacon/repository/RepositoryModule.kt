@@ -19,6 +19,7 @@ package tv.dotstart.beacon.repository
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import tv.dotstart.beacon.preload.Loader
+import java.nio.file.Path
 
 /**
  * Exposes all components within this module to the injection framework.
@@ -27,7 +28,11 @@ import tv.dotstart.beacon.preload.Loader
  * @date 08/12/2020
  */
 val repositoryModule = module {
-  single { ServiceRegistry(get()) }
+  single {
+    val applicationPath = get<Path>(named("storagePath"))
+
+    ServiceRegistry(applicationPath, get())
+  }
 
   single<Loader>(named("systemRepositoryLoader")) { ServiceRegistry.SystemRepositoryLoader(get()) }
   single<Loader>(named("userRepositoryLoader")) { ServiceRegistry.UserRepositoryLoader(get()) }
