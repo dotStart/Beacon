@@ -80,6 +80,7 @@ class Configuration(root: Path) {
 
     if (!Files.exists(this.file)) {
       logger.info("No prior configuration file located - Assuming defaults")
+      this.persist()
       return
     }
 
