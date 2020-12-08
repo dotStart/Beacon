@@ -23,10 +23,13 @@ import tv.dotstart.beacon.core.Beacon
 import tv.dotstart.beacon.core.delegate.logManager
 import tv.dotstart.beacon.core.gateway.InternetGatewayDevice
 import tv.dotstart.beacon.core.gateway.InternetGatewayDeviceLocator
+import tv.dotstart.beacon.core.upnp.error.*
 import tv.dotstart.beacon.delegate.property
 import tv.dotstart.beacon.preload.Loader
 import tv.dotstart.beacon.preload.error.PreloadError
 import tv.dotstart.beacon.repository.model.Service
+import tv.dotstart.beacon.util.Localization
+import tv.dotstart.beacon.util.errorDialog
 import java.io.Closeable
 
 /**
@@ -84,8 +87,22 @@ class PortExposureProvider : Closeable {
     val beacon = this.beacon
         ?: throw IllegalStateException("No active beacon")
 
-    runBlocking {
-      beacon.expose(service)
+    try {
+      runBlocking {
+        beacon.expose(service)
+      }
+    } catch (ex: ActionFailedException) {
+      errorDialog(Localization("error.upnp.failed"), Localization("error.upnp.failed.body"))
+    } catch (ex: DeviceOutOfMemoryException) {
+      errorDialog(Localization("error.upnp.memory"), Localization("error.upnp.memory.body"))
+    } catch (ex: HumanInterventionRequiredException) {
+      errorDialog(Localization("error.upnp.intervention"), Localization("error.upnp.intervention.body"))
+    } catch (ex: InvalidActionArgumentException) {
+      errorDialog(Localization("error.upnp.argument"), Localization("error.upnp.argument.body"))
+    } catch (ex: InvalidActionException) {
+      errorDialog(Localization("error.upnp.action"), Localization("error.upnp.action.body"))
+    } catch (ex: ActionException) {
+      errorDialog(Localization("error.upnp.unknown"), Localization("error.upnp.unknown.body"))
     }
   }
 
