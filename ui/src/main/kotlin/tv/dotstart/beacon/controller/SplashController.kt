@@ -22,7 +22,10 @@ import javafx.fxml.Initializable
 import javafx.scene.control.Label
 import javafx.scene.control.ProgressBar
 import javafx.stage.Stage
-import tv.dotstart.beacon.Beacon
+import org.koin.core.component.KoinApiExtension
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+import tv.dotstart.beacon.BeaconApplication
 import tv.dotstart.beacon.BeaconMetadata
 import tv.dotstart.beacon.preload.Preloader
 import tv.dotstart.beacon.util.Localization
@@ -37,7 +40,10 @@ import java.util.concurrent.Callable
  *
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
  */
-class SplashController : Initializable {
+@KoinApiExtension
+class SplashController : Initializable, KoinComponent {
+
+  private val preloader by inject<Preloader>()
 
   @FXML
   lateinit var statusLabel: Label
@@ -57,26 +63,26 @@ class SplashController : Initializable {
     this.statusLabel.textProperty().bind(
         Bindings.createStringBinding(
             Callable {
-              val key = Preloader.description
+              val key = this.preloader.description
               if (key.isEmpty()) {
                 return@Callable ""
               }
 
               Localization("preload.$key")
             },
-            Preloader.descriptionProperty
+            this.preloader.descriptionProperty
         )
     )
     this.versionLabel.text = "v${BeaconMetadata.version}"
-    this.progressBar.progressProperty().bind(Preloader.percentageProperty)
+    this.progressBar.progressProperty().bind(this.preloader.percentageProperty)
 
     logger.info("Starting preloading process")
-    Preloader {
+    this.preloader.preload {
       logger.info("Completed application pre-loading")
 
       val stage = Stage()
       stage.title = "Beacon v${BeaconMetadata.version}"
-      stage.icons += Beacon.icon
+      stage.icons += BeaconApplication.icon
       stage.window<MainController>("main.fxml", maximizable = false)
       stage.show()
 

@@ -19,6 +19,10 @@ package tv.dotstart.beacon
 import javafx.application.Application
 import javafx.scene.image.Image
 import javafx.stage.Stage
+import org.koin.core.component.KoinApiExtension
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+import org.koin.core.context.startKoin
 import tv.dotstart.beacon.config.Configuration
 import tv.dotstart.beacon.controller.SplashController
 import tv.dotstart.beacon.preload.Preloader
@@ -36,11 +40,14 @@ import java.nio.file.Files
  *
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
  */
-class Beacon : Application() {
+@KoinApiExtension
+class BeaconApplication : Application(), KoinComponent {
+
+  private val preloader by inject<Preloader>()
 
   companion object {
 
-    private val logger = Beacon::class.logger
+    private val logger = BeaconApplication::class.logger
 
     private const val iconPath = "image/logo.png"
     val icon: Image by lazy {
@@ -74,7 +81,7 @@ class Beacon : Application() {
   }
 
   override fun stop() {
-    Preloader.shutdown()
+    this.preloader.shutdown()
 
     super.stop()
   }

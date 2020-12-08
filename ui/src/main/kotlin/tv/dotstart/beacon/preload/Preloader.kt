@@ -18,13 +18,12 @@ package tv.dotstart.beacon.preload
 
 import javafx.application.Platform
 import javafx.beans.property.*
-import tv.dotstart.beacon.forwarding.PortExposureProvider
+import org.koin.core.component.KoinComponent
+import tv.dotstart.beacon.core.delegate.logManager
 import tv.dotstart.beacon.preload.error.PreloadError
-import tv.dotstart.beacon.repository.ServiceRegistry
 import tv.dotstart.beacon.util.Localization
 import tv.dotstart.beacon.util.detailedErrorDialog
 import tv.dotstart.beacon.util.errorDialog
-import tv.dotstart.beacon.util.logger
 import kotlin.concurrent.thread
 
 /**
@@ -32,17 +31,15 @@ import kotlin.concurrent.thread
  *
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
  */
-object Preloader {
+class Preloader(loaders: List<Loader>) : KoinComponent {
 
-  val logger = Preloader::class.logger
+  companion object {
 
-  private val loaders = listOf(
-      PortExposureProvider,
+    private val logger by logManager()
+  }
 
-      ServiceRegistry.SystemRepositoryLoader,
-      ServiceRegistry.UserRepositoryLoader,
-      ServiceRegistry.CustomRepositoryLoader
-  )
+  private val loaders = loaders
+      .sortedByDescending(Loader::priority)
 
   private val _description = SimpleStringProperty()
   private val _percentage = SimpleDoubleProperty()
@@ -64,7 +61,7 @@ object Preloader {
   /**
    * Invokes all preloader components in an asynchronous fashion.
    */
-  operator fun invoke(onComplete: () -> Unit) {
+  fun preload(onComplete: () -> Unit) {
     thread(name = "preload") {
       Platform.runLater {
         this._percentage.set(0.0)

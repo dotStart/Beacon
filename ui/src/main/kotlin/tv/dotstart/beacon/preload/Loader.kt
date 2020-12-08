@@ -33,6 +33,11 @@ interface Loader {
   val description: String
 
   /**
+   * Identifies the relative order in which this loader is expected to be invoked.
+   */
+  val priority: Int
+
+  /**
    * Handles the preloading for this particular manager implementation.
    */
   fun load()

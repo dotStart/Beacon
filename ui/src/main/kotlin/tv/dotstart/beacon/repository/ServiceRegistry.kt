@@ -21,13 +21,13 @@ import org.apache.commons.compress.compressors.xz.XZCompressorOutputStream
 import tv.dotstart.beacon.BeaconCli
 import tv.dotstart.beacon.config.Configuration
 import tv.dotstart.beacon.core.artifact.ArtifactProvider
-import tv.dotstart.beacon.preload.Loader
 import tv.dotstart.beacon.core.artifact.error.*
-import tv.dotstart.beacon.repository.model.Service
-import tv.dotstart.beacon.repository.error.MalformedRepositoryException
-import tv.dotstart.beacon.util.Cache
+import tv.dotstart.beacon.core.cache.CacheProvider
+import tv.dotstart.beacon.core.delegate.logManager
 import tv.dotstart.beacon.core.util.OperatingSystem
-import tv.dotstart.beacon.util.logger
+import tv.dotstart.beacon.preload.Loader
+import tv.dotstart.beacon.repository.error.MalformedRepositoryException
+import tv.dotstart.beacon.repository.model.Service
 import java.io.BufferedInputStream
 import java.io.ByteArrayInputStream
 import java.io.IOException
@@ -43,9 +43,12 @@ import java.nio.file.StandardCopyOption
  *
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
  */
-object ServiceRegistry : Iterable<Service> {
+class ServiceRegistry(private val cache: CacheProvider) : Iterable<Service> {
 
-  private val logger = ServiceRegistry::class.logger
+  companion object {
+
+    private val logger by logManager()
+  }
 
   private val artifactProvider = ArtifactProvider.forDiscoveredLoaders()
 
@@ -91,7 +94,7 @@ object ServiceRegistry : Iterable<Service> {
   fun refresh(location: URI) {
     logger.info("Loading repository $location")
 
-    val repository = Cache.getOrPopulate(location.toString()) {
+    val repository = this.cache.getOrPopulate(location.toString()) {
       this.artifactProvider.retrieve(location)
     }
 
@@ -236,36 +239,42 @@ object ServiceRegistry : Iterable<Service> {
   /**
    * Performs a refresh of all system repositories.
    */
-  object SystemRepositoryLoader : Loader {
+  class SystemRepositoryLoader(private val registry: ServiceRegistry) : Loader {
 
     override val description = "service.system"
 
+    override val priority = 53
+
     override fun load() {
       logger.info("Refreshing system repositories")
-      refresh(BeaconCli.systemRepositories)
+      this.registry.refresh(BeaconCli.systemRepositories)
     }
   }
 
   /**
    * Performs a refresh of all user repositories.
    */
-  object UserRepositoryLoader : Loader {
+  class UserRepositoryLoader(private val registry: ServiceRegistry) : Loader {
 
     override val description = "service.user"
 
+    override val priority = 52
+
     override fun load() {
       logger.info("Refreshing user repositories")
-      refresh(Configuration.userRepositoryIndex)
+      this.registry.refresh(Configuration.userRepositoryIndex)
     }
   }
 
-  object CustomRepositoryLoader : Loader {
+  class CustomRepositoryLoader(private val registry: ServiceRegistry) : Loader {
 
     override val description = "service.custom"
 
+    override val priority = 51
+
     override fun load() {
       logger.info("Refreshing custom repository")
-      refreshCustom()
+      this.registry.refreshCustom()
     }
   }
 }

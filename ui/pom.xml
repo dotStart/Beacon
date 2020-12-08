@@ -91,6 +91,10 @@
       <artifactId>commons-compress</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.koin</groupId>
+      <artifactId>koin-core</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.sangupta</groupId>
       <artifactId>murmur</artifactId>
     </dependency>

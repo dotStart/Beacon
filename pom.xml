@@ -30,6 +30,7 @@
 
     <kotlin.version>1.4.20</kotlin.version>
     <kotlin-coroutines.version>1.4.2</kotlin-coroutines.version>
+    <koin.version>2.2.0</koin.version>
     <mmupnp.version>3.1.1</mmupnp.version>
     <jackson.version>2.10.0.pr1</jackson.version>
     <log4j.version>2.12.0</log4j.version>
@@ -192,6 +193,11 @@
         <groupId>com.fasterxml.jackson.module</groupId>
         <artifactId>jackson-module-kotlin</artifactId>
         <version>${jackson.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.koin</groupId>
+        <artifactId>koin-core</artifactId>
+        <version>${koin.version}</version>
       </dependency>
       <dependency>
         <groupId>com.sangupta</groupId>

@@ -22,9 +22,24 @@ import javafx.application.Application
 import javafx.application.Platform
 import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.LogManager
+import org.koin.core.component.KoinApiExtension
+import org.koin.core.context.startKoin
+import org.koin.core.qualifier.named
+import org.koin.dsl.module
+import tv.dotstart.beacon.core.Beacon
+import tv.dotstart.beacon.core.cache.CacheProvider
+import tv.dotstart.beacon.core.cache.NoopCacheProvider
+import tv.dotstart.beacon.core.cache.filesystem.FileSystemCache
+import tv.dotstart.beacon.core.cache.filesystem.path.Murmur3PathProvider
 import tv.dotstart.beacon.core.util.Banner
 import tv.dotstart.beacon.core.util.OperatingSystem
-import tv.dotstart.beacon.util.*
+import tv.dotstart.beacon.exposure.exposureModule
+import tv.dotstart.beacon.preload.Preloader
+import tv.dotstart.beacon.repository.repositoryModule
+import tv.dotstart.beacon.util.Localization
+import tv.dotstart.beacon.util.configureLogStorage
+import tv.dotstart.beacon.util.detailedErrorDialog
+import tv.dotstart.beacon.util.rootLevel
 import java.net.URI
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -83,35 +98,39 @@ object BeaconCli : CliktCommand(name = "Beacon") {
    * Defaults to the operating system dependent storage directory (e.g. APPDATA on Windows, Home on
    * NIX based systems, etc).
    */
-  val logDirectory: Path by option("--log-dir",
-                                   help = "Specifies the log storage directory")
+  val logDirectory: Path by option(
+      "--log-dir",
+      help = "Specifies the log storage directory")
       .convert { Paths.get(it) }
       .defaultLazy { OperatingSystem.current.storageDirectory.resolve("log") }
 
   /**
    * Enables global debug logging.
    */
-  val debug: Boolean by option("--debug",
-                               help = "Enables debug logging")
+  val debug: Boolean by option(
+      "--debug",
+      help = "Enables debug logging")
       .flag()
 
   /**
    * Enables global trace logging.
    */
-  val verbose: Boolean by option("--verbose",
-                                 help = "Enables verbose logging")
+  val verbose: Boolean by option(
+      "--verbose",
+      help = "Enables verbose logging")
       .flag()
 
   init {
     versionOption(BeaconMetadata.version)
   }
 
+  @KoinApiExtension
   override fun run() {
     // stash the desired logging path as early as possible to make sure Logger construction does not
     // fail due to missing system properties
     configureLogStorage(this.logDirectory)
 
-    val logger = LogManager.getLogger(Beacon::class.java)
+    val logger = LogManager.getLogger(BeaconApplication::class.java)
 
     val bytecodeVersion = System.getProperty("java.class.version", "").toFloatOrNull() ?: 53f
     if (bytecodeVersion < 53) {
@@ -166,8 +185,39 @@ object BeaconCli : CliktCommand(name = "Beacon") {
       logger.info("Cache duration has been set to $cacheDuration")
     }
 
+    val uiModule = module {
+      single(named("storagePath")) {
+        OperatingSystem.current.resolveApplicationDirectory("Beacon")
+      }
+      single(named("cachePath")) {
+        get<Path>(named("storagePath")).resolve("cache")
+      }
+
+      single(named("systemRepositories")) { systemRepositories }
+
+      if (disableCache) {
+        single<CacheProvider> { NoopCacheProvider }
+      } else {
+        single<CacheProvider> {
+          val cachePath = get<Path>(named("cachePath"))
+
+          FileSystemCache(cachePath, cacheDuration,
+                          pathProvider = Murmur3PathProvider(424242L))
+        }
+      }
+
+      single { Preloader(getAll()) }
+    }
+
+    startKoin {
+      modules(exposureModule)
+      modules(repositoryModule)
+
+      modules(uiModule)
+    }
+
     // we do not pass any of our arguments to JavaFX since there's nothing special to handle here
-    Application.launch(Beacon::class.java)
+    Application.launch(BeaconApplication::class.java)
   }
 }
 

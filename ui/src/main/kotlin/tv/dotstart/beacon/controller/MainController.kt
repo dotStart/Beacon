@@ -30,11 +30,14 @@ import javafx.scene.control.TableView
 import javafx.scene.control.TreeItem
 import javafx.scene.image.ImageView
 import javafx.stage.Stage
+import org.koin.core.component.KoinApiExtension
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import tv.dotstart.beacon.cell.ServiceListTreeCell
 import tv.dotstart.beacon.cell.model.CategoryNode
 import tv.dotstart.beacon.cell.model.ServiceListNode
 import tv.dotstart.beacon.cell.model.ServiceNode
-import tv.dotstart.beacon.forwarding.PortExposureProvider
+import tv.dotstart.beacon.exposure.PortExposureProvider
 import tv.dotstart.beacon.repository.Model
 import tv.dotstart.beacon.repository.ServiceRegistry
 import tv.dotstart.beacon.repository.model.Port
@@ -48,7 +51,11 @@ import java.util.*
  *
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
  */
-class MainController : Initializable {
+@KoinApiExtension
+class MainController : Initializable, KoinComponent {
+
+  private val exposureProvider by inject<PortExposureProvider>()
+  private val serviceRegistry by inject<ServiceRegistry>()
 
   @FXML
   private lateinit var serviceList: JFXTreeView<ServiceListNode>
@@ -111,8 +118,7 @@ class MainController : Initializable {
     this.serviceEditButton.visibleProperty().bind(customSelected)
     this.serviceRemoveButton.visibleProperty().bind(customSelected)
 
-    this.externalAddress.text = PortExposureProvider.externalAddress
-        ?: Localization("address.unknown")
+    this.externalAddress.textProperty().bind(this.exposureProvider.externalAddressProperty)
 
     this.rebuildServiceList()
   }
@@ -129,7 +135,7 @@ class MainController : Initializable {
     this.root.children.clear()
     this.categoryMap.forEach { _, node -> node.children.clear() }
 
-    ServiceRegistry.forEach {
+    this.serviceRegistry.forEach {
       val parent = this.categoryMap[it.category]!!
       parent.children.add(TreeItem(ServiceNode(it, it.icon?.toImage(), it.title)))
     }
@@ -156,7 +162,7 @@ class MainController : Initializable {
     this.serviceTitle.text = service.title
     this.serviceIcon.image = node.icon
 
-    this.serviceOpenButton.isVisible = service !in PortExposureProvider
+    this.serviceOpenButton.isVisible = service !in this.exposureProvider
     this.servicePorts.items.setAll(service.ports)
   }
 
@@ -175,7 +181,7 @@ class MainController : Initializable {
 
   private fun persistCustomServices() {
     try {
-      ServiceRegistry.persist()
+      this.serviceRegistry.persist()
     } catch (ex: Throwable) {
       logger.error("Failed to persist custom services", ex)
 
@@ -191,7 +197,7 @@ class MainController : Initializable {
         as? ServiceNode ?: return
     val service = node.service
 
-    PortExposureProvider.expose(service)
+    this.exposureProvider.expose(service)
 
     this.serviceOpenButton.isVisible = false
   }
@@ -204,7 +210,7 @@ class MainController : Initializable {
         as? ServiceNode ?: return
     val service = node.service
 
-    PortExposureProvider.close(service)
+    this.exposureProvider.close(service)
 
     this.serviceOpenButton.isVisible = true
   }
@@ -225,7 +231,7 @@ class MainController : Initializable {
     val definition = controller.service
         ?: return
 
-    ServiceRegistry += definition
+    this.serviceRegistry += definition
     this.persistCustomServices()
 
     this.rebuildServiceList()
@@ -252,7 +258,7 @@ class MainController : Initializable {
 
     val new = controller.service
     if (new != null) {
-      ServiceRegistry += new
+      this.serviceRegistry += new
       this.persistCustomServices()
 
       this.rebuildServiceList()
@@ -266,9 +272,9 @@ class MainController : Initializable {
         ?.takeIf { it.category == Model.Category.CUSTOM }
         ?: return
 
-    ServiceRegistry -= selected
+    this.serviceRegistry -= selected
 
-    ServiceRegistry.persist()
+    this.serviceRegistry.persist()
     this.rebuildServiceList()
   }
 

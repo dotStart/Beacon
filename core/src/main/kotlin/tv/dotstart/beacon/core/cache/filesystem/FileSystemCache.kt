@@ -34,8 +34,7 @@ import java.time.Instant
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
  * @date 05/12/2020
  */
-// TODO: Marked open for compatibility reasons
-open class FileSystemCache(
+class FileSystemCache(
 
     /**
      * Defines the location at which cache files are stored.
