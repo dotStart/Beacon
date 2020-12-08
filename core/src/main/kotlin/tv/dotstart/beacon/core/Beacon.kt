@@ -23,7 +23,9 @@ import tv.dotstart.beacon.core.gateway.PortMapping
 import tv.dotstart.beacon.core.model.Service
 import java.io.Closeable
 import java.net.URI
+import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.thread
 import kotlin.concurrent.withLock
@@ -56,10 +58,11 @@ class Beacon(
     private val graceDuration: Long = 30) : Closeable, Iterable<Service> {
 
   private val runtimeLock = ReentrantLock()
-  private val dispatcher: CoroutineDispatcher =
-      Executors.newSingleThreadExecutor({
-                                          thread(name = "beacon", start = false, block = it::run)
-                                        }).asCoroutineDispatcher()
+
+  private val executor: ExecutorService = Executors.newSingleThreadExecutor(
+      { thread(name = "beacon", start = false, block = it::run) })
+  private val dispatcher: CoroutineDispatcher = executor
+      .asCoroutineDispatcher()
 
   private var renewalJob: Job? = null
 
@@ -165,6 +168,9 @@ class Beacon(
 
       logger.info("Shutting down remaining coroutines")
       dispatcher.cancel()
+
+      this.executor.shutdownNow()
+      this.executor.awaitTermination(2, TimeUnit.MINUTES)
 
       logger.info("Removing remaining mappings")
       runBlocking {
