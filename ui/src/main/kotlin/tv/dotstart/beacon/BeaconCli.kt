@@ -91,7 +91,7 @@ object BeaconCli : CliktCommand(name = "Beacon") {
       "--cache-duration",
       help = "Specifies the duration for which repositories will be cached locally")
       .convert { Duration.parse(it) }
-      .default(Duration.ofMinutes(10))
+      .default(Duration.ofDays(1))
 
   /**
    * Defines the location in which log files shall be placed by the application.
