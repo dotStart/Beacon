@@ -20,6 +20,14 @@ message UserConfiguration {
   Version version = 1;
 
   /**
+   * Identifies the current application revision.
+   *
+   * This value acts as a marker in order to identify the previously running application version and
+   * thus permits migration.
+   */
+  string application_version = 3;
+
+  /**
    * Stores a listing of user defined service definition repositories.
    *
    * These URLs are accessed every time the application starts up in order to discover potential

@@ -26,6 +26,7 @@ import org.koin.core.component.KoinApiExtension
 import org.koin.core.context.startKoin
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
+import tv.dotstart.beacon.config.Configuration
 import tv.dotstart.beacon.config.configModule
 import tv.dotstart.beacon.core.cache.CacheProvider
 import tv.dotstart.beacon.core.cache.NoopCacheProvider
@@ -201,9 +202,16 @@ object BeaconCli : CliktCommand(name = "Beacon") {
       } else {
         single<CacheProvider> {
           val cachePath = get<Path>(named("cachePath"))
+          val config = get<Configuration>()
 
           FileSystemCache(cachePath, cacheDuration,
                           pathProvider = Murmur3PathProvider(424242L))
+              .also {
+                if (config.migration) {
+                  logger.warn("Migrating between versions - Purging all cache entries")
+                  it.purgeAll()
+                }
+              }
         }
       }
 

@@ -19,10 +19,9 @@ package tv.dotstart.beacon.config
 import javafx.beans.InvalidationListener
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
+import tv.dotstart.beacon.BeaconUiMetadata
 import tv.dotstart.beacon.config.storage.Config
 import tv.dotstart.beacon.core.delegate.logManager
-import tv.dotstart.beacon.core.util.OperatingSystem
-import tv.dotstart.beacon.util.logger
 import java.io.OutputStream
 import java.net.URI
 import java.nio.file.Files
@@ -43,7 +42,14 @@ class Configuration(root: Path) {
    * Identifies the location of the configuration file which will persistently store all data
    * managed by this type.
    */
-  val file = root.resolve("config.dat")
+  private val file = root.resolve("config.dat")
+
+  /**
+   * Identifies whether a different version of the application was running prior to this execution
+   * thus requiring migration in some modules.
+   */
+  var migration: Boolean = false
+    private set
 
   /**
    * Exposes an index of user specified repository URLs which are to be pulled upon application
@@ -57,12 +63,14 @@ class Configuration(root: Path) {
   private val persistable: Config.UserConfiguration
     get() = Config.UserConfiguration.newBuilder()
         .setVersion(Config.Version.V1_0)
+        .setApplicationVersion(BeaconUiMetadata.version)
         .addAllRepository(this.userRepositoryIndex
                               .map(URI::toString)
                               .toList())
         .build()
 
   companion object {
+
     private val logger by logManager()
   }
 
@@ -93,11 +101,20 @@ class Configuration(root: Path) {
       return
     }
 
+    if (serialized.applicationVersion != BeaconUiMetadata.version) {
+      logger.warn("Migration from version ${serialized.applicationVersion} in progress")
+      this.migration = true
+    }
+
     this.userRepositoryIndex.setAll(serialized.repositoryList
                                         .map { URI.create(it) }
                                         .toList())
 
     logger.info("Discovered ${this.userRepositoryIndex.size} user repositories")
+
+    if (this.migration) {
+      this.persist()
+    }
   }
 
   /**
