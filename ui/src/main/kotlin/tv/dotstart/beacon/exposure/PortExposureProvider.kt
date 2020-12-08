@@ -92,16 +92,22 @@ class PortExposureProvider : Closeable {
         beacon.expose(service)
       }
     } catch (ex: ActionFailedException) {
+      logger.error("UPnP action failed for service $service", ex)
       errorDialog(Localization("error.upnp.failed"), Localization("error.upnp.failed.body"))
     } catch (ex: DeviceOutOfMemoryException) {
+      logger.error("UPnP device ran out of memory for service $service", ex)
       errorDialog(Localization("error.upnp.memory"), Localization("error.upnp.memory.body"))
     } catch (ex: HumanInterventionRequiredException) {
+      logger.error("UPnP device requires human intervention for service $service", ex)
       errorDialog(Localization("error.upnp.intervention"), Localization("error.upnp.intervention.body"))
     } catch (ex: InvalidActionArgumentException) {
+      logger.error("UPnP device rejected action arguments for service $service", ex)
       errorDialog(Localization("error.upnp.argument"), Localization("error.upnp.argument.body"))
     } catch (ex: InvalidActionException) {
+      logger.error("UPnP device rejected action for service $service", ex)
       errorDialog(Localization("error.upnp.action"), Localization("error.upnp.action.body"))
     } catch (ex: ActionException) {
+      logger.error("UPnP action failed for service $service", ex)
       errorDialog(Localization("error.upnp.unknown"), Localization("error.upnp.unknown.body"))
     }
   }
