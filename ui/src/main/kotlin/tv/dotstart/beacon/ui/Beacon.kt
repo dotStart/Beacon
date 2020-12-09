@@ -104,7 +104,7 @@ object BeaconCli : CliktCommand(name = "Beacon") {
       "--log-dir",
       help = "Specifies the log storage directory")
       .convert { Paths.get(it) }
-      .defaultLazy { OperatingSystem.current.storageDirectory.resolve("log") }
+      .defaultLazy { OperatingSystem.current.resolveApplicationDirectory(applicationName).resolve("log") }
 
   /**
    * Enables global debug logging.
