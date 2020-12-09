@@ -90,10 +90,10 @@ object ErrorReporter {
    * This information is transmitted along with error records if submitted thus providing additional
    * information on how to reproduce a given error within the application.
    */
-  fun trace(message: String,
+  fun trace(category: String,
+            message: String,
             level: RaygunBreadcrumbLevel = RaygunBreadcrumbLevel.INFO,
-            category: String? = null,
-            data: Map<String, String?> = emptyMap()) {
+            data: Map<String, Any?> = emptyMap()) {
     val client = client
     if (client == null) {
       logger.debug("Ignoring breadcrumb of level $level for category \"$category\": $message")
