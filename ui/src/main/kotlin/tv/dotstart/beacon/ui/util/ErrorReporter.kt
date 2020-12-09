@@ -17,6 +17,7 @@
 package tv.dotstart.beacon.ui.util
 
 import com.mindscapehq.raygun4java.core.RaygunClient
+import com.mindscapehq.raygun4java.core.messages.RaygunBreadcrumbLevel
 import tv.dotstart.beacon.ui.BeaconUiMetadata
 
 /**
@@ -81,5 +82,27 @@ object ErrorReporter {
 
     val responseCode = client.send(ex)
     logger.info("Submitted error report (server responded with code $responseCode)")
+  }
+
+  /**
+   * Records a trace of an action performed within the application.
+   *
+   * This information is transmitted along with error records if submitted thus providing additional
+   * information on how to reproduce a given error within the application.
+   */
+  fun trace(message: String,
+            level: RaygunBreadcrumbLevel = RaygunBreadcrumbLevel.INFO,
+            category: String? = null,
+            data: Map<String, String?> = emptyMap()) {
+    val client = client
+    if (client == null) {
+      logger.debug("Ignoring breadcrumb of level $level for category \"$category\": $message")
+      return
+    }
+
+    client.recordBreadcrumb(message)
+        .withLevel(level)
+        .withCategory(category)
+        .withCustomData(data)
   }
 }
