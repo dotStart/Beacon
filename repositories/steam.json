@@ -2,9 +2,53 @@
   "revision": 1,
   "services": [
     {
+      "id": "game+steam://251570",
+      "title": "7 Days to Die",
+      "icon": "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/251570/f6515dd177b2992aebcb563151fbe836a600f364.jpg",
+      "category": "GAME",
+      "ports": [
+        {
+          "protocol": "TCP",
+          "number": 26900
+        },
+        {
+          "protocol": "UDP",
+          "number": 26900
+        },
+        {
+          "protocol": "UDP",
+          "number": 26901
+        },
+        {
+          "protocol": "UDP",
+          "number": 26902
+        },
+        {
+          "protocol": "UDP",
+          "number": 26903
+        }
+      ]
+    },
+    {
+      "id": "game+steam://346110",
+      "title": "ARK: Survival Evolved",
+      "icon": "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/346110/fef1799533131c10f538d2dd697bbbd89e663265.jpg",
+      "category": "GAME",
+      "ports": [
+        {
+          "protocol": "TCP",
+          "number": 27015
+        },
+        {
+          "protocol": "UDP",
+          "number": 27015
+        }
+      ]
+    },
+    {
       "id": "game+steam://33900",
       "title": "Arma 2",
-      "icon": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/33900/7fd2d12d3f91ee3e69955121323bb89063ea304e.jpg",
+      "icon": "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/33900/7fd2d12d3f91ee3e69955121323bb89063ea304e.jpg",
       "category": "GAME",
       "ports": [
         {
@@ -22,9 +66,45 @@
       ]
     },
     {
+      "id": "game+steam://107410",
+      "title": "Arma 3",
+      "icon": "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/107410/3212af52faf994c558bd622cb0f360c1ef295a6b.jpg",
+      "category": "GAME",
+      "ports": [
+        {
+          "protocol": "UDP",
+          "number": 2302
+        },
+        {
+          "protocol": "UDP",
+          "number": 2303
+        },
+        {
+          "protocol": "UDP",
+          "number": 2304
+        }
+      ]
+    },
+    {
+      "id": "game+steam://361420",
+      "title": "Astroneer",
+      "icon": "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/361420/58b2dfa7da469dcacdc806196f5af0de7a91b03c.jpg",
+      "category": "GAME",
+      "ports": [
+        {
+          "protocol": "TCP",
+          "number": 8777
+        },
+        {
+          "protocol": "UDP",
+          "number": 8777
+        }
+      ]
+    },
+    {
       "id": "game+steam://10",
       "title": "Counter Strike",
-      "icon": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/10/6b0312cda02f5f777efa2f3318c307ff9acafbb5.jpg",
+      "icon": "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/10/6b0312cda02f5f777efa2f3318c307ff9acafbb5.jpg",
       "category": "GAME",
       "ports": [
         {
@@ -40,7 +120,7 @@
     {
       "id": "game+steam://730",
       "title": "Counter Strike: Global Offensive",
-      "icon": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/730/69f7ebe2735c366c65c0b33dae00e12dc40edbe4.jpg",
+      "icon": "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/730/69f7ebe2735c366c65c0b33dae00e12dc40edbe4.jpg",
       "category": "GAME",
       "ports": [
         {
@@ -56,7 +136,7 @@
     {
       "id": "game+steam://240",
       "title": "Counter Strike: Source",
-      "icon": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/240/9052fa60c496a1c03383b27687ec50f4bf0f0e10.jpg",
+      "icon": "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/240/9052fa60c496a1c03383b27687ec50f4bf0f0e10.jpg",
       "category": "GAME",
       "ports": [
         {
@@ -70,9 +150,57 @@
       ]
     },
     {
+      "id": "game+steam://219640",
+      "title": "Chivalry: Medieval Warfare",
+      "icon": "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/219640/d4628be29b7e97d93a3404870dfe79642b90b907.jpg",
+      "category": "GAME",
+      "ports": [
+        {
+          "protocol": "TCP",
+          "number": 27015
+        },
+        {
+          "protocol": "UDP",
+          "number": 27015
+        }
+      ]
+    },
+    {
+      "id": "game+steam://221100",
+      "title": "DayZ",
+      "icon": "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/221100/16a985dfee9b093d76a0ffc4cf4c77ba20c2eb0d.jpg",
+      "category": "GAME",
+      "ports": [
+        {
+          "protocol": "UDP",
+          "number": 2302
+        },
+        {
+          "protocol": "TCP",
+          "number": 2305
+        },
+        {
+          "protocol": "UDP",
+          "number": 2305
+        }
+      ]
+    },
+    {
+      "id": "game+steam://427520",
+      "title": "Factorio",
+      "icon": "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/427520/267f5a89f36ab287e600a4e7d4e73d3d11f0fd7d.jpg",
+      "category": "GAME",
+      "ports": [
+        {
+          "protocol": "UDP",
+          "number": 34197
+        }
+      ]
+    },
+    {
       "id": "game+steam://4000",
       "title": "Garry's Mod",
-      "icon": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/4000/4a6f25cfa2426445d0d9d6e233408de4d371ce8b.jpg",
+      "icon": "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/4000/4a6f25cfa2426445d0d9d6e233408de4d371ce8b.jpg",
       "category": "GAME",
       "ports": [
         {
@@ -88,7 +216,7 @@
     {
       "id": "game+steam://232090",
       "title": "Killing Floor 2",
-      "icon": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/232090/15837cefb378766e9916548f8591b6eb490b9e52.jpg",
+      "icon": "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/232090/15837cefb378766e9916548f8591b6eb490b9e52.jpg",
       "category": "GAME",
       "ports": [
         {
@@ -100,7 +228,7 @@
     {
       "id": "game+steam://550",
       "title": "Left 4 Dead 2",
-      "icon": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/550/7d5a243f9500d2f8467312822f8af2a2928777ed.jpg",
+      "icon": "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/550/7d5a243f9500d2f8467312822f8af2a2928777ed.jpg",
       "category": "GAME",
       "ports": [
         {
@@ -116,7 +244,7 @@
     {
       "id": "game+steam://252490",
       "title": "Rust",
-      "icon": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/252490/820be4782639f9c4b64fa3ca7e6c26a95ae4fd1c.jpg",
+      "icon": "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/252490/820be4782639f9c4b64fa3ca7e6c26a95ae4fd1c.jpg",
       "category": "GAME",
       "ports": [
         {
@@ -128,12 +256,100 @@
     {
       "id": "game+steam://211820",
       "title": "Starbound",
-      "icon": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/211820/4dbf4041c33eb2edfc41f552320a2e584519134c.jpg",
+      "icon": "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/211820/4dbf4041c33eb2edfc41f552320a2e584519134c.jpg",
       "category": "GAME",
       "ports": [
         {
           "protocol": "TCP",
           "number": 21025
+        }
+      ]
+    },
+    {
+      "id": "game+steam://264710/nitrox",
+      "title": "Subnautica (Nitrox)",
+      "icon": "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/264710/8a14ceef6e230330a916d7a6324b8c52d464d569.jpg",
+      "category": "GAME",
+      "ports": [
+        {
+          "protocol": "UDP",
+          "number": 11000
+        }
+      ]
+    },
+    {
+      "id": "game+steam://393380",
+      "title": "Squad",
+      "icon": "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/393380/eb66a8cb52165274c84cae6526205065d13119d5.jpg",
+      "category": "GAME",
+      "ports": [
+        {
+          "protocol": "UDP",
+          "number": 7787
+        },
+        {
+          "protocol": "UDP",
+          "number": 7788
+        },
+        {
+          "protocol": "TCP",
+          "number": 27165
+        },
+        {
+          "protocol": "UDP",
+          "number": 27165
+        },
+        {
+          "protocol": "TCP",
+          "number": 27166
+        },
+        {
+          "protocol": "UDP",
+          "number": 27166
+        }
+      ]
+    },
+    {
+      "id": "game+steam://105600",
+      "title": "Terraria",
+      "icon": "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/105600/858961e95fbf869f136e1770d586e0caefd4cfac.jpg",
+      "category": "GAME",
+      "ports": [
+        {
+          "protocol": "TCP",
+          "number": 7777
+        }
+      ]
+    },
+    {
+      "id": "game+steam://304930",
+      "title": "Unturned",
+      "icon": "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/304930/e18009fb628b35953826efe47dc3be556b689f4c.jpg",
+      "category": "GAME",
+      "ports": [
+        {
+          "protocol": "TCP",
+          "number": "27015"
+        },
+        {
+          "protocol": "TCP",
+          "number": "27016"
+        },
+        {
+          "protocol": "TCP",
+          "number": "27017"
+        },
+        {
+          "protocol": "UDP",
+          "number": "27015"
+        },
+        {
+          "protocol": "UDP",
+          "number": "27016"
+        },
+        {
+          "protocol": "UDP",
+          "number": "27017"
         }
       ]
     }
