@@ -16,6 +16,7 @@
  */
 package tv.dotstart.beacon.controller
 
+import javafx.application.Platform
 import javafx.beans.binding.Bindings
 import javafx.fxml.FXML
 import javafx.fxml.Initializable
@@ -28,6 +29,7 @@ import org.koin.core.component.inject
 import tv.dotstart.beacon.BeaconApplication
 import tv.dotstart.beacon.BeaconUiMetadata
 import tv.dotstart.beacon.preload.Preloader
+import tv.dotstart.beacon.tray.TrayIconProvider
 import tv.dotstart.beacon.util.Localization
 import tv.dotstart.beacon.util.logger
 import tv.dotstart.beacon.util.window
@@ -44,6 +46,7 @@ import java.util.concurrent.Callable
 class SplashController : Initializable, KoinComponent {
 
   private val preloader by inject<Preloader>()
+  private val trayIconProvider by inject<TrayIconProvider>()
 
   @FXML
   lateinit var statusLabel: Label
@@ -84,6 +87,27 @@ class SplashController : Initializable, KoinComponent {
       stage.title = "Beacon v${BeaconUiMetadata.version}"
       stage.icons += BeaconApplication.icon
       stage.window<MainController>("main.fxml", maximizable = false)
+
+      this.trayIconProvider.registerCallback {
+        stage.show()
+        stage.isIconified = false
+
+        stage.requestFocus()
+      }
+      this.trayIconProvider.visibleProperty.bind(stage.showingProperty().not())
+
+      stage.iconifiedProperty().addListener { _, _, newValue ->
+        if (newValue) {
+          stage.hide()
+        }
+      }
+      stage.setOnCloseRequest {
+        this.trayIconProvider.hide()
+        this.trayIconProvider.visibleProperty.unbind()
+
+        Platform.exit()
+      }
+
       stage.show()
 
       // we're always spawned in primary

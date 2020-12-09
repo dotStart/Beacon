@@ -37,6 +37,7 @@ import tv.dotstart.beacon.core.util.OperatingSystem
 import tv.dotstart.beacon.exposure.exposureModule
 import tv.dotstart.beacon.preload.Preloader
 import tv.dotstart.beacon.repository.repositoryModule
+import tv.dotstart.beacon.tray.trayModule
 import tv.dotstart.beacon.util.Localization
 import tv.dotstart.beacon.util.configureLogStorage
 import tv.dotstart.beacon.util.detailedErrorDialog
@@ -222,6 +223,7 @@ object BeaconCli : CliktCommand(name = "Beacon") {
       modules(configModule)
       modules(exposureModule)
       modules(repositoryModule)
+      modules(trayModule)
 
       modules(uiModule)
     }

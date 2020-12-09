@@ -17,16 +17,16 @@
 package tv.dotstart.beacon
 
 import javafx.application.Application
+import javafx.application.Platform
 import javafx.scene.image.Image
 import javafx.stage.Stage
 import org.koin.core.component.KoinApiExtension
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import org.koin.core.context.startKoin
 import tv.dotstart.beacon.config.Configuration
 import tv.dotstart.beacon.controller.SplashController
-import tv.dotstart.beacon.preload.Preloader
 import tv.dotstart.beacon.core.util.OperatingSystem
+import tv.dotstart.beacon.preload.Preloader
 import tv.dotstart.beacon.util.logger
 import tv.dotstart.beacon.util.splashWindow
 import java.nio.file.Files
@@ -58,6 +58,11 @@ class BeaconApplication : Application(), KoinComponent {
   }
 
   override fun start(stage: Stage) {
+    // disable implicit application exit as the tray icon would otherwise cause the toolkit to
+    // shut down once the main window is hidden from view as Stage#close and Stage#hide are
+    // synonymous
+    Platform.setImplicitExit(false)
+
     try {
       stage.icons.add(icon)
     } catch (ex: Throwable) {
