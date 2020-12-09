@@ -14,29 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tv.dotstart.beacon.ui.repository
+package tv.dotstart.beacon.ui
 
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
-import tv.dotstart.beacon.ui.preload.Loader
-import tv.dotstart.beacon.ui.storagePathQualifier
-import java.nio.file.Path
+import tv.dotstart.beacon.core.util.OperatingSystem
 
 /**
- * Exposes all components within this module to the injection framework.
+ * Provides a module which exposes environment related components.
  *
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
- * @date 08/12/2020
+ * @date 09/12/2020
  */
-val repositoryModule = module {
-  single {
-    val storagePath = get<Path>(storagePathQualifier)
-    ServiceRegistry(storagePath, get())
-  }
 
-  single<Loader>(named("systemRepositoryLoader")) { ServiceRegistry.SystemRepositoryLoader(get()) }
-  single<Loader>(named("userRepositoryLoader")) {
-    ServiceRegistry.UserRepositoryLoader(get(), get())
-  }
-  single<Loader>(named("customRepositoryLoader")) { ServiceRegistry.CustomRepositoryLoader(get()) }
+const val applicationName = "Beacon"
+val storagePathQualifier = named("storagePath")
+
+val environmentModule = module {
+  val os = OperatingSystem.current
+
+  single(storagePathQualifier) { os.resolveApplicationDirectory(applicationName) }
 }
+

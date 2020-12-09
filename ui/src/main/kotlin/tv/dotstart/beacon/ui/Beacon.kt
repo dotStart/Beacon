@@ -189,20 +189,13 @@ object BeaconCli : CliktCommand(name = "Beacon") {
     }
 
     val uiModule = module {
-      single(named("storagePath")) {
-        OperatingSystem.current.resolveApplicationDirectory("Beacon")
-      }
-      single(named("cachePath")) {
-        get<Path>(named("storagePath")).resolve("cache")
-      }
-
       single(named("systemRepositories")) { systemRepositories }
 
       if (disableCache) {
         single<CacheProvider> { NoopCacheProvider }
       } else {
         single<CacheProvider> {
-          val cachePath = get<Path>(named("cachePath"))
+          val cachePath = get<Path>(storagePathQualifier).resolve("cache")
           val config = get<Configuration>()
 
           FileSystemCache(cachePath, cacheDuration,
@@ -220,7 +213,9 @@ object BeaconCli : CliktCommand(name = "Beacon") {
     }
 
     startKoin {
+      modules(environmentModule)
       modules(configModule)
+
       modules(exposureModule)
       modules(repositoryModule)
       modules(trayModule)

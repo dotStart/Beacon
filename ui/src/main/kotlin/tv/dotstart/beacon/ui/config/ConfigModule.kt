@@ -16,8 +16,8 @@
  */
 package tv.dotstart.beacon.ui.config
 
-import org.koin.core.qualifier.named
 import org.koin.dsl.module
+import tv.dotstart.beacon.ui.storagePathQualifier
 import java.nio.file.Path
 
 /**
@@ -25,9 +25,8 @@ import java.nio.file.Path
  * @date 08/12/2020
  */
 val configModule = module {
-
   single {
-    val storagePath = get<Path>(named("storagePath"))
+    val storagePath = get<Path>(storagePathQualifier)
     Configuration(storagePath)
   }
 }
