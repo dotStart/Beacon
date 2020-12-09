@@ -24,7 +24,7 @@ import javafx.scene.control.Label
 import org.koin.core.component.KoinApiExtension
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import tv.dotstart.beacon.core.util.OperatingSystem
+import org.koin.core.qualifier.named
 import tv.dotstart.beacon.ui.BeaconCli
 import tv.dotstart.beacon.ui.BeaconUiMetadata
 import tv.dotstart.beacon.ui.config.Configuration
@@ -32,6 +32,7 @@ import java.awt.Desktop
 import java.net.URL
 import java.nio.channels.Channels
 import java.nio.channels.FileChannel
+import java.nio.file.Path
 import java.nio.file.StandardOpenOption
 import java.util.*
 
@@ -44,6 +45,7 @@ import java.util.*
 @KoinApiExtension
 class SettingsController : Initializable, KoinComponent {
 
+  private val storagePath by inject<Path>(named("storagePath"))
   private val configuration by inject<Configuration>()
 
   @FXML
@@ -62,7 +64,7 @@ class SettingsController : Initializable, KoinComponent {
   @FXML
   private fun onShowLicenses(actionEvent: ActionEvent) {
     val classLoader = Thread.currentThread().contextClassLoader
-    val targetFile = OperatingSystem.current.storageDirectory.resolve("THIRD-PARTY.txt")
+    val targetFile = this.storagePath.resolve("THIRD-PARTY.txt")
 
     classLoader.getResourceAsStream("THIRD-PARTY.txt")
         .use {
