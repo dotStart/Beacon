@@ -28,6 +28,7 @@ import tv.dotstart.beacon.ui.delegate.property
 import tv.dotstart.beacon.ui.preload.Loader
 import tv.dotstart.beacon.ui.preload.error.PreloadError
 import tv.dotstart.beacon.ui.repository.model.Service
+import tv.dotstart.beacon.ui.util.ErrorReporter
 import tv.dotstart.beacon.ui.util.Localization
 import tv.dotstart.beacon.ui.util.dialog
 import java.io.Closeable
@@ -84,6 +85,7 @@ class PortExposureProvider : Closeable {
     val beacon = this.beacon
     beacon?.start()
 
+    ErrorReporter.trace("exposure", "Internet gateway refresh performed")
     return beacon != null
   }
 
@@ -114,6 +116,11 @@ class PortExposureProvider : Closeable {
       logger.error("UPnP action failed for service $service", ex)
       dialog(Localization("error.upnp.unknown"), Localization("error.upnp.unknown.body"))
     }
+
+    ErrorReporter.trace("exposure", "Service exposed", data = mapOf(
+        "service_id" to service.id,
+        "service_title" to service.title
+    ))
   }
 
   operator fun contains(service: Service): Boolean {
@@ -130,6 +137,11 @@ class PortExposureProvider : Closeable {
     runBlocking {
       beacon.close(service)
     }
+
+    ErrorReporter.trace("exposure", "Service closed", data = mapOf(
+        "service_id" to service.id,
+        "service_title" to service.title
+    ))
   }
 
   override fun close() {

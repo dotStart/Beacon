@@ -25,6 +25,7 @@ import tv.dotstart.beacon.ui.BeaconUiMetadata
 import tv.dotstart.beacon.config.storage.Config
 import tv.dotstart.beacon.core.delegate.logManager
 import tv.dotstart.beacon.ui.delegate.property
+import tv.dotstart.beacon.ui.util.ErrorReporter
 import java.io.OutputStream
 import java.net.URI
 import java.nio.file.Files
@@ -138,6 +139,11 @@ class Configuration(root: Path) {
         }
         else -> logger.info("No configuration parameter migration required")
       }
+
+      ErrorReporter.trace("config", "Configuration loaded", data = mapOf(
+          "config_version" to serialized.version,
+          "previous_application_version" to serialized.applicationVersion
+      ))
     } finally {
       this.loading = false
     }
@@ -168,5 +174,9 @@ class Configuration(root: Path) {
     Files.newOutputStream(this.file, StandardOpenOption.CREATE, StandardOpenOption.WRITE,
                           StandardOpenOption.TRUNCATE_EXISTING)
         .use<OutputStream?, Unit>(serialized::writeTo)
+
+    ErrorReporter.trace("config", "Configuration persisted", data = mapOf(
+        "config_version" to currentVersion
+    ))
   }
 }

@@ -28,6 +28,7 @@ import tv.dotstart.beacon.ui.preload.Loader
 import tv.dotstart.beacon.repository.Model
 import tv.dotstart.beacon.ui.repository.error.MalformedRepositoryException
 import tv.dotstart.beacon.ui.repository.model.Service
+import tv.dotstart.beacon.ui.util.ErrorReporter
 import java.io.BufferedInputStream
 import java.io.ByteArrayInputStream
 import java.io.IOException
@@ -213,6 +214,8 @@ class ServiceRegistry(
     Files.newOutputStream(this.customPath)
         .let(::XZCompressorOutputStream)
         .use(repository::writeTo)
+
+    ErrorReporter.trace("service", "Custom services persisted")
   }
 
   /**
@@ -226,6 +229,11 @@ class ServiceRegistry(
     if (service.category == Model.Category.CUSTOM) {
       this.customServices[service.id] = service
     }
+
+    ErrorReporter.trace("service", "Service registered", data = mapOf(
+        "service_id" to service.id,
+        "service_title" to service.title
+    ))
   }
 
   /**
@@ -234,6 +242,11 @@ class ServiceRegistry(
   operator fun minusAssign(service: Service) {
     this.services.remove(service.id)
     this.customServices.remove(service.id)
+
+    ErrorReporter.trace("service", "Service deleted", data = mapOf(
+        "service_id" to service.id,
+        "service_title" to service.title
+    ))
   }
 
   override fun iterator(): Iterator<Service> = this.services.values.iterator()

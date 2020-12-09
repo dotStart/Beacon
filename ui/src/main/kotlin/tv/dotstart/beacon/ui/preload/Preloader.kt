@@ -21,6 +21,7 @@ import javafx.beans.property.*
 import org.koin.core.component.KoinComponent
 import tv.dotstart.beacon.core.delegate.logManager
 import tv.dotstart.beacon.ui.preload.error.PreloadError
+import tv.dotstart.beacon.ui.util.ErrorReporter
 import tv.dotstart.beacon.ui.util.Localization
 import tv.dotstart.beacon.ui.util.detailedErrorDialog
 import tv.dotstart.beacon.ui.util.dialog
@@ -103,6 +104,7 @@ class Preloader(loaders: List<Loader>) : KoinComponent {
 
       Thread.sleep(500)
 
+      ErrorReporter.trace("startup", "Preloading completed")
       logger.info("--- preload end ---")
 
       Platform.runLater {
