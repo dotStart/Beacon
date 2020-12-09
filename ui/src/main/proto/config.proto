@@ -34,6 +34,11 @@ message UserConfiguration {
    * services, their protocols and ports.
    */
   repeated string repository = 2;
+
+  /**
+   * Defines whether the application shall be hidden and replaced with a tray icon when iconified.
+   */
+  bool iconify_to_tray = 4;
 }
 
 /**
@@ -41,4 +46,5 @@ message UserConfiguration {
  */
 enum Version {
   V1_0 = 0;
+  V1_1 = 1;
 }

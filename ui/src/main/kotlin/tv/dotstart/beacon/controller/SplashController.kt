@@ -28,6 +28,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import tv.dotstart.beacon.BeaconApplication
 import tv.dotstart.beacon.BeaconUiMetadata
+import tv.dotstart.beacon.config.Configuration
 import tv.dotstart.beacon.preload.Preloader
 import tv.dotstart.beacon.tray.TrayIconProvider
 import tv.dotstart.beacon.util.Localization
@@ -45,6 +46,7 @@ import java.util.concurrent.Callable
 @KoinApiExtension
 class SplashController : Initializable, KoinComponent {
 
+  private val configuration by inject<Configuration>()
   private val preloader by inject<Preloader>()
   private val trayIconProvider by inject<TrayIconProvider>()
 
@@ -94,19 +96,17 @@ class SplashController : Initializable, KoinComponent {
 
         stage.requestFocus()
       }
-      this.trayIconProvider.visibleProperty.bind(stage.showingProperty().not())
 
       stage.iconifiedProperty().addListener { _, _, newValue ->
-        if (newValue) {
+        if (this.configuration.iconifyToTray && newValue) {
           stage.hide()
         }
       }
-      stage.setOnCloseRequest {
-        this.trayIconProvider.hide()
-        this.trayIconProvider.visibleProperty.unbind()
 
-        Platform.exit()
+      this.configuration.iconifyToTrayProperty.addListener { _, _, enabled ->
+        this.updateTrayIconRegistration(stage, enabled)
       }
+      this.updateTrayIconRegistration(stage, this.configuration.iconifyToTray)
 
       stage.show()
 
@@ -114,6 +114,22 @@ class SplashController : Initializable, KoinComponent {
       (this.statusLabel.scene.window as Stage).close()
 
       logger.info("Switched to main window")
+    }
+  }
+
+  private fun updateTrayIconRegistration(stage: Stage, enabled: Boolean) {
+    if (!enabled) {
+      this.trayIconProvider.visibleProperty.unbind()
+      this.trayIconProvider.hide()
+      return
+    }
+
+    this.trayIconProvider.visibleProperty.bind(stage.showingProperty().not())
+    stage.setOnCloseRequest {
+      this.trayIconProvider.hide()
+      this.trayIconProvider.visibleProperty.unbind()
+
+      Platform.exit()
     }
   }
 }

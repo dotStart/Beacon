@@ -17,11 +17,14 @@
 package tv.dotstart.beacon.config
 
 import javafx.beans.InvalidationListener
+import javafx.beans.property.BooleanProperty
+import javafx.beans.property.SimpleBooleanProperty
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import tv.dotstart.beacon.BeaconUiMetadata
 import tv.dotstart.beacon.config.storage.Config
 import tv.dotstart.beacon.core.delegate.logManager
+import tv.dotstart.beacon.delegate.property
 import java.io.OutputStream
 import java.net.URI
 import java.nio.file.Files
@@ -45,6 +48,11 @@ class Configuration(root: Path) {
   private val file = root.resolve("config.dat")
 
   /**
+   * Loading flag to prevent repeated persistence when loading configuration files.
+   */
+  private var loading = false
+
+  /**
    * Identifies whether a different version of the application was running prior to this execution
    * thus requiring migration in some modules.
    */
@@ -55,75 +63,108 @@ class Configuration(root: Path) {
    * Exposes an index of user specified repository URLs which are to be pulled upon application
    * initialization (or manual repository refresh).
    */
-  val userRepositoryIndex: ObservableList<URI> = FXCollections.observableArrayList<URI>()
+  val userRepositoryIndex: ObservableList<URI> = FXCollections.observableArrayList()
 
   /**
-   * Constructs a persistable representation of the current configuration state.
+   * Identifies whether the application shall be reduced to a tray icon when iconified instead of
+   * staying on the task bar.
    */
-  private val persistable: Config.UserConfiguration
-    get() = Config.UserConfiguration.newBuilder()
-        .setVersion(Config.Version.V1_0)
-        .setApplicationVersion(BeaconUiMetadata.version)
-        .addAllRepository(this.userRepositoryIndex
-                              .map(URI::toString)
-                              .toList())
-        .build()
+  val iconifyToTrayProperty: BooleanProperty = SimpleBooleanProperty(true)
+
+  /**
+   * @see iconifyToTrayProperty
+   */
+  var iconifyToTray by property(iconifyToTrayProperty)
 
   companion object {
 
     private val logger by logManager()
+
+    private val currentVersion = Config.Version.V1_1
   }
 
   init {
-    this.userRepositoryIndex.addListener(InvalidationListener {
-      this.persist()
-    })
+    val listener = InvalidationListener { this.persist() }
+
+    this.userRepositoryIndex.addListener(listener)
+    this.iconifyToTrayProperty.addListener(listener)
   }
 
   /**
    * Loads a configuration file from disk.
    */
   fun load() {
-    logger.info("Loading user configuration file")
+    this.loading = true
 
-    if (!Files.exists(this.file)) {
-      logger.info("No prior configuration file located - Assuming defaults")
-      this.persist()
-      return
+    try {
+      logger.info("Loading user configuration file")
+
+      if (!Files.exists(this.file)) {
+        logger.info("No prior configuration file located - Assuming defaults")
+        this.persist()
+        return
+      }
+
+      val serialized = Files.newInputStream(this.file).use {
+        Config.UserConfiguration.parseFrom(it)
+      }
+
+      logger.info("Configuration version: ${serialized.version}")
+      if (serialized.version == Config.Version.UNRECOGNIZED) {
+        logger.warn("Incompatible save file - Changes to settings may overwrite existing data")
+        return
+      }
+
+      this.migration = serialized.applicationVersion != BeaconUiMetadata.version ||
+          serialized.version != currentVersion
+      if (this.migration) {
+        logger.warn(
+            "Migration from version ${serialized.applicationVersion} (config ${serialized.version}) in progress")
+      }
+
+      this.userRepositoryIndex.setAll(serialized.repositoryList
+                                          .map { URI.create(it) }
+                                          .toList())
+      logger.info("Discovered ${this.userRepositoryIndex.size} user repositories")
+
+      this.iconifyToTray = serialized.iconifyToTray
+      logger.info("Iconify to tray: $iconifyToTray")
+
+      when (serialized.version) {
+        Config.Version.V1_0 -> {
+          logger.warn(
+              "Forcefully enabling iconify to tray functionality due to configuration upgrade")
+          this.iconifyToTray = true
+        }
+        else -> logger.info("No configuration parameter migration required")
+      }
+    } finally {
+      this.loading = false
     }
 
-    val serialized = Files.newInputStream(this.file).use {
-      Config.UserConfiguration.parseFrom(it)
-    }
-
-    if (serialized.version == Config.Version.UNRECOGNIZED) {
-      logger.warn("Incompatible save file - Changes to settings may overwrite existing data")
-      return
-    }
-
-    if (serialized.applicationVersion != BeaconUiMetadata.version) {
-      logger.warn("Migration from version ${serialized.applicationVersion} in progress")
-      this.migration = true
-    }
-
-    this.userRepositoryIndex.setAll(serialized.repositoryList
-                                        .map { URI.create(it) }
-                                        .toList())
-
-    logger.info("Discovered ${this.userRepositoryIndex.size} user repositories")
-
-    if (this.migration) {
-      this.persist()
-    }
+    this.persist()
   }
 
   /**
    * Persists the configuration back to disk.
    */
   fun persist() {
+    if (this.loading) {
+      logger.debug("Currently loading configuration file - Ignoring persist request")
+      return
+    }
+
     logger.info("Persisting user configuration to disk")
 
-    val serialized = this.persistable
+    val serialized = Config.UserConfiguration.newBuilder()
+        .setVersion(currentVersion)
+        .setApplicationVersion(BeaconUiMetadata.version)
+        .addAllRepository(this.userRepositoryIndex
+                              .map(URI::toString)
+                              .toList())
+        .setIconifyToTray(this.iconifyToTray)
+        .build()
+
     Files.newOutputStream(this.file, StandardOpenOption.CREATE, StandardOpenOption.WRITE,
                           StandardOpenOption.TRUNCATE_EXISTING)
         .use<OutputStream?, Unit>(serialized::writeTo)
