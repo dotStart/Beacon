@@ -32,17 +32,54 @@
     -fx-border-width: 0 4 4 4;
   }
 }
+.jfx-check-box {
+  -jfx-checked-color: @brand-color;
+}
 
-.tree-view {
+.jfx-radio-button {
+  -jfx-selected-color: @brand-color;
+}
+
+.jfx-text-field {
+  -jfx-focus-color: @brand-color;
+}
+
+.tree-view,
+.list-view {
   &, &:focused {
-    -fx-background-color: transparent;
+    -fx-background-color: white;
     -fx-background-insets: 0;
   }
 }
 
+.list-cell {
+  -fx-background-color: white;
+}
+
+.list-cell:selected,
 .tree-cell:selected {
   -fx-background-color: @brand-color;
   -fx-text-fill: white;
+}
+
+.table-view {
+  -fx-padding: 0;
+  -fx-background-color: white;
+
+  .filler,
+  .column-header-background,
+  .column-header {
+    -fx-background-color: -grey-300;
+  }
+}
+
+.table-row-cell {
+  -fx-background-color: transparent;
+
+  &:selected {
+    -fx-background-color: @brand-color;
+    -fx-text-fill: white;
+  }
 }
 
 .button {
