@@ -200,7 +200,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>tv.dotstart.beacon.BeaconCliKt</mainClass>
+              <mainClass>tv.dotstart.beacon.ui.BeaconCliKt</mainClass>
             </manifest>
           </archive>
         </configuration>

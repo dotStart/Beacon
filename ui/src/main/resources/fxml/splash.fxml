@@ -22,7 +22,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <VBox prefWidth="640" prefHeight="320"
-  fx:controller="tv.dotstart.beacon.controller.SplashController" xmlns:fx="http://javafx.com/fxml">
+  fx:controller="tv.dotstart.beacon.ui.controller.SplashController" xmlns:fx="http://javafx.com/fxml">
   <stylesheets>
     <URL value="@/style/splash.css"/>
   </stylesheets>

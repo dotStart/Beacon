@@ -20,7 +20,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
-<VBox fx:controller="tv.dotstart.beacon.controller.AboutController" styleClass="content"
+<VBox fx:controller="tv.dotstart.beacon.ui.controller.AboutController" styleClass="content"
   prefWidth="300" prefHeight="600"
   xmlns:fx="http://javafx.com/fxml">
   <stylesheets>

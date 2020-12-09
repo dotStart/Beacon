@@ -24,7 +24,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import com.jfoenix.controls.JFXButton?>
 <VBox fx:id="root" styleClass="wrapper" xmlns:fx="http://javafx.com/fxml"
-  fx:controller="tv.dotstart.beacon.controller.PortEditorController">
+  fx:controller="tv.dotstart.beacon.ui.controller.PortEditorController">
   <stylesheets>
     <URL value="@/style/port.css"/>
   </stylesheets>

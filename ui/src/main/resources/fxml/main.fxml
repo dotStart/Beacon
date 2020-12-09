@@ -29,7 +29,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <HBox prefWidth="800" prefHeight="400" styleClass="content"
-  fx:controller="tv.dotstart.beacon.controller.MainController" xmlns:fx="http://javafx.com/fxml">
+  fx:controller="tv.dotstart.beacon.ui.controller.MainController" xmlns:fx="http://javafx.com/fxml">
   <stylesheets>
     <URL value="@/style/main.css"/>
   </stylesheets>
