@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Johannes Donath <johannesd@torchmind.com>
+ * Copyright 2020 Johannes Donath <johannesd@torchmind.com>
  * and other copyright owners as documented in the project's IP log.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,13 +16,18 @@
  */
 package tv.dotstart.beacon.ui.controller
 
+import com.jfoenix.controls.JFXCheckBox
 import javafx.event.ActionEvent
 import javafx.fxml.FXML
 import javafx.fxml.Initializable
 import javafx.scene.control.Label
+import org.koin.core.component.KoinApiExtension
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+import tv.dotstart.beacon.core.util.OperatingSystem
 import tv.dotstart.beacon.ui.BeaconCli
 import tv.dotstart.beacon.ui.BeaconUiMetadata
-import tv.dotstart.beacon.core.util.OperatingSystem
+import tv.dotstart.beacon.ui.config.Configuration
 import java.awt.Desktop
 import java.net.URL
 import java.nio.channels.Channels
@@ -31,17 +36,27 @@ import java.nio.file.StandardOpenOption
 import java.util.*
 
 /**
- * Provides a controller component for the about dialogue.
+ * Provides the necessary controller logic for the settings window.
  *
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
+ * @date 09/12/2020
  */
-class AboutController : Initializable {
+@KoinApiExtension
+class SettingsController : Initializable, KoinComponent {
+
+  private val configuration by inject<Configuration>()
 
   @FXML
-  private lateinit var versionLabel: Label
+  private lateinit var generalIconifyToTrayCheckBox: JFXCheckBox
 
-  override fun initialize(path: URL, resources: ResourceBundle?) {
-    this.versionLabel.text = BeaconUiMetadata.version
+  @FXML
+  private lateinit var aboutVersionLabel: Label
+
+  override fun initialize(location: URL?, resources: ResourceBundle?) {
+    this.generalIconifyToTrayCheckBox.selectedProperty()
+        .bindBidirectional(this.configuration.iconifyToTrayProperty)
+
+    this.aboutVersionLabel.text = BeaconUiMetadata.version
   }
 
   @FXML

@@ -29,6 +29,7 @@ import javafx.scene.control.Label
 import javafx.scene.control.TableView
 import javafx.scene.control.TreeItem
 import javafx.scene.image.ImageView
+import javafx.stage.Modality
 import javafx.stage.Stage
 import org.koin.core.component.KoinApiExtension
 import org.koin.core.component.KoinComponent
@@ -284,16 +285,11 @@ class MainController : Initializable, KoinComponent {
   }
 
   @FXML
-  private fun onAboutOpen(actionEvent: ActionEvent) {
+  private fun onSettingsOpen() {
     val stage = Stage()
-    stage.focusedProperty()
-        .addListener({ _, _, n ->
-                       if (!n) {
-                         stage.close()
-                       }
-                     })
-
-    stage.splashWindow<AboutController>("about.fxml")
-    stage.show()
+    stage.window<SettingsController>("settings.fxml", minimizable = false, maximizable = false)
+    stage.title = Localization("settings.title")
+    stage.initModality(Modality.APPLICATION_MODAL)
+    stage.showAndWait()
   }
 }

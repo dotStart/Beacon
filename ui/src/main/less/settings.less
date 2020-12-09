@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Johannes Donath <johannesd@torchmind.com>
+ * Copyright 2020 Johannes Donath <johannesd@torchmind.com>
  * and other copyright owners as documented in the project's IP log.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,36 +16,47 @@
  */
 @import "variables.less";
 
-@spacing: 10px;
+@logoSize: 180;
 
-.root {
-  -fx-background-image: url(../image/about.png);
+.settings-header {
+  -fx-font-size: 1.3em;
+  -fx-padding: 0 0 @spacing 0;
 }
 
-.content,
-.dependencies,
-.contributors {
+.about,
+.about-dependencies,
+.about-contributors {
   -fx-alignment: top-center;
 }
 
-.content {
+.application-logo {
+  -fx-fit-to-width: @logoSize;
+  -fx-fit-to-height: @logoSize;
+}
+
+.application-title {
+  -fx-font-family: "Roboto Light";
+  -fx-font-size: 2em;
+}
+
+.application-version {
+  -fx-font-family: "Roboto Thin";
+  -fx-font-size: 1.2em;
+}
+
+.about-header {
+  -fx-font-size: 1.15em;
+
+  -fx-border-width: 0 0 2px 0;
+  -fx-border-style: solid;
+  -fx-border-color: -grey-500;
+}
+
+.about-placeholder {
+  -fx-pref-height: @spacing * 2;
+}
+
+.about-actions {
   -fx-spacing: @spacing;
-  -fx-padding: 170px @spacing @spacing @spacing;
-}
-
-.placeholder {
-  -fx-pref-height: 440px;
-}
-
-.button {
-  -fx-text-fill: white;
-}
-
-.label {
-  -fx-text-fill: white;
-}
-
-.application-version,
-.header {
-  -fx-font-size: 1.3em;
+  -fx-alignment: bottom-center;
 }
