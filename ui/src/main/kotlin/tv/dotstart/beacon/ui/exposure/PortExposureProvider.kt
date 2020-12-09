@@ -77,6 +77,10 @@ class PortExposureProvider : Closeable {
       locator.locate()
     }
 
+    runBlocking {
+      _externalAddressProperty.set(internetGatewayDevice?.getExternalAddress())
+    }
+
     val beacon = this.beacon
     beacon?.start()
 
