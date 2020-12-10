@@ -228,6 +228,7 @@ class MainController : Initializable, KoinComponent {
         stage.window<ServiceEditorController>("service-editor.fxml",
                                               maximizable = false,
                                               minimizable = false)
+    stage.initModality(Modality.APPLICATION_MODAL)
 
     stage.title = Localization("editor.title")
     stage.isResizable = false
@@ -255,6 +256,8 @@ class MainController : Initializable, KoinComponent {
         stage.window<ServiceEditorController>("service-editor.fxml",
                                               maximizable = false,
                                               minimizable = false)
+    stage.initModality(Modality.APPLICATION_MODAL)
+
     controller.service = previous
 
     stage.title = Localization("editor.title")

@@ -27,6 +27,7 @@ import javafx.event.ActionEvent
 import javafx.fxml.FXML
 import javafx.fxml.Initializable
 import javafx.scene.control.TableView
+import javafx.stage.Modality
 import javafx.stage.Stage
 import tv.dotstart.beacon.repository.Model
 import tv.dotstart.beacon.ui.repository.model.Port
@@ -94,6 +95,7 @@ class ServiceEditorController : Initializable {
     val stage = Stage()
     val controller = stage.window<PortEditorController>(
         "port-editor.fxml", maximizable = false, minimizable = false)
+    stage.initModality(Modality.APPLICATION_MODAL)
 
     stage.title = Localization("editor.port.title")
     stage.isResizable = false
