@@ -23,3 +23,9 @@
 #demo {
   margin-bottom: -60px;
 }
+
+#releases pre {
+  white-space: normal;
+  text-wrap: normal;
+  text-overflow: clip;
+}

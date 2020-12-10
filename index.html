@@ -45,26 +45,31 @@
             <p>Automatically expose your game server using UPnP magic</p>
 
             <div id="download-buttons">
-              {% for asset in site.github.releases[0].assets %}
-                {% if asset.content_type == "application/x-msdownload" %}
-                  <a href="{{ asset.browser_download_url }}" class="ui inverted huge button">
-                    <i class="windows icon"></i>
-                    Windows
-                  </a>
-                {% endif %}
-              {% endfor %}
-              {% for asset in site.github.releases[0].assets %}
-                {% if asset.content_type == "application/octet-stream" and asset.name contains '.jar' %}
-                  <a href="{{ asset.browser_download_url }}" class="ui inverted huge button">
-                    <i class="linux icon"></i>
-                    Linux
-                  </a>
-                  <a href="{{ asset.browser_download_url }}" class="ui inverted huge button">
-                    <i class="apple icon"></i>
-                    Mac OS
-                  </a>
-                {% endif %}
-              {% endfor %}
+              {% assign stable_releases = site.github.releases | where: 'prerelease', false %}
+              {% assign latest_release = stable_releases[0] %}
+
+              {% assign latest_windows_assets = latest_release.assets | where: 'content_type', 'application/x-msdownload' %}
+              {% assign latest_windows_asset = latest_windows_assets[0] %}
+
+              {% assign latest_nix_assets = latest_release.assets | where: 'content_type', 'application/java-archive' %}
+              {% assign latest_nix_asset = latest_nix_assets[0] %}
+
+              {% if latest_windows_asset %}
+                <a href="{{ latest_windows_asset.browser_download_url }}" class="ui inverted huge button">
+                  <i class="windows icon"></i>
+                  Windows
+                </a>
+              {% endif %}
+              {% if latest_nix_asset %}
+                <a href="{{ latest_nix_asset.browser_download_url }}" class="ui inverted huge button">
+                  <i class="linux icon"></i>
+                  Linux
+                </a>
+                <a href="{{ latest_nix_asset.browser_download_url }}" class="ui inverted huge button">
+                  <i class="apple icon"></i>
+                  Mac OS
+                </a>
+              {% endif %}
             </div>
           </div>
         </section>
@@ -129,7 +134,8 @@
               </tr>
             </thead>
             <tbody>
-              {% for release in site.github.releases %}
+              {% assign recent_releases = site.github.releases | slice: 0, 3 %}
+              {% for release in recent_releases %}
                 <tr>
                   <td>
                     <h4 class="ui header">
@@ -141,27 +147,29 @@
                     </h4>
 
                     {% if release.body != "" %}
-                      <pre>{{ release.body }}</pre>
+                      <pre>{{ release.body | markdownify }}</pre>
                     {% endif %}
                   </td>
                   <td class="top aligned collapsing">
-                    {% for asset in release.assets %}
-                      {% if asset.content_type == "application/x-msdownload" %}
-                        <a href="{{ asset.browser_download_url }}" class="ui basic blue icon button" title="Windows">
-                          <i class="windows icon"></i>
-                        </a>
-                      {% endif %}
-                    {% endfor %}
-                    {% for asset in release.assets %}
-                      {% if asset.content_type == "application/octet-stream" and asset.name contains '.jar' %}
-                        <a href="{{ asset.browser_download_url }}" class="ui basic blue icon button" title="Linux">
-                          <i class="linux icon"></i>
-                        </a>
-                        <a href="{{ asset.browser_download_url }}" class="ui basic blue icon button" title="Mac OS">
-                          <i class="apple icon"></i>
-                        </a>
-                      {% endif %}
-                    {% endfor %}
+                    {% assign windows_assets = release.assets | where: 'content_type', 'application/x-msdownload' %}
+                    {% assign windows_asset = windows_assets[0] %}
+
+                    {% assign nix_assets = release.assets | where: 'content_type', 'application/java-archive' %}
+                    {% assign nix_asset = nix_assets[0] %}
+
+                    {% if windows_asset %}
+                      <a href="{{ windows_asset.browser_download_url }}" class="ui basic blue icon button" title="Windows">
+                        <i class="windows icon"></i>
+                      </a>
+                    {% endif %}
+                    {% if nix_asset %}
+                      <a href="{{ nix_asset.browser_download_url }}" class="ui basic blue icon button" title="Linux">
+                        <i class="linux icon"></i>
+                      </a>
+                      <a href="{{ nix_asset.browser_download_url }}" class="ui basic blue icon button" title="Mac OS">
+                        <i class="apple icon"></i>
+                      </a>
+                    {% endif %}
                   </td>
                 </tr>
               {% endfor %}
