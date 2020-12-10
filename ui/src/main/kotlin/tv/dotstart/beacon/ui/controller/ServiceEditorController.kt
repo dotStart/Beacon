@@ -91,7 +91,7 @@ class ServiceEditorController : Initializable {
   }
 
   @FXML
-  private fun onAddPort(event: ActionEvent) {
+  private fun onAddPort() {
     val stage = Stage()
     val controller = stage.window<PortEditorController>(
         "port-editor.fxml", maximizable = false, minimizable = false)
@@ -109,7 +109,7 @@ class ServiceEditorController : Initializable {
   }
 
   @FXML
-  private fun onRemovePort(event: ActionEvent) {
+  private fun onRemovePort() {
     val selectedPort = this.portTableView.selectionModel.selectedItem
         ?: return
 
@@ -117,7 +117,7 @@ class ServiceEditorController : Initializable {
   }
 
   @FXML
-  private fun onSave(event: ActionEvent) {
+  private fun onSave() {
     val serviceId = this.service
         ?.id
         ?: URI("custom", UUID.randomUUID().toString(), null)

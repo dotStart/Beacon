@@ -96,7 +96,7 @@ class PortEditorController : Initializable {
   }
 
   @FXML
-  private fun onSave(event: ActionEvent) {
+  private fun onSave() {
     this.port = Port(
         if (this.protocolToggleGroup.selectedToggle == this.tcpProtocolButton) {
           Protocol.TCP

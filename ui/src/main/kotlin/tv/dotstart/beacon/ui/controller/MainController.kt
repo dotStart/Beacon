@@ -196,7 +196,7 @@ class MainController : Initializable, KoinComponent {
   }
 
   @FXML
-  private fun onServiceOpen(actionEvent: ActionEvent) {
+  private fun onServiceOpen() {
     val node = this.serviceList.selectionModel
         .selectedItem
         ?.value
@@ -209,7 +209,7 @@ class MainController : Initializable, KoinComponent {
   }
 
   @FXML
-  private fun onServiceClose(actionEvent: ActionEvent) {
+  private fun onServiceClose() {
     val node = this.serviceList.selectionModel
         .selectedItem
         ?.value
@@ -222,7 +222,7 @@ class MainController : Initializable, KoinComponent {
   }
 
   @FXML
-  private fun onAddService(actionEvent: ActionEvent) {
+  private fun onAddService() {
     val stage = Stage()
     val controller =
         stage.window<ServiceEditorController>("service-editor.fxml",
@@ -246,7 +246,7 @@ class MainController : Initializable, KoinComponent {
   }
 
   @FXML
-  private fun onServiceEdit(actionEvent: ActionEvent) {
+  private fun onServiceEdit() {
     val previous = this.currentService
         ?.takeIf { it.category == Model.Category.CUSTOM }
         ?: return
@@ -276,7 +276,7 @@ class MainController : Initializable, KoinComponent {
   }
 
   @FXML
-  private fun onServiceRemove(actionEvent: ActionEvent) {
+  private fun onServiceRemove() {
     val selected = this.currentService
         ?.takeIf { it.category == Model.Category.CUSTOM }
         ?: return

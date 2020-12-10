@@ -18,6 +18,7 @@ package tv.dotstart.beacon.ui.preload
 
 import javafx.application.Platform
 import javafx.beans.property.*
+import org.koin.core.component.KoinApiExtension
 import org.koin.core.component.KoinComponent
 import tv.dotstart.beacon.core.delegate.logManager
 import tv.dotstart.beacon.ui.preload.error.PreloadError
@@ -32,6 +33,7 @@ import kotlin.concurrent.thread
  *
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
  */
+@KoinApiExtension
 class Preloader(loaders: List<Loader>) : KoinComponent {
 
   companion object {
