@@ -61,6 +61,15 @@
     </GridPane>
   </PreferencePage>
 
+  <PreferencePage title="%settings.troubleshooting">
+    <HBox styleClass="actions">
+      <JFXButton text="%settings.troubleshooting.logs" onAction="#onTroubleshootingShowLogs"
+        styleClass="brand"/>
+      <JFXButton text="%settings.troubleshooting.purgeCache" onAction="#onTroubleshootingPurgeCache"
+        styleClass="brand"/>
+    </HBox>
+  </PreferencePage>
+
   <PreferencePage title="%settings.about" styleClass="about">
     <ImageView styleClass="application-logo" fitWidth="200" fitHeight="200">
       <Image url="@/image/logo.png"/>
@@ -100,8 +109,7 @@
     <Pane styleClass="about-placeholder"/>
 
     <HBox styleClass="about-actions">
-      <JFXButton text="%settings.about.licenses" onAction="#onShowLicenses" styleClass="brand"/>
-      <JFXButton text="%settings.about.logs" onAction="#onShowLogs" styleClass="brand"/>
+      <JFXButton text="%settings.about.licenses" onAction="#onAboutShowLicenses" styleClass="brand"/>
     </HBox>
   </PreferencePage>
 </PreferencePageView>

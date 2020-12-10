@@ -32,6 +32,7 @@ import org.koin.core.component.KoinApiExtension
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.qualifier.named
+import tv.dotstart.beacon.core.cache.CacheProvider
 import tv.dotstart.beacon.ui.BeaconCli
 import tv.dotstart.beacon.ui.BeaconUiMetadata
 import tv.dotstart.beacon.ui.config.Configuration
@@ -56,6 +57,7 @@ import java.util.*
 class SettingsController : Initializable, KoinComponent {
 
   private val storagePath by inject<Path>(named("storagePath"))
+  private val cache by inject<CacheProvider>()
   private val configuration by inject<Configuration>()
 
   @FXML
@@ -117,7 +119,17 @@ class SettingsController : Initializable, KoinComponent {
   }
 
   @FXML
-  private fun onShowLicenses(actionEvent: ActionEvent) {
+  private fun onTroubleshootingShowLogs(actionEvent: ActionEvent) {
+    Desktop.getDesktop().open(BeaconCli.logDirectory.toFile())
+  }
+
+  @FXML
+  private fun onTroubleshootingPurgeCache() {
+    this.cache.purgeAll()
+  }
+
+  @FXML
+  private fun onAboutShowLicenses() {
     val classLoader = Thread.currentThread().contextClassLoader
     val targetFile = this.storagePath.resolve("THIRD-PARTY.txt")
 
@@ -133,10 +145,5 @@ class SettingsController : Initializable, KoinComponent {
         }
 
     Desktop.getDesktop().open(targetFile.toFile())
-  }
-
-  @FXML
-  private fun onShowLogs(actionEvent: ActionEvent) {
-    Desktop.getDesktop().open(BeaconCli.logDirectory.toFile())
   }
 }
