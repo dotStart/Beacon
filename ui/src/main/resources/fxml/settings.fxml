@@ -20,6 +20,7 @@
 <?import com.jfoenix.controls.JFXCheckBox?>
 <?import java.net.URL?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.GridPane?>
@@ -36,11 +37,27 @@
   </stylesheets>
 
   <PreferencePage title="%settings.general">
-    <Label text="%settings.general" styleClass="settings-header" />
+    <Label text="%settings.general" styleClass="settings-header"/>
 
-    <GridPane>
-      <JFXCheckBox fx:id="generalIconifyToTrayCheckBox" GridPane.rowIndex="0" GridPane.columnIndex="1"
+    <GridPane styleClass="settings-grid">
+      <JFXCheckBox fx:id="generalIconifyToTrayCheckBox" GridPane.rowIndex="0"
+        GridPane.columnIndex="1"
         text="%settings.general.iconifyToTray"/>
+
+      <Label text="%settings.general.userRepository" styleClass="settings-header"
+        GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
+      <HBox styleClass="general-user-repository-pane" GridPane.rowIndex="2" GridPane.columnIndex="0"
+        GridPane.columnSpan="2" maxWidth="Infinity">
+        <ListView fx:id="generalUserRepositoryListView" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+
+        <VBox styleClass="actions" prefWidth="150" HBox.hgrow="NEVER">
+          <JFXButton text="%settings.general.userRepository.add" onAction="#onGeneralAddRepository"
+            styleClass="green-800" prefWidth="Infinity"/>
+          <JFXButton fx:id="generalUserRepositoryRemoveButton" onAction="#onGeneralRemoveRepository"
+            text="%settings.general.userRepository.remove"
+            styleClass="brand" prefWidth="Infinity"/>
+        </VBox>
+      </HBox>
     </GridPane>
   </PreferencePage>
 
@@ -49,20 +66,20 @@
       <Image url="@/image/logo.png"/>
     </ImageView>
 
-    <Pane styleClass="about-placeholder" />
+    <Pane styleClass="about-placeholder"/>
 
     <Label styleClass="application-title" text="BEACON"/>
 
     <Label fx:id="aboutVersionLabel" styleClass="application-version"/>
 
-    <Pane styleClass="about-placeholder" />
+    <Pane styleClass="about-placeholder"/>
 
     <VBox styleClass="about-contributors">
       <Label styleClass="about-header" text="%settings.about.contributors"/>
       <Label text="Johannes &quot;.start&quot; Donath"/>
     </VBox>
 
-    <Pane styleClass="about-placeholder" />
+    <Pane styleClass="about-placeholder"/>
 
     <VBox styleClass="about-dependencies">
       <Label styleClass="about-header" text="%settings.about.dependencies"/>
@@ -80,7 +97,7 @@
       <Label text="%settings.about.dependencies.remaining"/>
     </VBox>
 
-    <Pane styleClass="about-placeholder" />
+    <Pane styleClass="about-placeholder"/>
 
     <HBox styleClass="about-actions">
       <JFXButton text="%settings.about.licenses" onAction="#onShowLicenses" styleClass="brand"/>

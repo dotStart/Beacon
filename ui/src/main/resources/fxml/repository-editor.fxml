@@ -15,32 +15,25 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<?import com.jfoenix.controls.JFXRadioButton?>
+<?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import java.net.URL?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.VBox?>
-<?import com.jfoenix.controls.JFXButton?>
-<VBox fx:id="root" styleClass="wrapper" xmlns:fx="http://javafx.com/fxml"
-  fx:controller="tv.dotstart.beacon.ui.controller.PortEditorController">
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+  styleClass="wrapper"
+  fx:controller="tv.dotstart.beacon.ui.controller.RepositoryEditorController">
   <stylesheets>
     <URL value="@/style/form.css"/>
   </stylesheets>
 
   <GridPane styleClass="form">
-    <Label text="%editor.port.protocol" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-    <JFXRadioButton fx:id="tcpProtocolButton" text="TCP" GridPane.rowIndex="0"
-      GridPane.columnIndex="1"/>
-    <JFXRadioButton fx:id="udpProtocolButton" text="UDP" GridPane.rowIndex="0"
-      GridPane.columnIndex="2"/>
-
-    <Label text="%editor.port.number" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-    <JFXTextField fx:id="portNumberTextField" GridPane.rowIndex="1" GridPane.columnIndex="1"
-      GridPane.columnSpan="2" maxWidth="Infinity"/>
+    <Label text="%settings.general.userRepository.uri" GridPane.rowIndex="0"
+      GridPane.columnIndex="0"/>
+    <JFXTextField fx:id="repositoryUriTextField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
   </GridPane>
 
-  <JFXButton fx:id="saveButton" text="%editor.port.save" onAction="#onSave" styleClass="brand"
-    maxWidth="Infinity"/>
+  <JFXButton fx:id="saveButton" text="%action.save" onAction="#onSave" maxWidth="Infinity"
+    styleClass="brand"/>
 </VBox>

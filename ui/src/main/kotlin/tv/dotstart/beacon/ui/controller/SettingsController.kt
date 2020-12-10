@@ -16,11 +16,18 @@
  */
 package tv.dotstart.beacon.ui.controller
 
+import com.jfoenix.controls.JFXButton
 import com.jfoenix.controls.JFXCheckBox
+import javafx.beans.binding.Bindings
+import javafx.beans.property.ObjectProperty
+import javafx.beans.property.SimpleObjectProperty
 import javafx.event.ActionEvent
 import javafx.fxml.FXML
 import javafx.fxml.Initializable
 import javafx.scene.control.Label
+import javafx.scene.control.ListView
+import javafx.stage.Modality
+import javafx.stage.Stage
 import org.koin.core.component.KoinApiExtension
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -28,7 +35,10 @@ import org.koin.core.qualifier.named
 import tv.dotstart.beacon.ui.BeaconCli
 import tv.dotstart.beacon.ui.BeaconUiMetadata
 import tv.dotstart.beacon.ui.config.Configuration
+import tv.dotstart.beacon.ui.delegate.property
+import tv.dotstart.beacon.ui.util.window
 import java.awt.Desktop
+import java.net.URI
 import java.net.URL
 import java.nio.channels.Channels
 import java.nio.channels.FileChannel
@@ -52,13 +62,58 @@ class SettingsController : Initializable, KoinComponent {
   private lateinit var generalIconifyToTrayCheckBox: JFXCheckBox
 
   @FXML
+  private lateinit var generalUserRepositoryListView: ListView<URI>
+
+  @FXML
+  private lateinit var generalUserRepositoryRemoveButton: JFXButton
+
+  @FXML
   private lateinit var aboutVersionLabel: Label
+
+  private val generalSelectedUserRepositoryProperty: ObjectProperty<URI> = SimpleObjectProperty()
+  private val generalSelectedUserRepository by property(generalSelectedUserRepositoryProperty)
 
   override fun initialize(location: URL?, resources: ResourceBundle?) {
     this.generalIconifyToTrayCheckBox.selectedProperty()
         .bindBidirectional(this.configuration.iconifyToTrayProperty)
+    Bindings.bindContentBidirectional(this.generalUserRepositoryListView.items,
+                                      this.configuration.userRepositoryIndex)
+
+    val generalSelectedUserRepositoryBinding = Bindings.select<URI>(
+        this.generalUserRepositoryListView, "selectionModel", "selectedItem")
+    this.generalSelectedUserRepositoryProperty.bind(generalSelectedUserRepositoryBinding)
+
+    this.generalUserRepositoryRemoveButton.disableProperty()
+        .bind(generalSelectedUserRepositoryBinding.isNull)
 
     this.aboutVersionLabel.text = BeaconUiMetadata.version
+  }
+
+  @FXML
+  private fun onGeneralAddRepository() {
+    val stage = Stage()
+    val controller = stage.window<RepositoryEditorController>(
+        "repository-editor.fxml",
+        minimizable = false,
+        maximizable = false)
+    stage.initModality(Modality.APPLICATION_MODAL)
+
+    stage.showAndWait()
+
+    val repositoryUri = controller.repositoryUri
+        ?: return
+
+    if (repositoryUri !in this.configuration.userRepositoryIndex) {
+      this.configuration.userRepositoryIndex.add(repositoryUri)
+    }
+  }
+
+  @FXML
+  private fun onGeneralRemoveRepository() {
+    val uri = this.generalSelectedUserRepository
+        ?: return
+
+    this.configuration.userRepositoryIndex -= uri
   }
 
   @FXML
