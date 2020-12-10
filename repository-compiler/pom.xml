@@ -23,7 +23,7 @@
   <parent>
     <artifactId>parent</artifactId>
     <groupId>tv.dotstart.beacon</groupId>
-    <version>2.4.0</version>
+    <version>3.0.0-alpha.1</version>
   </parent>
 
   <artifactId>repository-compiler</artifactId>

@@ -1,11 +1,11 @@
 name: Test JDK Builds
-on: [push, pull_request]
+on: [ push, pull_request ]
 jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java: [ '9', '11', '12' ]
+        java: [ '9', '10', '11', '12', '13', '14', '15' ]
 
     steps:
       - uses: actions/checkout@v1

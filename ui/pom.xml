@@ -23,7 +23,7 @@
   <parent>
     <artifactId>parent</artifactId>
     <groupId>tv.dotstart.beacon</groupId>
-    <version>2.4.0</version>
+    <version>3.0.0-alpha.1</version>
   </parent>
 
   <artifactId>ui</artifactId>
@@ -31,6 +31,10 @@
   <name>Beacon UI</name>
 
   <dependencies>
+    <dependency>
+      <groupId>tv.dotstart.beacon</groupId>
+      <artifactId>core</artifactId>
+    </dependency>
     <dependency>
       <groupId>tv.dotstart.beacon</groupId>
       <artifactId>repository-model</artifactId>
@@ -78,11 +82,6 @@
     </dependency>
 
     <dependency>
-      <groupId>net.mm2d</groupId>
-      <artifactId>mmupnp</artifactId>
-    </dependency>
-
-    <dependency>
       <groupId>com.mindscapehq</groupId>
       <artifactId>core</artifactId>
     </dependency>
@@ -92,16 +91,8 @@
       <artifactId>commons-compress</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>fluent-hc</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.fasterxml.jackson.module</groupId>
-      <artifactId>jackson-module-kotlin</artifactId>
+      <groupId>org.koin</groupId>
+      <artifactId>koin-core</artifactId>
     </dependency>
     <dependency>
       <groupId>com.sangupta</groupId>
@@ -114,15 +105,6 @@
     <dependency>
       <groupId>org.tukaani</groupId>
       <artifactId>xz</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>io.reactivex.rxjava2</groupId>
-      <artifactId>rxjava</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.reactivex.rxjava2</groupId>
-      <artifactId>rxkotlin</artifactId>
     </dependency>
 
     <dependency>
@@ -155,18 +137,13 @@
         <filtering>true</filtering>
 
         <includes>
-          <include>beacon.properties</include>
           <include>raygun.token</include>
         </includes>
       </resource>
       <resource>
-        <directory>${project.basedir}/src/main/resources/META-INF</directory>
-        <targetPath>META-INF</targetPath>
-        <filtering>false</filtering>
-
-        <includes>
-          <include>services/*</include>
-        </includes>
+        <directory>${project.basedir}/src/main/resources/META-INF/metadata</directory>
+        <targetPath>META-INF/metadata</targetPath>
+        <filtering>true</filtering>
       </resource>
       <resource>
         <directory>${project.basedir}/src/main/resources/fxml</directory>
@@ -183,6 +160,7 @@
         <filtering>false</filtering>
 
         <includes>
+          <include>tray.ico</include>
           <include>**/*.png</include>
         </includes>
       </resource>
@@ -209,6 +187,12 @@
       <plugin>
         <groupId>org.lesscss</groupId>
         <artifactId>lesscss-maven-plugin</artifactId>
+
+        <configuration>
+          <excludes>
+            <exclude>variables.less</exclude>
+          </excludes>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -222,7 +206,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>tv.dotstart.beacon.BeaconCliKt</mainClass>
+              <mainClass>tv.dotstart.beacon.ui.BeaconKt</mainClass>
             </manifest>
           </archive>
         </configuration>
@@ -289,8 +273,8 @@
                     <fileVersion>1.0.0.0</fileVersion>
                     <txtFileVersion>${project.version}</txtFileVersion>
                     <fileDescription>${project.description}</fileDescription>
-                    <copyright>Copyright (C) 2019 Johannes Donath</copyright>
-                    <productVersion>${project.version}.0</productVersion>
+                    <copyright>Copyright (C) 2019-2020 Johannes Donath</copyright>
+                    <productVersion>${exe.version}</productVersion>
                     <txtProductVersion>${project.version}</txtProductVersion>
                     <productName>${project.name}</productName>
                     <internalName>${project.artifactId}</internalName>

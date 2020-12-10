@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Copyright 2020 Johannes Donath <johannesd@torchmind.com>
+  ~ and other copyright owners as documented in the project's IP log.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ 	http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import java.net.URL?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import tv.dotstart.beacon.ui.component.PreferencePage?>
+<?import tv.dotstart.beacon.ui.component.PreferencePageView?>
+<PreferencePageView xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+  fx:controller="tv.dotstart.beacon.ui.controller.SettingsController"
+  prefHeight="650.0" prefWidth="700.0">
+  <stylesheets>
+    <URL value="@/style/settings.css"/>
+  </stylesheets>
+
+  <PreferencePage title="%settings.general">
+    <Label text="%settings.general" styleClass="settings-header"/>
+
+    <GridPane styleClass="settings-grid">
+      <JFXCheckBox fx:id="generalIconifyToTrayCheckBox" GridPane.rowIndex="0"
+        GridPane.columnIndex="1"
+        text="%settings.general.iconifyToTray"/>
+
+      <Label text="%settings.general.userRepository" styleClass="settings-header"
+        GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
+      <HBox styleClass="general-user-repository-pane" GridPane.rowIndex="2" GridPane.columnIndex="0"
+        GridPane.columnSpan="2" maxWidth="Infinity">
+        <ListView fx:id="generalUserRepositoryListView" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+
+        <VBox styleClass="actions" prefWidth="150" HBox.hgrow="NEVER">
+          <JFXButton text="%settings.general.userRepository.add" onAction="#onGeneralAddRepository"
+            styleClass="green-800" prefWidth="Infinity"/>
+          <JFXButton fx:id="generalUserRepositoryRemoveButton" onAction="#onGeneralRemoveRepository"
+            text="%settings.general.userRepository.remove"
+            styleClass="brand" prefWidth="Infinity"/>
+        </VBox>
+      </HBox>
+    </GridPane>
+  </PreferencePage>
+
+  <PreferencePage title="%settings.troubleshooting">
+    <Label text="%settings.troubleshooting" styleClass="settings-header"/>
+
+    <GridPane styleClass="settings-grid">
+      <Label text="%settings.troubleshooting.deviceName"
+        GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+      <JFXTextField fx:id="troubleshootingDeviceNameTextField" editable="false"
+        GridPane.rowIndex="0" GridPane.columnIndex="1" maxWidth="Infinity"/>
+      <JFXButton fx:id="troubleshootingDeviceVendorUrlButton"
+        text="%settings.troubleshooting.visitDeviceVendorUrl" styleClass="brand"
+        onAction="#onTroubleshootingVisitVendorUrl"
+        GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+
+      <Label text="%settings.troubleshooting.deviceModelName"
+        GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+      <JFXTextField fx:id="troubleshootingDeviceModelNameTextField" editable="false"
+        GridPane.rowIndex="1" GridPane.columnIndex="1" maxWidth="Infinity"/>
+
+      <Label text="%settings.troubleshooting.deviceManufacturer"
+        GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+      <JFXTextField fx:id="troubleshootingDeviceManufacturerTextField" editable="false"
+        GridPane.rowIndex="2" GridPane.columnIndex="1" maxWidth="Infinity"/>
+    </GridPane>
+
+    <Pane styleClass="settings-placeholder"/>
+
+    <Label text="%settings.troubleshooting.actions" styleClass="settings-header"/>
+    <Label text="%settings.troubleshooting.actions.body"/>
+
+    <Pane styleClass="settings-placeholder"/>
+
+    <HBox styleClass="actions">
+      <JFXButton text="%settings.troubleshooting.logs" onAction="#onTroubleshootingShowLogs"
+        styleClass="brand"/>
+      <JFXButton text="%settings.troubleshooting.purgeCache" onAction="#onTroubleshootingPurgeCache"
+        styleClass="brand"/>
+    </HBox>
+  </PreferencePage>
+
+  <PreferencePage title="%settings.about" styleClass="about">
+    <ImageView styleClass="application-logo" fitWidth="200" fitHeight="200">
+      <Image url="@/image/logo.png"/>
+    </ImageView>
+
+    <Pane styleClass="settings-placeholder"/>
+
+    <Label styleClass="application-title" text="BEACON"/>
+
+    <Label fx:id="aboutVersionLabel" styleClass="application-version"/>
+
+    <Pane styleClass="settings-placeholder"/>
+
+    <VBox styleClass="about-contributors">
+      <Label styleClass="about-header" text="%settings.about.contributors"/>
+      <Label text="Johannes &quot;.start&quot; Donath"/>
+    </VBox>
+
+    <Pane styleClass="settings-placeholder"/>
+
+    <VBox styleClass="about-dependencies">
+      <Label styleClass="about-header" text="%settings.about.dependencies"/>
+      <Label text="Apache Commons"/>
+      <Label text="clikt"/>
+      <Label text="Jackson"/>
+      <Label text="JFoenix"/>
+      <Label text="Kotlin"/>
+      <Label text="Koin"/>
+      <Label text="Log4j2"/>
+      <Label text="mmupnp"/>
+      <Label text="Murmur"/>
+      <Label text="OpenJFX"/>
+      <Label text="ProtoBuffers"/>
+      <Label text="%settings.about.dependencies.remaining"/>
+    </VBox>
+
+    <Pane styleClass="settings-placeholder"/>
+
+    <HBox styleClass="about-actions">
+      <JFXButton text="%settings.about.licenses" onAction="#onAboutShowLicenses"
+        styleClass="brand"/>
+    </HBox>
+  </PreferencePage>
+</PreferencePageView>

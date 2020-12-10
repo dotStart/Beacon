@@ -24,6 +24,28 @@
       ]
     },
     {
+      "id": "tool+generic://httpd/ssl",
+      "title": "HTTP Server (SSL)",
+      "category": "TOOL",
+      "ports": [
+        {
+          "protocol": "TCP",
+          "number": 443
+        }
+      ]
+    },
+    {
+      "id": "tool+generic://httpd/alternative",
+      "title": "HTTP Server (8080)",
+      "category": "TOOL",
+      "ports": [
+        {
+          "protocol": "TCP",
+          "number": 8080
+        }
+      ]
+    },
+    {
       "id": "tool+generic://sshd",
       "title": "SSH Server",
       "category": "TOOL",

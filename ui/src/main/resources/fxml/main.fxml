@@ -29,7 +29,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <HBox prefWidth="800" prefHeight="400" styleClass="content"
-  fx:controller="tv.dotstart.beacon.controller.MainController" xmlns:fx="http://javafx.com/fxml">
+  fx:controller="tv.dotstart.beacon.ui.controller.MainController" xmlns:fx="http://javafx.com/fxml">
   <stylesheets>
     <URL value="@/style/main.css"/>
   </stylesheets>
@@ -41,7 +41,7 @@
       <JFXTextField fx:id="externalAddress" styleClass="external-address" editable="false"/>
       <JFXButton text="%action.addService" onAction="#onAddService" styleClass="brand"
         maxWidth="Infinity"/>
-      <JFXButton text="%action.about" onAction="#onAboutOpen" styleClass="brand"
+      <JFXButton text="%action.settings" onAction="#onSettingsOpen" styleClass="brand"
         maxWidth="Infinity"/>
     </VBox>
   </VBox>
