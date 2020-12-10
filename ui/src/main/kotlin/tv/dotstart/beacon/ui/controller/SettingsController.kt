@@ -18,6 +18,7 @@ package tv.dotstart.beacon.ui.controller
 
 import com.jfoenix.controls.JFXButton
 import com.jfoenix.controls.JFXCheckBox
+import com.jfoenix.controls.JFXTextField
 import javafx.beans.binding.Bindings
 import javafx.beans.property.ObjectProperty
 import javafx.beans.property.SimpleObjectProperty
@@ -33,10 +34,12 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.qualifier.named
 import tv.dotstart.beacon.core.cache.CacheProvider
+import tv.dotstart.beacon.core.gateway.InternetGatewayDevice
 import tv.dotstart.beacon.ui.BeaconCli
 import tv.dotstart.beacon.ui.BeaconUiMetadata
 import tv.dotstart.beacon.ui.config.Configuration
 import tv.dotstart.beacon.ui.delegate.property
+import tv.dotstart.beacon.ui.exposure.PortExposureProvider
 import tv.dotstart.beacon.ui.util.window
 import java.awt.Desktop
 import java.net.URI
@@ -59,6 +62,7 @@ class SettingsController : Initializable, KoinComponent {
   private val storagePath by inject<Path>(named("storagePath"))
   private val cache by inject<CacheProvider>()
   private val configuration by inject<Configuration>()
+  private val portExposureProvider by inject<PortExposureProvider>()
 
   @FXML
   private lateinit var generalIconifyToTrayCheckBox: JFXCheckBox
@@ -70,7 +74,19 @@ class SettingsController : Initializable, KoinComponent {
   private lateinit var generalUserRepositoryRemoveButton: JFXButton
 
   @FXML
+  private lateinit var troubleshootingDeviceNameTextField: JFXTextField
+
+  @FXML
+  private lateinit var troubleshootingDeviceModelNameTextField: JFXTextField
+
+  @FXML
+  private lateinit var troubleshootingDeviceManufacturerTextField: JFXTextField
+
+  @FXML
   private lateinit var aboutVersionLabel: Label
+
+  private val troubleshootingInternetGatewayDeviceProperty: ObjectProperty<InternetGatewayDevice> =
+      SimpleObjectProperty()
 
   private val generalSelectedUserRepositoryProperty: ObjectProperty<URI> = SimpleObjectProperty()
   private val generalSelectedUserRepository by property(generalSelectedUserRepositoryProperty)
@@ -87,6 +103,17 @@ class SettingsController : Initializable, KoinComponent {
 
     this.generalUserRepositoryRemoveButton.disableProperty()
         .bind(generalSelectedUserRepositoryBinding.isNull)
+
+    val deviceBinding = Bindings.select<InternetGatewayDevice>(
+        this.portExposureProvider, "internetGatewayDevice")
+    this.troubleshootingInternetGatewayDeviceProperty.bind(deviceBinding)
+
+    this.troubleshootingDeviceNameTextField.textProperty().bind(
+        Bindings.selectString(this.troubleshootingInternetGatewayDeviceProperty, "friendlyName"))
+    this.troubleshootingDeviceModelNameTextField.textProperty().bind(
+        Bindings.selectString(this.troubleshootingInternetGatewayDeviceProperty, "modelName"))
+    this.troubleshootingDeviceManufacturerTextField.textProperty().bind(
+        Bindings.selectString(this.troubleshootingInternetGatewayDeviceProperty, "manufacturer"))
 
     this.aboutVersionLabel.text = BeaconUiMetadata.version
   }

@@ -18,6 +18,7 @@
   -->
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXCheckBox?>
+<?import com.jfoenix.controls.JFXTextField?>
 <?import java.net.URL?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
@@ -31,7 +32,7 @@
 <?import tv.dotstart.beacon.ui.component.PreferencePageView?>
 <PreferencePageView xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
   fx:controller="tv.dotstart.beacon.ui.controller.SettingsController"
-  prefHeight="650.0" prefWidth="800.0">
+  prefHeight="650.0" prefWidth="700.0">
   <stylesheets>
     <URL value="@/style/settings.css"/>
   </stylesheets>
@@ -62,6 +63,32 @@
   </PreferencePage>
 
   <PreferencePage title="%settings.troubleshooting">
+    <Label text="%settings.troubleshooting" styleClass="settings-header"/>
+
+    <GridPane styleClass="settings-grid">
+      <Label text="%settings.troubleshooting.deviceName"
+        GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+      <JFXTextField fx:id="troubleshootingDeviceNameTextField" editable="false"
+        GridPane.rowIndex="0" GridPane.columnIndex="1" maxWidth="Infinity"/>
+
+      <Label text="%settings.troubleshooting.deviceModelName"
+        GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+      <JFXTextField fx:id="troubleshootingDeviceModelNameTextField" editable="false"
+        GridPane.rowIndex="1" GridPane.columnIndex="1" maxWidth="Infinity"/>
+
+      <Label text="%settings.troubleshooting.deviceManufacturer"
+        GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+      <JFXTextField fx:id="troubleshootingDeviceManufacturerTextField" editable="false"
+        GridPane.rowIndex="2" GridPane.columnIndex="1" maxWidth="Infinity"/>
+    </GridPane>
+
+    <Pane styleClass="settings-placeholder"/>
+
+    <Label text="%settings.troubleshooting.actions" styleClass="settings-header"/>
+    <Label text="%settings.troubleshooting.actions.body"/>
+
+    <Pane styleClass="settings-placeholder"/>
+
     <HBox styleClass="actions">
       <JFXButton text="%settings.troubleshooting.logs" onAction="#onTroubleshootingShowLogs"
         styleClass="brand"/>
@@ -75,20 +102,20 @@
       <Image url="@/image/logo.png"/>
     </ImageView>
 
-    <Pane styleClass="about-placeholder"/>
+    <Pane styleClass="settings-placeholder"/>
 
     <Label styleClass="application-title" text="BEACON"/>
 
     <Label fx:id="aboutVersionLabel" styleClass="application-version"/>
 
-    <Pane styleClass="about-placeholder"/>
+    <Pane styleClass="settings-placeholder"/>
 
     <VBox styleClass="about-contributors">
       <Label styleClass="about-header" text="%settings.about.contributors"/>
       <Label text="Johannes &quot;.start&quot; Donath"/>
     </VBox>
 
-    <Pane styleClass="about-placeholder"/>
+    <Pane styleClass="settings-placeholder"/>
 
     <VBox styleClass="about-dependencies">
       <Label styleClass="about-header" text="%settings.about.dependencies"/>
@@ -106,10 +133,11 @@
       <Label text="%settings.about.dependencies.remaining"/>
     </VBox>
 
-    <Pane styleClass="about-placeholder"/>
+    <Pane styleClass="settings-placeholder"/>
 
     <HBox styleClass="about-actions">
-      <JFXButton text="%settings.about.licenses" onAction="#onAboutShowLicenses" styleClass="brand"/>
+      <JFXButton text="%settings.about.licenses" onAction="#onAboutShowLicenses"
+        styleClass="brand"/>
     </HBox>
   </PreferencePage>
 </PreferencePageView>
