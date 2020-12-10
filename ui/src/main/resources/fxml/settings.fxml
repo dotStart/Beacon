@@ -70,6 +70,10 @@
         GridPane.rowIndex="0" GridPane.columnIndex="0"/>
       <JFXTextField fx:id="troubleshootingDeviceNameTextField" editable="false"
         GridPane.rowIndex="0" GridPane.columnIndex="1" maxWidth="Infinity"/>
+      <JFXButton fx:id="troubleshootingDeviceVendorUrlButton"
+        text="%settings.troubleshooting.visitDeviceVendorUrl" styleClass="brand"
+        onAction="#onTroubleshootingVisitVendorUrl"
+        GridPane.rowIndex="0" GridPane.columnIndex="2"/>
 
       <Label text="%settings.troubleshooting.deviceModelName"
         GridPane.rowIndex="1" GridPane.columnIndex="0"/>

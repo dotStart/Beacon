@@ -22,7 +22,6 @@ import com.jfoenix.controls.JFXTextField
 import javafx.beans.binding.Bindings
 import javafx.beans.property.ObjectProperty
 import javafx.beans.property.SimpleObjectProperty
-import javafx.event.ActionEvent
 import javafx.fxml.FXML
 import javafx.fxml.Initializable
 import javafx.scene.control.Label
@@ -34,6 +33,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.qualifier.named
 import tv.dotstart.beacon.core.cache.CacheProvider
+import tv.dotstart.beacon.core.delegate.logManager
 import tv.dotstart.beacon.core.gateway.InternetGatewayDevice
 import tv.dotstart.beacon.ui.BeaconCli
 import tv.dotstart.beacon.ui.BeaconUiMetadata
@@ -80,6 +80,9 @@ class SettingsController : Initializable, KoinComponent {
   private lateinit var troubleshootingDeviceModelNameTextField: JFXTextField
 
   @FXML
+  private lateinit var troubleshootingDeviceVendorUrlButton: JFXButton
+
+  @FXML
   private lateinit var troubleshootingDeviceManufacturerTextField: JFXTextField
 
   @FXML
@@ -87,9 +90,16 @@ class SettingsController : Initializable, KoinComponent {
 
   private val troubleshootingInternetGatewayDeviceProperty: ObjectProperty<InternetGatewayDevice> =
       SimpleObjectProperty()
+  private val troubleshootingInternetGatewayDevice by property(
+      troubleshootingInternetGatewayDeviceProperty)
 
   private val generalSelectedUserRepositoryProperty: ObjectProperty<URI> = SimpleObjectProperty()
   private val generalSelectedUserRepository by property(generalSelectedUserRepositoryProperty)
+
+  companion object {
+
+    private val logger by logManager()
+  }
 
   override fun initialize(location: URL?, resources: ResourceBundle?) {
     this.generalIconifyToTrayCheckBox.selectedProperty()
@@ -114,6 +124,10 @@ class SettingsController : Initializable, KoinComponent {
         Bindings.selectString(this.troubleshootingInternetGatewayDeviceProperty, "modelName"))
     this.troubleshootingDeviceManufacturerTextField.textProperty().bind(
         Bindings.selectString(this.troubleshootingInternetGatewayDeviceProperty, "manufacturer"))
+
+    this.troubleshootingDeviceVendorUrlButton.disableProperty().bind(
+        Bindings.select<String>(this.troubleshootingInternetGatewayDeviceProperty,
+                                "manufacturerUrl").isNull)
 
     this.aboutVersionLabel.text = BeaconUiMetadata.version
   }
@@ -146,7 +160,22 @@ class SettingsController : Initializable, KoinComponent {
   }
 
   @FXML
-  private fun onTroubleshootingShowLogs(actionEvent: ActionEvent) {
+  private fun onTroubleshootingVisitVendorUrl() {
+    val websiteUri = try {
+      this.troubleshootingInternetGatewayDevice
+          ?.manufacturerUrl
+          ?.let(URI::create)
+          ?: return
+    } catch (ex: IllegalArgumentException) {
+      logger.debug("Device reported invalid device URI", ex)
+      return
+    }
+
+    Desktop.getDesktop().browse(websiteUri)
+  }
+
+  @FXML
+  private fun onTroubleshootingShowLogs() {
     Desktop.getDesktop().open(BeaconCli.logDirectory.toFile())
   }
 
