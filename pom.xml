@@ -38,6 +38,7 @@
     <protobuf.version>3.9.0</protobuf.version>
 
     <raygun.token/>
+    <exe.version>${project.version}.0</exe.version>
   </properties>
 
   <licenses>

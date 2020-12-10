@@ -268,7 +268,7 @@
                     <txtFileVersion>${project.version}</txtFileVersion>
                     <fileDescription>${project.description}</fileDescription>
                     <copyright>Copyright (C) 2019 Johannes Donath</copyright>
-                    <productVersion>${project.version}.0</productVersion>
+                    <productVersion>${exe.version}</productVersion>
                     <txtProductVersion>${project.version}</txtProductVersion>
                     <productName>${project.name}</productName>
                     <internalName>${project.artifactId}</internalName>
