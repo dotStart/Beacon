@@ -1,0 +1,87 @@
+---
+title: Custom Services
+layout: docs
+category: usage
+applicable_to: 2.x,3.x
+---
+
+<p>
+  In addition to the stock port lists, custom services may be defined and stored locally in order
+  to permit exposure of unsupported applications as well as customized port ranges:
+</p>
+
+<p>
+  <img alt="Main Window"
+       src="{{ '/media/docs/usage_custom-service-layout-main.png' | relative_url }}"/>
+</p>
+
+<ol>
+  <li><strong>Add Service</strong> - Opens the editor for a new custom service</li>
+  <li><strong>Edit Service</strong> - Opens the editor for an existing service</li>
+  <li><strong>Remove Service</strong> - <em>Permanently</em> deletes a service</li>
+</ol>
+
+<p>
+  When creating or editing a service, the following view is presented:
+</p>
+
+<p>
+  <img alt="Service Window"
+       src="{{ '/media/docs/usage_custom-service-layout-service.png' | relative_url }}"/>
+</p>
+
+<ol>
+  <li><strong>Service Name</strong> - User specified display name for this service (non empty)</li>
+  <li><strong>Port List</strong> - Displays previously created ports</li>
+  <li><strong>Add Port</strong> - Opens the port editor for a new port</li>
+  <li><strong>Remove Port</strong> - <em>Permanently</em> removes the selected port</li>
+</ol>
+
+<p>
+  New ports are created via the port editor:
+</p>
+
+<p>
+  <img alt="Port Window"
+       src="{{ '/media/docs/usage_custom-service-layout-port.png' | relative_url }}"/>
+</p>
+
+<p>
+  Each port is specified by a protocol (either TCP or UDP) and a port number. For more information
+  on which port and protocol to select, refer to your respective server's documentation.
+</p>
+
+<h2 class="ui header">Step by Step</h2>
+
+<ol>
+  <li>Select "Add Service" from the main application window</li>
+  <li>Enter a descriptive name (such as "Minecraft (Custom Port)")</li>
+  <li>Select "Add Port"</li>
+  <li>
+    Select the target protocol (either TCP or UDP) according to your server software
+    documentation
+  </li>
+  <li>
+    Enter the port number according to your server software documentation and custom settings
+  </li>
+  <li>
+    Select "Save"
+  </li>
+  <li>
+    <em>(Optional)</em> Repeat steps 3-6 as often as necessary
+  </li>
+  <li>Select "Save"</li>
+</ol>
+
+<p>
+  Once these steps are completed, your service will be listed in the "Custom" section in the main
+  application window as usual.
+</p>
+
+<div class=" ui info message">
+  <div class="header">TCP / UDP Ports</div>
+  Even if the port numbers match, TCP and UDP ports must be created separately. As such, a game
+  running on port <code>25565</code> on both TCP and UDP requires a mapping for
+  <code>TCP/25565</code> as well as <code>UDP/25565</code>. Refer to your server's documentation for
+  additional information.
+</div>
