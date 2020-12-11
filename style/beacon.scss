@@ -1,6 +1,13 @@
 ---
 ---
 
+body {
+  min-height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+}
+
 #header-container {
   background: #cb2d3e;
   background: radial-gradient(ellipse at bottom, #cb2d3e, #ef473a);
@@ -22,6 +29,10 @@
 
 #demo {
   margin-bottom: -60px;
+}
+
+#main-container {
+  flex-grow: 1;
 }
 
 #releases pre {
