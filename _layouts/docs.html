@@ -22,10 +22,39 @@
             </a>
 
             <div class="{% if page.category == 'usage' %}active {% endif %}item">
+              <i class="info icon"></i>
               Usage
 
               <div class="menu">
                 {% assign doc_pages = site.pages | where: "layout", "docs" | where: "category", "usage" %}
+
+                {% for doc_page in doc_pages %}
+                  <a class="{% if doc_page.url == page.url %}active {% endif %}item"
+                     href="{{ doc_page.url | relative_url }}">{{ doc_page.title }}</a>
+                {% endfor %}
+              </div>
+            </div>
+
+            <div class="{% if page.category == 'advanced' %}active {% endif %}item">
+              <i class="code icon"></i>
+              Advanced
+
+              <div class="menu">
+                {% assign doc_pages = site.pages | where: "layout", "docs" | where: "category", "advanced" %}
+
+                {% for doc_page in doc_pages %}
+                  <a class="{% if doc_page.url == page.url %}active {% endif %}item"
+                     href="{{ doc_page.url | relative_url }}">{{ doc_page.title }}</a>
+                {% endfor %}
+              </div>
+            </div>
+
+            <div class="{% if page.category == 'troubleshooting' %}active {% endif %}item">
+              <i class="bug icon"></i>
+              Troubleshooting
+
+              <div class="menu">
+                {% assign doc_pages = site.pages | where: "layout", "docs" | where: "category", "troubleshooting" %}
 
                 {% for doc_page in doc_pages %}
                   <a class="{% if doc_page.url == page.url %}active {% endif %}item"
