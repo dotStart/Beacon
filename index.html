@@ -129,15 +129,15 @@
                   {% assign nix_asset = nix_assets[0] %}
 
                   {% if windows_asset %}
-                    <a href="{{ windows_asset.browser_download_url }}" class="ui basic blue icon button" title="Windows">
+                    <a href="{{ windows_asset.browser_download_url }}" class="ui inverted red icon button" title="Windows">
                       <i class="windows icon"></i>
                     </a>
                   {% endif %}
                   {% if nix_asset %}
-                    <a href="{{ nix_asset.browser_download_url }}" class="ui basic blue icon button" title="Linux">
+                    <a href="{{ nix_asset.browser_download_url }}" class="ui inverted red icon button" title="Linux">
                       <i class="linux icon"></i>
                     </a>
-                    <a href="{{ nix_asset.browser_download_url }}" class="ui basic blue icon button" title="Mac OS">
+                    <a href="{{ nix_asset.browser_download_url }}" class="ui inverted red icon button" title="Mac OS">
                       <i class="apple icon"></i>
                     </a>
                   {% endif %}

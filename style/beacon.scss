@@ -1,6 +1,9 @@
 ---
 ---
 
+$primary-brand-color: #cb2d3e;
+$secondary-brand-color: #ef473a;
+
 body {
   min-height: 100vh;
 
@@ -9,8 +12,8 @@ body {
 }
 
 #header-container {
-  background: #cb2d3e;
-  background: radial-gradient(ellipse at bottom, #cb2d3e, #ef473a);
+  background: $primary-brand-color;
+  background: radial-gradient(ellipse at bottom, $primary-brand-color, $secondary-brand-color);
 }
 
 #pitch,
@@ -39,4 +42,13 @@ body {
   white-space: normal;
   text-wrap: normal;
   text-overflow: clip;
+}
+
+a {
+  color: $primary-brand-color;
+  transition: color 100ms ease;
+
+  &:hover {
+    color: $secondary-brand-color;
+  }
 }
