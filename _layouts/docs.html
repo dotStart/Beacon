@@ -28,7 +28,7 @@
                 {% assign doc_pages = site.pages | where: "layout", "docs" | where: "category", "usage" %}
 
                 {% for doc_page in doc_pages %}
-                  <a class="item" href="{{ doc_page.url }}">{{ doc_page.title }}</a>
+                  <a class="item" href="{{ doc_page.url | relative_url }}">{{ doc_page.title }}</a>
                 {% endfor %}
               </div>
             </div>
