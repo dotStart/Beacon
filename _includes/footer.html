@@ -1,14 +1,25 @@
 <footer id="footer-container" class="ui vertical inverted very padded segment">
   <section id="footer" class="ui inner container">
-    <div class="ui grid">
+    <div class="ui middle aligned grid">
       <div class="eight wide column">
         <p>Copyright &copy; 2016-2020 .start</p>
-      </div>
-      <div class="right aligned eight wide column">
         <p>
           Licensed under the terms of the
           <a href="{{ site.license.url }}">{{ site.license.name }}</a>
         </p>
+      </div>
+      <div class="right aligned eight wide column">
+        <div class="ui inverted right secondary compact menu">
+          <a title="Discord" href="{{ site.social.discord }}" class="icon item">
+            <i class="discord icon"></i>
+          </a>
+          <a title="Twitter" href="{{ site.social.twitter }}" class="icon item">
+            <i class="twitter icon"></i>
+          </a>
+          <a title="GitHub" href="{{ site.social.github }}" class="icon item">
+            <i class="github icon"></i>
+          </a>
+        </div>
       </div>
     </div>
   </section>
