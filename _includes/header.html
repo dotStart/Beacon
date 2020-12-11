@@ -1,0 +1,35 @@
+<header id="header-container" class="ui vertical inverted very padded segment">
+  <section id="header" class="ui inner container">
+    <div class="ui large secondary inverted menu">
+      <a href="{{ '/' | relative_url }}" class="item">
+        <h1 class="ui inverted header">Beacon</h1>
+      </a>
+
+      <div class="right menu">
+        <a href="{{ site.social.discord }}" class="icon item">
+          <i class="discord icon"></i>
+        </a>
+        <a href="{{ site.social.twitter }}" class="icon item">
+          <i class="twitter icon"></i>
+        </a>
+
+        <a href="{{ '/docs' | relative_url }}" class="item">
+          <i class="book icon"></i>
+          Documentation
+        </a>
+        <a href="#releases" class="item">
+          <i class="rocket icon"></i>
+          Releases
+        </a>
+        <a href="https://github.com/dotStart/Beacon" class="item">
+          <i class="github icon"></i>
+          Source Code
+        </a>
+      </div>
+    </div>
+  </section>
+
+  {% if include.additional_content %}
+     {{ include.additional_content }}
+  {% endif %}
+</header>
