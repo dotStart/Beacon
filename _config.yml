@@ -3,8 +3,6 @@ repository: dotStart/Beacon
 
 # Build settings
 markdown: kramdown
-plugins:
-  - jekyll-feed
 
 # License
 license:
