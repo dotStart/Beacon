@@ -1,0 +1,131 @@
+---
+title: Custom Repositories
+layout: docs
+category: advanced
+applicable_to: 3.x
+---
+
+<p>
+  Beacon provides the facilities to create custom service repositories and provide them to any
+  number of users via various distribution methods.
+</p>
+
+<div class="ui warning message">
+  <div class="header">Repository Compiler</div>
+  We currently do not provide a standalone version of the Beacon repository compiler thus requiring
+  some experience with Java/Kotlin development practices. The compiler is provided as part of the
+  <code>repository-compiler</code> module and may be accessed via any standard Maven compatible
+  development environment.
+</div>
+
+<h2 class="ui header">Repository Format</h2>
+
+<p>
+  Repositories are defined using an intermediate schema represented using JSON. In general,
+  they are structured as follows:
+</p>
+
+{% highlight json %}
+{
+  "displayName": "My Repository",
+  "revision": 1,
+  "services": [
+    {
+      "id": "game+custom://my-game-uri",
+      "title": "Custom Game",
+      "icon": "https://example.org/icon.png",
+      "category": "GAME",
+      "ports": [
+        {
+          "protocol": "UDP",
+          "number": "19132"
+        }
+      ]
+    }
+  ]
+}
+{% endhighlight %}
+
+<p>The following repository-level parameters are provided:</p>
+
+<ul>
+  <li><strong>displayName</strong> - Human readable name for the repository (currently unused)</li>
+  <li><strong>revision</strong> - Numerical file version (currently unused)</li>
+  <li><strong>services</strong> - Listing of known services</li>
+</ul>
+
+<p>Services are additionally structured as follows:</p>
+
+<ul>
+  <li><strong>id</strong> - Globally unique identifier for this service</li>
+  <li><strong>title</strong> - Human readable name for the service</li>
+  <li><strong>icon</strong> - HTTP(S) URL to an icon (optional)</li>
+  <li><strong>category</strong> - One of either <code>GAME</code> or <code>TOOL</code></li>
+  <li><strong>ports</strong> - Listing of ports to be exposed</li>
+</ul>
+
+<p>Port numbers expose the following parameters:</p>
+
+<ul>
+  <li><strong>protocol</strong> - One of either <code>TCP</code> or <code>UDP</code></li>
+  <li><strong>number</strong> - A port number within the range of <code>1-65,535</code></li>
+</ul>
+
+<h2 class="ui header">Considerations</h2>
+
+<h3 class="ui header">Service IDs</h3>
+
+<p>
+  Service identifiers are globally unique (meaning no two services may share the same identifier
+  as one of the two services would otherwise be discarded by the application).
+</p>
+
+<p>
+  Any valid URI may be used as a service identifier thus shifting the burden of designating a
+  sensible identifier pattern to the repository provider. Some examples can be found within the
+  stock repository located within the <code>repositories</code> directory in the
+  <a href="{{ site.social.github }}">source code</a>.
+</p>
+
+<h2 class="ui header">Distribution Schemes</h2>
+
+<p>
+  Beacon recognizes a set of distribution providers via which the application will fetch custom
+  repositories. The following implementations are currently available:
+</p>
+
+<h3 class="ui header">File (Testing only)</h3>
+
+<p>Example: <code>file:///home/user/test/myrepo.dat</code></p>
+
+<p>
+  The file implementation is provided for testing purposes only (e.g. to load compiled repositories
+  before publishing them. File repositories are formatted in accordance with the <code>file</code>
+  URI protocol and are thus somewhat system dependent.
+</p>
+
+<div class="ui info message">
+  <div class="header">For *NIX users</div>
+  Please note that relative paths are not supported on *NIX based operating system (e.g. Linux as
+  well as actual UNIX certified implementations). Absolute paths must be specified when using this
+  provider.
+</div>
+
+<h3 class="ui header">HTTP(S)</h3>
+
+<p>Example: <code>https://example.org/myrepo.dat</code></p>
+
+<p>
+  The HTTP implementation simply downloads a given repository from a standard HTTP(S) enabled
+  server. The server is expected to reply with a <code>200 OK</code> status code. The file content
+  type is simply ignored.
+</p>
+
+<h3 class="ui header">GitHub</h3>
+
+<p>Example: <code>github://owner/repo#myrepo.dat</code></p>
+
+<p>
+  The GitHub implementation locates the latest release within a given GitHub repository which
+  includes the specified repository file. This implementation is used by the stock repository.
+</p>
