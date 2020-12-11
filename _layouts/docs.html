@@ -26,7 +26,7 @@
               Usage
 
               <div class="menu">
-                {% assign doc_pages = site.pages | where: "layout", "docs" | where: "category", "usage" %}
+                {% assign doc_pages = site.pages | where: "layout", "docs" | where: "category", "usage" | sort: "title" %}
 
                 {% for doc_page in doc_pages %}
                   <a class="{% if doc_page.url == page.url %}active {% endif %}item"
@@ -40,7 +40,7 @@
               Advanced
 
               <div class="menu">
-                {% assign doc_pages = site.pages | where: "layout", "docs" | where: "category", "advanced" %}
+                {% assign doc_pages = site.pages | where: "layout", "docs" | where: "category", "advanced" | sort: "title" %}
 
                 {% for doc_page in doc_pages %}
                   <a class="{% if doc_page.url == page.url %}active {% endif %}item"
@@ -54,7 +54,7 @@
               Troubleshooting
 
               <div class="menu">
-                {% assign doc_pages = site.pages | where: "layout", "docs" | where: "category", "troubleshooting" %}
+                {% assign doc_pages = site.pages | where: "layout", "docs" | where: "category", "troubleshooting" | sort: "title" %}
 
                 {% for doc_page in doc_pages %}
                   <a class="{% if doc_page.url == page.url %}active {% endif %}item"
