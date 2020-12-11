@@ -68,10 +68,14 @@
           <h2 class="ui header">
             {{ page.title }}
 
-            {% assign applicable_versions = page.applicable_to | split: "," %}
-            {% for version in applicable_versions %}
-              <div class="ui red label">{{ version }}</div>
-            {% endfor %}
+            <div class="sub header">
+              Applicable to
+
+              {% assign applicable_versions = page.applicable_to | split: "," %}
+              {% for version in applicable_versions %}
+                <div class="ui tiny red label">{{ version }}</div>
+              {% endfor %}
+            </div>
           </h2>
 
           {{ content }}
