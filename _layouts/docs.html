@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns="https://www.w3.org/1999/xhtml">
+  <head>
+    {% include head.html %}
+
+    {% if page.title %}
+      <title>Beacon - {{ page.title }}</title>
+    {% else %}
+      <title>Beacon - Port forwarding made simple</title>
+    {% endif %}
+  </head>
+  <body>
+    {% include header.html %}
+
+    {% capture page_content %}
+      <div class="ui grid">
+        <div id="doc-sidebar" class="four wide column">
+          <div class="ui vertical pointing menu">
+            <a href="{{ '/docs/' | relative_url }}" class="{% if page.url == '/docs/' %}active {% endif %}item">
+              <i class="book icon"></i>
+              Documentation
+            </a>
+
+            <div class="{% if page.category == 'usage' %}active {% endif %}item">
+              Usage
+
+              <div class="menu">
+                {% assign doc_pages = site.pages | where: "layout", "docs" | where: "category", "usage" %}
+
+                {% for doc_page in doc_pages %}
+                  <a class="item" href="{{ doc_page.url }}">{{ doc_page.title }}</a>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="doc-content" class="twelve wide column">
+          <h2 class="ui header">
+            {{ page.title }}
+
+            {% assign applicable_versions = page.applicable_to | split: "," %}
+            {% for version in applicable_versions %}
+              <div class="ui red label">{{ version }}</div>
+            {% endfor %}
+          </h2>
+
+          {{ content }}
+        </div>
+      </div>
+    {% endcapture %}
+    {% include main.html content=page_content %}
+
+    {% include footer.html %}
+  </body>
+</html>
