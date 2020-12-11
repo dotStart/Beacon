@@ -1,4 +1,4 @@
-baseurl: "" # the subpath of your site, e.g. /blog
+baseurl: "/Beacon"
 repository: dotStart/Beacon
 
 # Build settings
