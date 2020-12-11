@@ -1,0 +1,94 @@
+---
+title: How to forward Ports
+layout: docs
+category: usage
+applicable_to: 2.x,3.x
+---
+
+<p>
+  The primary functionality of Beacon is to expose ports for dedicated server applications (such as
+  game servers). All related options are directly available from the primary application window:
+</p>
+
+<img alt="Main Window" src="{{ '/media/docs/usage_port-forwarding_layout.png' | relative_url }}"/>
+
+<p>
+  The window consists of the following three primary components:
+</p>
+
+<ol>
+  <li>
+    <strong>Service List</strong> - This list displays all applications for which port definitions
+    are provided
+  </li>
+  <li>
+    <strong>Service Actions</strong> - The open and close port actions will appear here
+  </li>
+  <li>
+    <strong>Port List</strong> - This list displays all ports for a selected application
+  </li>
+  <li>
+    <strong>External Address</strong> - This is the IP address at which exposed applications will
+    become available
+  </li>
+</ol>
+
+<h2 class="ui header">Step by Step</h2>
+
+<ol>
+  <li>
+    Start the server (a dedicated Minecraft Server, for instance)
+  </li>
+  <li>
+    Select an application ("Minecraft: Java Edition", for instance) from the service list on the
+    left
+  </li>
+  <li>
+    Select "Open Ports"
+  </li>
+  <li>
+    Copy the external address ("10.42.42.1" in the example above) and forward it to your
+    friends/family/etc (whoever you wish to let into your server)
+  </li>
+  <li>
+    <em>(Optional)</em> Minimize the application (By default, it will appear in your system
+    tray (see below) and may be restored via double click)
+  </li>
+  <li>
+    <em>(Optional)</em> Once you are done playing, press the "Close Ports" button
+  </li>
+</ol>
+
+<div class="ui warning message">
+  <div class="header">Important</div>
+  Beacon needs to remain running while ports are exposed. Closing the application will also close
+  all previously opened ports.
+</div>
+
+<h2 class="ui header">System Tray</h2>
+
+<p>
+  Unless explicitly disabled, Beacon will place itself within your System Tray when minimized. It will
+  remain running in the background and keep your ports open within this mode. In order to restore it,
+  double click the Beacon icon.
+</p>
+
+<div class="ui centered grid">
+  <div class="eight wide column">
+    <img alt="System Tray (Simple)"
+         src="{{ '/media/docs/usage_port-forwarding_tray-simple.png' | relative_url }}"/>
+  </div>
+  <div class="eight wide column">
+    <img alt="System Tray (Extended)"
+         src="{{ '/media/docs/usage_port-forwarding_tray-extended.png' | relative_url }}"/>
+  </div>
+</div>
+
+<p>This functionality can be disabled within the application settings.</p>
+
+<div class=" ui info message">
+  <div class="header">For Windows Users</div>
+  By default, Beacon will be hidden within the extended Tray Menu (accessible through the up arrow
+  located directly next to the tray area). If desired, this may be changed via the
+  <code>Taskbar Settings</code> menu.
+</div>
