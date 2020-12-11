@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns="https://www.w3.org/1999/xhtml">
+  <head>
+    {% include head.html %}
+
+    {% if page.title %}
+      <title>Beacon - {{ page.title }}</title>
+    {% else %}
+      <title>Beacon - Port forwarding made simple</title>
+    {% endif %}
+  </head>
+  <body>
+    {% include header.html %}
+
+    {% include main.html content=content %}
+
+    {% include footer.html %}
+  </body>
+</html>
