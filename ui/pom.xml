@@ -265,7 +265,7 @@
                   <icon>${project.basedir}/src/main/resources/image/logo.ico</icon>
 
                   <jre>
-                    <minVersion>9</minVersion>
+                    <minVersion>11</minVersion>
                   </jre>
                   <downloadUrl>https://www.oracle.com/technetwork/java/javase/downloads/index.html</downloadUrl>
 
