@@ -1,0 +1,59 @@
+---
+title: Java Installation
+layout: docs
+category: troubleshooting
+applicable_to: 2.x,3.x
+---
+
+<p>
+  Beacon requires Java 9 or newer (the preferred version at the time of writing being 11 due to
+  some minor compatibility related issues within 15 and up). In some cases, you may be presented
+  with an error dialog relating to an unsupported Java version or the application may not launch
+  at all. In these cases generally follow these steps:
+</p>
+
+<ol>
+  <li>Uninstall <em>all</em> Java versions on your system (JREs <em>and</em> JDKs)</li>
+  <li>Reinstall the recommended version of Java (see below)</li>
+</ol>
+
+<div class="ui warning message">
+  <div class="header">System Path and JAVA_HOME</div>
+  Always ensure that the System Path and <code>JAVA_HOME</code> are configured during the
+  installation (they may be unchecked within the installer if prior versions mis-configured these
+  properties and failed to remove them upon uninstallation. This issue typically does not apply to
+  Linux users.
+</div>
+
+<p>
+  Generally, you should avoid installing older versions as well (such as Java 8). Typically
+  applications operate fine on newer versions (especially as games like Minecraft ship their own
+  versions of the Java runtime along with the game). Older installations may clash and (in case of
+  Oracle's versions) fail to properly register with your system.
+</p>
+
+<div class="ui info message">
+  <div class="header">Installing older Java Versions</div>
+  If you really need an older version of Java installed on your system, install it last and ensure
+  these installations do not configure <code>JAVA_HOME</code> and are not present within the system
+  path (these options are typically presented within your installer). Linux users may need to
+  consult their respective distribution's documentation on how to select the default installation.
+</div>
+
+<p>If the issue persists, please seek assistance via the support channels.</p>
+
+<h2 class="ui header">Java Versions</h2>
+
+<p>
+  At the time of writing, the recommended Java distribution is
+  <a href="https://adoptopenjdk.net/">AdoptOpenJDK</a> in version 11 (choose the HotSpot based
+  implementation for maximal compatibility). Newer versions of AdoptOpenJDK may also work without
+  issues but are currently not recommended due to API changes within version 15 of the
+  specification.
+</p>
+
+<p>
+  Oracle versions should generally be avoided as their installers traditionally caused serious
+  issues regarding the registration of the Java installation within the System Path (as well as the
+  creation of the <code>JAVA_HOME</code> environment variable).
+</p>
