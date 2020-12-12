@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tv.dotstart.beacon.core.update
+package tv.dotstart.beacon.core.version
 
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.TestFactory

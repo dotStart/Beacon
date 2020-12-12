@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tv.dotstart.beacon.core.update
+package tv.dotstart.beacon.core.version
 
 /**
  * Provides a listing of recognizes instability types along with their respective associated
