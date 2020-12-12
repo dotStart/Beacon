@@ -1,0 +1,111 @@
+---
+title: Acquiring Logs
+layout: docs
+category: troubleshooting
+applicable_to: 2.x,3.x
+---
+
+<p>
+  Sometimes you may be asked to acquire the application logs for further debugging and tracing of
+  issues. Beacon writes these logs to a special directory on your system disk by default. The
+  logs are typically stored within the following paths (in accordance with yoru respective
+  operating system):
+</p>
+
+<ul>
+  <li><strong>Windows</strong> - <code>%APPDATA%\Beacon\log</code></li>
+  <li><strong>*NIX</strong> - <code>/home/&lt;user&gt;/.beacon/log</code></li>
+</ul>
+
+<p>
+  Typically, these paths may be accessed simply via your respective system's file explorer.
+</p>
+
+<p>
+  Log files are split per application launch (thus causing multiple files to be present within the
+  directory in most cases). The latest (or current) application launch will <em>always</em> write
+  its log messages into the file titled <code>latest.log</code>. Older launches are stored within
+  the files titled <code>lantern.log.1</code> through <code>lantern.log.10</code>. Please refer to
+  the modification dates when asked to provide older logs.
+</p>
+
+<h2 class="ui header">
+  When the application is working - Step by Step
+</h2>
+
+<p>
+  If the application starts up as expected (e.g. you can get to the Main Window and all following
+  screens within the following steps), you may simply access the logs as follows:
+</p>
+
+<ol>
+  <li>Select "Settings"</li>
+  <li>Select "Troubleshooting" in the sidebar on the left</li>
+  <li>"Select "Show Logs"</li>
+</ol>
+
+<p>
+  This should result in a file explorer window opening at the location of the log files. If this
+  is not the case, please verify that your system's file explorer has been configured properly.
+</p>
+
+{% capture file_not_found_info %}
+  <div class="ui info message">
+    <div class="header">Regarding "No such directory" errors</div>
+    If, for any reason, your file explorer reports that the given path does not exist on the
+    filesystem, this most commonly indicates a launch failure related to your Java installation.
+    Please refer to the Java Troubleshooting section in this case.
+  </div>
+{% endcapture %}
+
+<h2 class="ui header">
+  When the application is not working - Step by Step
+  <div class="sub header">For Windows Users</div>
+</h2>
+
+<p>
+  If the application fails to launch or crashes prior to reaching the troubleshooting menu, you may
+  also access the logs directly via your system's file explorer.
+</p>
+
+<ol>
+  <li>Launch a File Explorer at any location (for instance, your documents or user directory)</li>
+  <li>
+    Click the address bar (which should currently be displaying the location of the chosen initial
+    directory)
+  </li>
+  <li>Enter <code>%APPDATA%\Beacon\log</code></li>
+</ol>
+
+<p>
+  Similarly to the normal access path, your file explorer should now display all prior log files.
+</p>
+
+{{ file_not_found_info }}
+
+<h2 class="ui header">
+  When the application is not working - Step by Step
+  <div class="sub header">For Linux Users</div>
+</h2>
+
+<p>
+  If the application fails to launch or crashes prior to reaching the troubleshooting menu, you may
+  also access the logs directly via your system's file explorer.
+</p>
+
+<ol>
+  <li>Launch a File Explorer at any location (for instance, your documents or user directory)</li>
+  <li>
+    Navigate to your home directory (typically <code>/home/&lt;user&gt;</code>; may also be
+    accessible via a dedicated shortcut)
+  </li>
+  <li>If there is no directory called <code>.beacon</code>, press <code>Ctrl + H</code></li>
+  <li>Enter the <code>.beacon</code> directory</li>
+  <li>Enter the <code>log</code> directory</li>
+</ol>
+
+<p>
+  Similarly to the normal access path, your file explorer should now display all prior log files.
+</p>
+
+{{ file_not_found_info }}
