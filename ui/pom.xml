@@ -267,7 +267,7 @@
                   <jre>
                     <minVersion>11</minVersion>
                   </jre>
-                  <downloadUrl>https://www.oracle.com/technetwork/java/javase/downloads/index.html</downloadUrl>
+                  <downloadUrl>https://adoptopenjdk.net/</downloadUrl>
 
                   <versionInfo>
                     <fileVersion>1.0.0.0</fileVersion>
