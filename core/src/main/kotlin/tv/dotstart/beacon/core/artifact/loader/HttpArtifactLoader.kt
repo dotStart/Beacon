@@ -16,13 +16,14 @@
  */
 package tv.dotstart.beacon.core.artifact.loader
 
-import org.apache.http.client.HttpResponseException
-import org.apache.http.client.fluent.Request
+import okhttp3.OkHttpClient
 import tv.dotstart.beacon.core.BeaconCoreMetadata
 import tv.dotstart.beacon.core.artifact.error.ArtifactAvailabilityException
-import tv.dotstart.beacon.core.artifact.error.NoSuchArtifactException
+import tv.dotstart.beacon.core.artifact.error.ArtifactSchemeException
 import tv.dotstart.beacon.core.cache.CacheProvider
+import tv.dotstart.beacon.github.interceptor.UserAgentInterceptor
 import java.io.IOException
+import java.net.MalformedURLException
 import java.net.URI
 
 /**
@@ -32,28 +33,39 @@ import java.net.URI
  */
 object HttpArtifactLoader : ArtifactLoader {
 
-  override fun retrieve(uri: URI): ByteArray {
-    try {
-      return Request.Get(uri)
-          .setHeader("User-Agent", BeaconCoreMetadata.userAgent)
-          .setHeader("X-Beacon-Version", BeaconCoreMetadata.version)
-          .execute()
-          .returnResponse()
-          .let {
-            if (it.statusLine.statusCode == 404 || it.statusLine.statusCode == 204) {
-              throw NoSuchArtifactException("No such artifact")
-            }
+  private val client = OkHttpClient.Builder()
+      .addInterceptor(UserAgentInterceptor(BeaconCoreMetadata.userAgent))
+      .build()
 
-            it.entity.content
-          }
-          .readAllBytes()
-    } catch (ex: HttpResponseException) {
-      throw when (ex.statusCode) {
-        404 -> NoSuchArtifactException("Cannot locate repository", ex)
-        else -> ArtifactAvailabilityException("Cannot fetch repository", ex)
-      }
+  override fun retrieve(uri: URI): ByteArray {
+    val url = try {
+      uri.toURL()
+    } catch (ex: MalformedURLException) {
+      throw ArtifactSchemeException("Malformed HTTP(S) artifact URI", ex)
+    }
+
+    val request = okhttp3.Request.Builder()
+        .url(url)
+        .header("X-Beacon-Version", BeaconCoreMetadata.version)
+        .build()
+
+    val response = try {
+      this.client.newCall(request).execute()
     } catch (ex: IOException) {
-      throw ArtifactAvailabilityException("Cannot fetch or store repository", ex)
+      throw ArtifactAvailabilityException("Failed to retrieve artifact", ex)
+    }
+
+    if (!response.isSuccessful) {
+      throw ArtifactAvailabilityException(
+          "Upstream server responded with unexpected error code: ${response.code}")
+    }
+
+    return try {
+      response.body
+          ?.bytes()
+          ?: throw ArtifactAvailabilityException("Upstream server responded with empty body")
+    } catch (ex: IOException) {
+      throw ArtifactAvailabilityException("Failed to retrieve artifact", ex)
     }
   }
 
