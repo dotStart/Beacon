@@ -8,7 +8,7 @@ jobs:
     steps:
       - name: Retrieve version number
         run: |
-          echo ::set-env name=VERSION_NAME::${GITHUB_REF/refs\/tags\/v/}
+          echo "VERSION_NAME=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_ENV
       - name: Notify Raygun
         uses: satak/webrequest-action@master
         with:
