@@ -113,9 +113,13 @@ class GitHubArtifactLoader(
           "GitHub responded with an unexpected error code: ${response.code}")
     }
 
-    return response.body
-        ?.bytes()
-        ?: throw ArtifactAvailabilityException("GitHub responded with an empty response body")
+    return try {
+      response.body
+          ?.bytes()
+          ?: throw ArtifactAvailabilityException("GitHub responded with an empty response body")
+    } catch (ex: IOException) {
+      throw ArtifactAvailabilityException("Failed to retrieve artifact from GitHub", ex)
+    }
   }
 
   class Factory : ArtifactLoader.Factory {
