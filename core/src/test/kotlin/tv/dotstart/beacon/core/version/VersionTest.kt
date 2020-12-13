@@ -37,7 +37,9 @@ internal class VersionTest {
         "0.1.0-alpha+git-abcdef" to
             Version(0, 1, 0, "alpha", null, InstabilityType.ALPHA, "git-abcdef"),
         "2.1.3" to Version(2, 1, 3, null, null, InstabilityType.NONE, null),
+        "2.1.3-alpha" to Version(2, 1, 3, "alpha", null, InstabilityType.ALPHA, null),
         "2.1.3-alpha.ci.2" to Version(2, 1, 3, "alpha.ci", 2, InstabilityType.ALPHA, null),
+        "3.0.0-alpha.1" to Version(3, 0, 0, "alpha", 1, InstabilityType.ALPHA, null),
     )
 
     private val compareList = listOf(
