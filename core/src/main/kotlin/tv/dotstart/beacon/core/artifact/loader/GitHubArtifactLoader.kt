@@ -112,10 +112,9 @@ class GitHubArtifactLoader(
     override val schemes = listOf("github")
 
     override fun create(cache: CacheProvider) = GitHubArtifactLoader(
-        cache, GitHub.Factory()
-        .apply {
+        cache,
+        GitHub.create {
           userAgent = BeaconCoreMetadata.userAgent
-        }
-        .build())
+        })
   }
 }

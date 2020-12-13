@@ -75,6 +75,21 @@ class GitHub private constructor(
      * implementation (e.g. to select the correct API revision).
      */
     private val acceptMediaType = "application/vnd.github.v3+json"
+
+    /**
+     * Creates a new GitHub client using the default values.
+     */
+    fun withDefaults() = Factory()
+        .build()
+
+    /**
+     * Creates a new GitHub client using the given set of parameters.
+     */
+    fun create(block: Factory.() -> Unit): GitHub {
+      val factory = Factory()
+      factory.block()
+      return factory.build()
+    }
   }
 
   class Factory {
