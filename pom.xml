@@ -94,6 +94,11 @@
       </dependency>
       <dependency>
         <groupId>tv.dotstart.beacon</groupId>
+        <artifactId>github-api</artifactId>
+        <version>3.0.0-alpha.1</version>
+      </dependency>
+      <dependency>
+        <groupId>tv.dotstart.beacon</groupId>
         <artifactId>repository-model</artifactId>
         <version>3.0.0-alpha.1</version>
       </dependency>
@@ -181,6 +186,11 @@
         <version>1.18</version>
       </dependency>
       <dependency>
+        <groupId>com.squareup.okhttp3</groupId>
+        <artifactId>okhttp</artifactId>
+        <version>4.9.0</version>
+      </dependency>
+      <dependency>
         <groupId>org.apache.httpcomponents</groupId>
         <artifactId>fluent-hc</artifactId>
         <version>4.5.9</version>
@@ -188,6 +198,11 @@
       <dependency>
         <groupId>com.fasterxml.jackson.core</groupId>
         <artifactId>jackson-databind</artifactId>
+        <version>${jackson.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.datatype</groupId>
+        <artifactId>jackson-datatype-jdk8</artifactId>
         <version>${jackson.version}</version>
       </dependency>
       <dependency>
@@ -399,6 +414,7 @@
 
   <modules>
     <module>core</module>
+    <module>github-api</module>
     <module>repository-model</module>
 
     <module>ui</module>
