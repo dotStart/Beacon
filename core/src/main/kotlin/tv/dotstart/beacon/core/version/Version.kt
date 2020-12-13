@@ -193,6 +193,7 @@ data class Version(
             instabilityFlag.indexOf(bitSeparator)
                 .takeIf { it != -1 }
                 ?.let { instabilityFlag.substring(0, it) }
+                ?: instabilityFlag
           }
           ?.let(InstabilityType.Companion::ofFlag)
           ?: if (major == 0) {
