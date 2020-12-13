@@ -26,16 +26,23 @@ import org.koin.core.component.KoinApiExtension
 import org.koin.core.context.startKoin
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
-import tv.dotstart.beacon.ui.config.Configuration
-import tv.dotstart.beacon.ui.config.configModule
 import tv.dotstart.beacon.core.cache.CacheProvider
 import tv.dotstart.beacon.core.cache.NoopCacheProvider
 import tv.dotstart.beacon.core.cache.filesystem.FileSystemCache
 import tv.dotstart.beacon.core.cache.filesystem.path.Murmur3PathProvider
 import tv.dotstart.beacon.core.util.Banner
 import tv.dotstart.beacon.core.util.OperatingSystem
+import tv.dotstart.beacon.core.version.InstabilityType
+import tv.dotstart.beacon.core.version.Version
+import tv.dotstart.beacon.core.version.update.GitHubUpdateProvider
+import tv.dotstart.beacon.core.version.update.UpdateProvider
+import tv.dotstart.beacon.github.GitHub
+import tv.dotstart.beacon.ui.config.Configuration
+import tv.dotstart.beacon.ui.config.configModule
 import tv.dotstart.beacon.ui.exposure.exposureModule
+import tv.dotstart.beacon.ui.preload.Loader
 import tv.dotstart.beacon.ui.preload.Preloader
+import tv.dotstart.beacon.ui.preload.UpdateCheckLoader
 import tv.dotstart.beacon.ui.repository.repositoryModule
 import tv.dotstart.beacon.ui.tray.trayModule
 import tv.dotstart.beacon.ui.util.Localization
@@ -104,7 +111,9 @@ object BeaconCli : CliktCommand(name = "Beacon") {
       "--log-dir",
       help = "Specifies the log storage directory")
       .convert { Paths.get(it) }
-      .defaultLazy { OperatingSystem.current.resolveApplicationDirectory(applicationName).resolve("log") }
+      .defaultLazy {
+        OperatingSystem.current.resolveApplicationDirectory(applicationName).resolve("log")
+      }
 
   /**
    * Enables global debug logging.
@@ -208,6 +217,20 @@ object BeaconCli : CliktCommand(name = "Beacon") {
               }
         }
       }
+
+      single { Version.parse(BeaconUiMetadata.version) }
+
+      single { GitHub.withDefaults() }
+      single<UpdateProvider> {
+        val gitHub = get<GitHub>()
+
+        GitHubUpdateProvider(
+            get(),
+            InstabilityType.NONE,
+            gitHub.forRepository("dotStart", "Beacon"))
+      }
+
+      single<Loader>(named("updateLoader")) { UpdateCheckLoader(get()) }
 
       single { Preloader(getAll()) }
     }
