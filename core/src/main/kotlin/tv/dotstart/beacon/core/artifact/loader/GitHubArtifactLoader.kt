@@ -16,7 +16,8 @@
  */
 package tv.dotstart.beacon.core.artifact.loader
 
-import okhttp3.internal.userAgent
+import okhttp3.OkHttpClient
+import okhttp3.ResponseBody
 import org.apache.http.client.fluent.Request
 import tv.dotstart.beacon.core.BeaconCoreMetadata
 import tv.dotstart.beacon.core.artifact.error.ArtifactAvailabilityException
@@ -28,7 +29,9 @@ import tv.dotstart.beacon.core.delegate.logManager
 import tv.dotstart.beacon.github.GitHub
 import tv.dotstart.beacon.github.error.GitHubException
 import tv.dotstart.beacon.github.error.repository.NoSuchRepositoryException
+import tv.dotstart.beacon.github.interceptor.UserAgentInterceptor
 import tv.dotstart.beacon.github.model.repository.Release
+import java.io.IOException
 import java.net.URI
 
 /**
@@ -38,7 +41,8 @@ import java.net.URI
  */
 class GitHubArtifactLoader(
     private val cache: CacheProvider,
-    private val api: GitHub) : ArtifactLoader {
+    private val api: GitHub,
+    private val http: OkHttpClient) : ArtifactLoader {
 
   companion object {
 
@@ -93,18 +97,25 @@ class GitHubArtifactLoader(
     logger.debug(
         "Fetching release asset ${upstreamAsset.nodeId} from release ${release.tagName} (${release.nodeId})")
 
-    return Request.Get(URI.create(upstreamAsset.url))
-        .setHeader("User-Agent", BeaconCoreMetadata.userAgent)
-        .execute()
-        .returnResponse()
-        .let {
-          if (it.statusLine.statusCode == 404 || it.statusLine.statusCode == 204) {
-            throw NoSuchArtifactException("No such artifact")
-          }
+    val request = okhttp3.Request.Builder()
+        .url(upstreamAsset.url)
+        .header("Accept", upstreamAsset.contentType)
+        .build()
 
-          it.entity.content
-        }
-        .readAllBytes()
+    val response = try {
+      this.http.newCall(request).execute()
+    } catch (ex: IOException) {
+      throw ArtifactAvailabilityException("Failed to retrieve artifact from GitHub", ex)
+    }
+
+    if (!response.isSuccessful) {
+      throw ArtifactAvailabilityException(
+          "GitHub responded with an unexpected error code: ${response.code}")
+    }
+
+    return response.body
+        ?.let(ResponseBody::bytes)
+        ?: throw ArtifactAvailabilityException("GitHub responded with an empty response body")
   }
 
   class Factory : ArtifactLoader.Factory {
@@ -115,6 +126,9 @@ class GitHubArtifactLoader(
         cache,
         GitHub.create {
           userAgent = BeaconCoreMetadata.userAgent
-        })
+        },
+        OkHttpClient.Builder()
+            .addInterceptor(UserAgentInterceptor(BeaconCoreMetadata.userAgent))
+            .build())
   }
 }
