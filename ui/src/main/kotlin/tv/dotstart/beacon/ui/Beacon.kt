@@ -222,11 +222,13 @@ object BeaconCli : CliktCommand(name = "Beacon") {
 
       single { GitHub.withDefaults() }
       single<UpdateProvider> {
+        val version = get<Version>()
         val gitHub = get<GitHub>()
+        val channel = version.instabilityType
 
         GitHubUpdateProvider(
-            get(),
-            InstabilityType.NONE,
+            version,
+            channel,
             gitHub.forRepository("dotStart", "Beacon"))
       }
 
