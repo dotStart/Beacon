@@ -114,7 +114,7 @@ class GitHubArtifactLoader(
     }
 
     return response.body
-        ?.let(ResponseBody::bytes)
+        ?.bytes()
         ?: throw ArtifactAvailabilityException("GitHub responded with an empty response body")
   }
 
