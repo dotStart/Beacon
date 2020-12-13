@@ -23,7 +23,7 @@
   <parent>
     <artifactId>parent</artifactId>
     <groupId>tv.dotstart.beacon</groupId>
-    <version>3.0.0-alpha.1</version>
+    <version>3.0.0-alpha.2</version>
   </parent>
 
   <artifactId>repository-compiler</artifactId>
@@ -46,8 +46,8 @@
       <artifactId>commons-compress</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>fluent-hc</artifactId>
+      <groupId>com.squareup.okhttp3</groupId>
+      <artifactId>okhttp</artifactId>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>

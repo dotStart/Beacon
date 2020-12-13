@@ -18,7 +18,9 @@ package tv.dotstart.beacon.repository.compiler
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import org.apache.http.client.fluent.Request
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
 import org.apache.logging.log4j.LogManager
 import tv.dotstart.beacon.repository.compiler.model.Repository
 import java.awt.image.BufferedImage
@@ -41,6 +43,9 @@ object Compiler {
   private val logger = LogManager.getLogger(Compiler::class.java)
 
   private val mapper = jacksonObjectMapper()
+
+  val client = OkHttpClient.Builder() // TODO: User Agent
+      .build()
 
   /**
    * JVM Entry Point
@@ -155,16 +160,20 @@ object Compiler {
       return
     }
 
-    withTemporaryFile {
-      logger.debug("Storing image in temporary file $url")
+    withTemporaryFile { path ->
+      logger.debug("Storing image $url in temporary file $path")
 
-      Request.Get(url.toURI())
-          .setHeader("User-Agent",
-              "Beacon Repository Compiler (+https://github.com/dotStart/Beacon)")
-          .execute()
-          .saveContent(it.toFile())
+      val request = Request.Builder()
+          .url(url)
+          .build()
 
-      convertImage(it, target)
+      this.client.newCall(request).execute()
+          .takeIf(Response::isSuccessful)
+          ?.body
+          ?.bytes()
+          ?.let { Files.write(path, it) }
+
+      convertImage(path, target)
     }
   }
 
