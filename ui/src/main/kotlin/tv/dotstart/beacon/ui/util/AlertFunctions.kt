@@ -36,17 +36,19 @@ import java.time.format.DateTimeFormatter
 /**
  * Displays a standard error dialog with the given title and description.
  */
-fun dialog(title: String, description: String) {
+fun dialog(title: String, description: String, buttons: List<JFXButton> = emptyList()) {
   val alert = JFXAlert<Any>()
   alert.title = title
 
   val closeButton = JFXButton(Localization("action.close"))
   closeButton.onAction = EventHandler { alert.close() }
 
+  val actions = buttons + closeButton
+
   val layout = JFXDialogLayout()
   layout.setHeading(Label(title))
   layout.setBody(Label(description))
-  layout.setActions(closeButton)
+  layout.setActions(actions)
   alert.setContent(layout)
 
   alert.showAndWait()

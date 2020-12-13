@@ -23,7 +23,7 @@
   <parent>
     <artifactId>parent</artifactId>
     <groupId>tv.dotstart.beacon</groupId>
-    <version>3.0.0-alpha.1</version>
+    <version>3.0.0-alpha.2</version>
   </parent>
 
   <artifactId>ui</artifactId>
@@ -265,9 +265,9 @@
                   <icon>${project.basedir}/src/main/resources/image/logo.ico</icon>
 
                   <jre>
-                    <minVersion>9</minVersion>
+                    <minVersion>11</minVersion>
                   </jre>
-                  <downloadUrl>https://www.oracle.com/technetwork/java/javase/downloads/index.html</downloadUrl>
+                  <downloadUrl>https://adoptopenjdk.net/</downloadUrl>
 
                   <versionInfo>
                     <fileVersion>1.0.0.0</fileVersion>
