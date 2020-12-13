@@ -1,0 +1,25 @@
+name: Report Deployment
+on:
+  release:
+    types: [published]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Retrieve version number
+        run: |
+          echo ::set-env name=VERSION_NAME::${GITHUB_REF/refs\/tags\/v/}
+      - name: Notify Raygun
+        uses: satak/webrequest-action@master
+        with:
+          url: "https://app.raygun.com/deployments?authToken=${{ secrets.RAYGUN_API_TOKEN }}"
+          method: POST
+          env:
+
+          payload: >-
+            {
+              "apiKey": "${{ secrets.RAYGUN_TOKEN }}",
+              "version": "${{ env.VERSION_NAME }}",
+              "scmIdentifier": "${{ github.sha }}",
+              "scmType": "GitHub"
+            }
