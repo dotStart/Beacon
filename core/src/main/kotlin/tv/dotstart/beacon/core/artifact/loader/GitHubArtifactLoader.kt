@@ -17,12 +17,9 @@
 package tv.dotstart.beacon.core.artifact.loader
 
 import okhttp3.OkHttpClient
-import okhttp3.ResponseBody
-import org.apache.http.client.fluent.Request
 import tv.dotstart.beacon.core.BeaconCoreMetadata
 import tv.dotstart.beacon.core.artifact.error.ArtifactAvailabilityException
 import tv.dotstart.beacon.core.artifact.error.ArtifactSpecificationException
-import tv.dotstart.beacon.core.artifact.error.NoSuchArtifactException
 import tv.dotstart.beacon.core.cache.CacheProvider
 import tv.dotstart.beacon.core.cache.serialize.jsonSerializer
 import tv.dotstart.beacon.core.delegate.logManager
