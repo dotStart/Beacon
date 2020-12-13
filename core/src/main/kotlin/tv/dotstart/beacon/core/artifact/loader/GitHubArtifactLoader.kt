@@ -16,30 +16,32 @@
  */
 package tv.dotstart.beacon.core.artifact.loader
 
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
+import okhttp3.internal.userAgent
 import org.apache.http.client.fluent.Request
 import tv.dotstart.beacon.core.BeaconCoreMetadata
-import tv.dotstart.beacon.core.artifact.error.ArtifactSpecificationException
 import tv.dotstart.beacon.core.artifact.error.ArtifactAvailabilityException
+import tv.dotstart.beacon.core.artifact.error.ArtifactSpecificationException
 import tv.dotstart.beacon.core.artifact.error.NoSuchArtifactException
 import tv.dotstart.beacon.core.cache.CacheProvider
-import tv.dotstart.beacon.core.cache.serialize.StringSerializer
+import tv.dotstart.beacon.core.cache.serialize.jsonSerializer
 import tv.dotstart.beacon.core.delegate.logManager
-import java.io.IOException
+import tv.dotstart.beacon.github.GitHub
+import tv.dotstart.beacon.github.error.GitHubException
+import tv.dotstart.beacon.github.error.repository.NoSuchRepositoryException
+import tv.dotstart.beacon.github.model.repository.Release
 import java.net.URI
-import java.net.URL
 
 /**
  * Retrieves artifacts from GitHub.
  *
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
  */
-class GitHubArtifactLoader(private val cache: CacheProvider) : ArtifactLoader {
+class GitHubArtifactLoader(
+    private val cache: CacheProvider,
+    private val api: GitHub) : ArtifactLoader {
 
   companion object {
+
     private val logger by logManager()
 
     /**
@@ -66,45 +68,32 @@ class GitHubArtifactLoader(private val cache: CacheProvider) : ArtifactLoader {
           "Invalid GitHub asset identifier: Asset cannot be empty")
     }
 
-    val apiUri = "https://api.github.com/repos/$owner/$repository/releases"
-    val releaseList = this.cache.getOrPopulate(apiUri, StringSerializer) {
+    val (release, upstreamAsset) = this.cache.getOrPopulate(uri.toASCIIString(), jsonSerializer()) {
       logger.debug("Fetching release information for $owner:$repository ($asset)")
 
       try {
-        Request.Get(apiUri)
-            .setHeader("User-Agent", BeaconCoreMetadata.userAgent)
-            .setHeader("Accept", "application/vnd.github.$apiVersion+json")
-            .execute()
-            .returnResponse()
-            .let {
-              if (it.statusLine.statusCode == 404 || it.statusLine.statusCode == 204) {
-                throw NoSuchArtifactException("No such artifact")
-              }
+        val repositoryOps = this.api.forRepository(owner, repository)
 
-              it.entity.content
+        repositoryOps.listReleases()
+            .filterNot(Release::prerelease)
+            .mapNotNull { release ->
+              release.assets
+                  .find { it.name == asset }
+                  ?.let { release to it }
             }
-            .readAllBytes()
-            .toString(Charsets.UTF_8)
-      } catch (ex: IOException) {
+            .firstOrNull()
+            ?: throw ArtifactAvailabilityException("No such artifact: $owner/$repository#$asset")
+      } catch (ex: NoSuchRepositoryException) {
+        throw ArtifactAvailabilityException("No such repository: $owner/$repository", ex)
+      } catch (ex: GitHubException) {
         throw ArtifactAvailabilityException("Failed to establish communication with GitHub", ex)
       }
     }
 
-    val (release, file) = jacksonObjectMapper()
-        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-        .readValue<List<Release>>(releaseList)
-        .flatMap { release ->
-          release.assets
-              .map { release to it }
-        }
-        .find { it.second.name == asset }
-        ?: throw ArtifactAvailabilityException(
-            "Cannot find release with asset \"$asset\" in $owner/$repository")
-
     logger.debug(
-        "Fetching release asset ${file.id} from release ${release.tagName} (${release.id})")
+        "Fetching release asset ${upstreamAsset.nodeId} from release ${release.tagName} (${release.nodeId})")
 
-    return Request.Get(file.url.toURI())
+    return Request.Get(URI.create(upstreamAsset.url))
         .setHeader("User-Agent", BeaconCoreMetadata.userAgent)
         .execute()
         .returnResponse()
@@ -118,22 +107,15 @@ class GitHubArtifactLoader(private val cache: CacheProvider) : ArtifactLoader {
         .readAllBytes()
   }
 
-  data class Release(
-      val id: String,
-      @JsonProperty("tag_name")
-      val tagName: String,
-      val assets: List<Asset>)
-
-  data class Asset(
-      val id: String,
-      val name: String,
-      @JsonProperty("browser_download_url")
-      val url: URL)
-
   class Factory : ArtifactLoader.Factory {
 
     override val schemes = listOf("github")
 
-    override fun create(cache: CacheProvider) = GitHubArtifactLoader(cache)
+    override fun create(cache: CacheProvider) = GitHubArtifactLoader(
+        cache, GitHub.Factory()
+        .apply {
+          userAgent = BeaconCoreMetadata.userAgent
+        }
+        .build())
   }
 }
