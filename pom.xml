@@ -22,7 +22,7 @@
 
   <groupId>tv.dotstart.beacon</groupId>
   <artifactId>parent</artifactId>
-  <version>3.0.0-alpha.2</version>
+  <version>3.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <properties>
@@ -90,17 +90,17 @@
       <dependency>
         <groupId>tv.dotstart.beacon</groupId>
         <artifactId>core</artifactId>
-        <version>3.0.0-alpha.2</version>
+        <version>3.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>tv.dotstart.beacon</groupId>
         <artifactId>github-api</artifactId>
-        <version>3.0.0-alpha.2</version>
+        <version>3.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>tv.dotstart.beacon</groupId>
         <artifactId>repository-model</artifactId>
-        <version>3.0.0-alpha.2</version>
+        <version>3.0.0-SNAPSHOT</version>
       </dependency>
 
       <dependency>
