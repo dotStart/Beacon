@@ -421,5 +421,6 @@
 
     <module>ui</module>
     <module>repository-compiler</module>
+    <module>cli</module>
   </modules>
 </project>
