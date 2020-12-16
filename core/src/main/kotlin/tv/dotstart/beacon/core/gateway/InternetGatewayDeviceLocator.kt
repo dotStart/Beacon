@@ -57,7 +57,15 @@ class InternetGatewayDeviceLocator(
 
     private val logger by logManager()
 
-    internal const val deviceType = "urn:schemas-upnp-org:device:WANConnectionDevice:1"
+    internal const val deviceType = "urn:schemas-upnp-org:device:WANConnectionDevice"
+
+    /**
+     * Defines the specification revisions which are to be queried by the locator.
+     */
+    internal val deviceVersions = listOf(
+        1,
+        2
+    )
   }
 
   /**
@@ -81,12 +89,18 @@ class InternetGatewayDeviceLocator(
 
     cp.start()
 
-    val device = this.locate(cp)
+    val device = deviceVersions
+        .mapNotNull { this.locate(cp, it) }
+        .firstOrNull()
+
     if (device == null) {
+      logger.debug("locate() found no compatible device - Terminating control point prematurely")
+
       cp.terminate()
       return null
     }
 
+    logger.debug("locate() returned compatible device \"${device.friendlyName}\"")
     return device
   }
 
@@ -98,10 +112,14 @@ class InternetGatewayDeviceLocator(
    *
    * By default, this method will never timeout. Only a single query will be dispatched, however.
    */
-  internal suspend fun locate(cp: ControlPoint): InternetGatewayDevice? {
+  internal suspend fun locate(cp: ControlPoint, version: Int): InternetGatewayDevice? {
     FlowDiscoveryListener().use { listener ->
+      logger.debug("Registering discovery listener with control point")
       cp.addDiscoveryListener(listener)
-      cp.search(deviceType)
+
+      val queryString = "$deviceType:$version"
+      logger.debug("Broadcasting search request for device $queryString")
+      cp.search(queryString)
 
       @Suppress("ConvertLambdaToReference") // ugly
       val device = withTimeoutOrNull(this.timeout) {
@@ -112,10 +130,16 @@ class InternetGatewayDeviceLocator(
               logger.info(
                   "Received announcement for device \"${device.friendlyName}\" (${device.modelName}) of type ${device.deviceType} by ${device.manufacture} <${device.manufactureUrl}>")
 
-              if (device.deviceType == deviceType) {
+              logger.debug("Sub-Devices:")
+              device.deviceList.forEach {
+                logger.debug(
+                    " * \"${device.friendlyName}\" (${device.modelName}) of type ${device.deviceType}")
+              }
+
+              if (device.deviceType == queryString) {
                 device
               } else {
-                device.findDeviceByTypeRecursively(deviceType)
+                device.findDeviceByTypeRecursively(queryString)
               }
             }
             .map { device -> InternetGatewayDevice(cp, device) }
@@ -123,6 +147,8 @@ class InternetGatewayDeviceLocator(
               if (!it.portMappingAvailable) {
                 logger.warn(
                     "Device \"${it.friendlyName}\" does not support port mapping and will not be considered")
+              } else {
+                logger.info("Device \"${it.friendlyName}\" is compatible")
               }
 
               it.portMappingAvailable
@@ -130,6 +156,7 @@ class InternetGatewayDeviceLocator(
             .firstOrNull()
       }
 
+      logger.debug("Removing discovery listener from ControlPoint")
       cp.removeDiscoveryListener(listener)
       return device
     }
