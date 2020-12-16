@@ -85,7 +85,7 @@ class Beacon(
         return
       }
 
-      dispatcher.ensureActive()
+      logger.debug("Launching beacon for device \"${gateway.friendlyName}\"")
       renewalJob = GlobalScope.launch(dispatcher + CoroutineName("beacon-renewal")) {
         renewalLoop()
       }
