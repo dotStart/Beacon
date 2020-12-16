@@ -32,7 +32,6 @@ import tv.dotstart.beacon.core.cache.filesystem.FileSystemCache
 import tv.dotstart.beacon.core.cache.filesystem.path.Murmur3PathProvider
 import tv.dotstart.beacon.core.util.Banner
 import tv.dotstart.beacon.core.util.OperatingSystem
-import tv.dotstart.beacon.core.version.InstabilityType
 import tv.dotstart.beacon.core.version.Version
 import tv.dotstart.beacon.core.version.update.GitHubUpdateProvider
 import tv.dotstart.beacon.core.version.update.UpdateProvider
@@ -50,6 +49,7 @@ import tv.dotstart.beacon.ui.util.configureLogStorage
 import tv.dotstart.beacon.ui.util.detailedErrorDialog
 import tv.dotstart.beacon.ui.util.rootLevel
 import java.net.URI
+import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.time.Duration
@@ -180,7 +180,12 @@ object BeaconCli : CliktCommand(name = "Beacon") {
     logger.info(
         "System Repositories (${systemRepositories.size}): ${systemRepositories.joinToString()}")
 
-    if (verbose || debug) {
+    val debugCookieSet = Files.exists(
+        OperatingSystem.current
+            .resolveApplicationDirectory(applicationName)
+            .resolve("debug.txt"))
+
+    if (verbose || debug || debugCookieSet) {
       val level = if (verbose) {
         Level.ALL
       } else {
