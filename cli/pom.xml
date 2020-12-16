@@ -134,16 +134,6 @@
         <artifactId>protobuf-maven-plugin</artifactId>
       </plugin>
       <plugin>
-        <groupId>org.lesscss</groupId>
-        <artifactId>lesscss-maven-plugin</artifactId>
-
-        <configuration>
-          <excludes>
-            <exclude>variables.less</exclude>
-          </excludes>
-        </configuration>
-      </plugin>
-      <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>license-maven-plugin</artifactId>
       </plugin>
