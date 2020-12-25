@@ -44,7 +44,7 @@ private const val errorDescriptionFieldName = "UPnPError/errorDescription"
  * @throws UnknownActionErrorException when an unknown error occurs.
  * @throws CancellationException when the thread is interrupted while awaiting the action result.
  */
-operator suspend fun <T> Action.invoke(parameters: Map<String, String?> = emptyMap(),
+suspend operator fun <T> Action.invoke(parameters: Map<String, String?> = emptyMap(),
                                        converter: (Map<String, String>) -> T): T {
   val future = CompletableFuture<T>()
 
