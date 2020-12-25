@@ -48,42 +48,46 @@ suspend operator fun <T> Action.invoke(parameters: Map<String, String?> = emptyM
                                        converter: (Map<String, String>) -> T): T {
   val future = CompletableFuture<T>()
 
-  this.invoke(
-      parameters,
-      onResult = actionInvocation@{
-        if (errorCodeFieldName in it) {
-          val errorDescription = it[errorDescriptionFieldName]
-              ?.takeIf(String::isNotBlank)
-              ?: "No additional information given"
+  try {
+    this.invoke(
+        parameters,
+        onResult = actionInvocation@{
+          if (errorCodeFieldName in it) {
+            val errorDescription = it[errorDescriptionFieldName]
+                ?.takeIf(String::isNotBlank)
+                ?: "No additional information given"
 
-          val errorCodeStr = it[errorCodeFieldName]
-          val errorCode = errorCodeStr
-              ?.toIntOrNull()
-              ?: throw UnknownActionErrorException(
-                  "Device responded with malformed error code \"$errorCodeStr\": $errorDescription")
+            val errorCodeStr = it[errorCodeFieldName]
+            val errorCode = errorCodeStr
+                ?.toIntOrNull()
+                ?: throw UnknownActionErrorException(
+                    "Device responded with malformed error code \"$errorCodeStr\": $errorDescription")
 
-          val ex = when (errorCode) {
-            401, 602 -> InvalidActionException("Device rejected action: $errorDescription")
-            402, 600, 601, 605 -> InvalidActionArgumentException(
-                "Device rejected arguments: $errorDescription")
-            501 -> ActionFailedException("Device failed to perform action: $errorDescription")
-            603 -> DeviceOutOfMemoryException("Device ran out of memory: $errorDescription")
-            604 -> HumanInterventionRequiredException(
-                "Device requested human intervention: $errorDescription")
-            else -> UnknownActionErrorException(
-                "Device responded with unknown error code $errorCode: $errorDescription")
+            val ex = when (errorCode) {
+              401, 602 -> InvalidActionException("Device rejected action: $errorDescription")
+              402, 600, 601, 605 -> InvalidActionArgumentException(
+                  "Device rejected arguments: $errorDescription")
+              501 -> ActionFailedException("Device failed to perform action: $errorDescription")
+              603 -> DeviceOutOfMemoryException("Device ran out of memory: $errorDescription")
+              604 -> HumanInterventionRequiredException(
+                  "Device requested human intervention: $errorDescription")
+              else -> UnknownActionErrorException(
+                  "Device responded with unknown error code $errorCode: $errorDescription")
+            }
+
+            future.completeExceptionally(ex)
+            return@actionInvocation
           }
 
-          future.completeExceptionally(ex)
-          return@actionInvocation
-        }
-
-        val result = converter(it)
-        future.complete(result)
-      },
-      onError = future::completeExceptionally,
-      returnErrorResponse = true,
-  )
+          val result = converter(it)
+          future.complete(result)
+        },
+        onError = future::completeExceptionally,
+        returnErrorResponse = true,
+    )
+  } catch (ex: Exception) {
+    throw UnknownActionErrorException("Unknown error occurred while invoking device action", ex)
+  }
 
   return try {
     future.await()
