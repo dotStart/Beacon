@@ -17,6 +17,7 @@
 package tv.dotstart.beacon.core.upnp
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -48,16 +49,26 @@ class FlowDiscoveryListener : ControlPoint.DiscoveryListener, Closeable {
     private val logger by logManager()
   }
 
+  @ExperimentalCoroutinesApi
   override fun onDiscover(device: Device) {
     GlobalScope.launch(Dispatchers.IO) {
+      if (channel.isClosedForSend) {
+        return@launch
+      }
+
       channel.send(DeviceDiscoveryEvent(
           DeviceDiscoveryEvent.Type.DISCOVERED,
           device))
     }
   }
 
+  @ExperimentalCoroutinesApi
   override fun onLost(device: Device) {
     GlobalScope.launch(Dispatchers.IO) {
+      if (channel.isClosedForSend) {
+        return@launch
+      }
+
       channel.send(DeviceDiscoveryEvent(
           DeviceDiscoveryEvent.Type.LOST,
           device))
