@@ -49,7 +49,6 @@ import tv.dotstart.beacon.ui.util.configureLogStorage
 import tv.dotstart.beacon.ui.util.detailedErrorDialog
 import tv.dotstart.beacon.ui.util.rootLevel
 import java.net.URI
-import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.time.Duration
@@ -180,15 +179,14 @@ object BeaconCli : CliktCommand(name = "Beacon") {
     logger.info(
         "System Repositories (${systemRepositories.size}): ${systemRepositories.joinToString()}")
 
-    val debugCookieSet = Files.exists(
-        OperatingSystem.current
-            .resolveApplicationDirectory(applicationName)
-            .resolve("debug.txt"))
-
-    if (verbose || debug || debugCookieSet) {
+    if (verbose || debug || debugCookie) {
       val level = if (verbose) {
         Level.ALL
       } else {
+        if (debugCookie) {
+          logger.warn("Logging level will be adjusted due to debug cookie file at $debugCookiePath")
+        }
+
         Level.DEBUG
       }
 
