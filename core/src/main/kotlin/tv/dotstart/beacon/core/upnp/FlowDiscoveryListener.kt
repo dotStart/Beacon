@@ -16,12 +16,16 @@
  */
 package tv.dotstart.beacon.core.upnp
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.launch
 import net.mm2d.upnp.ControlPoint
 import net.mm2d.upnp.Device
+import tv.dotstart.beacon.core.delegate.logManager
 import java.io.Closeable
 
 /**
@@ -33,21 +37,38 @@ import java.io.Closeable
  */
 class FlowDiscoveryListener : ControlPoint.DiscoveryListener, Closeable {
 
-  private val channel = Channel<DeviceDiscoveryEvent>()
+  private val channel = Channel<DeviceDiscoveryEvent> {
+    logger.warn("Discovery event $it has not been delivered")
+  }
 
   val events: Flow<DeviceDiscoveryEvent>
     get() = this.channel.receiveAsFlow()
 
+  companion object {
+
+    private val logger by logManager()
+  }
+
+  @ExperimentalCoroutinesApi
   override fun onDiscover(device: Device) {
-    runBlocking {
+    GlobalScope.launch(Dispatchers.IO) {
+      if (channel.isClosedForSend) {
+        return@launch
+      }
+
       channel.send(DeviceDiscoveryEvent(
           DeviceDiscoveryEvent.Type.DISCOVERED,
           device))
     }
   }
 
+  @ExperimentalCoroutinesApi
   override fun onLost(device: Device) {
-    runBlocking {
+    GlobalScope.launch(Dispatchers.IO) {
+      if (channel.isClosedForSend) {
+        return@launch
+      }
+
       channel.send(DeviceDiscoveryEvent(
           DeviceDiscoveryEvent.Type.LOST,
           device))

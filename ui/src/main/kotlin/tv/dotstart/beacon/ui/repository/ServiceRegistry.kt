@@ -230,10 +230,12 @@ class ServiceRegistry(
       this.customServices[service.id] = service
     }
 
-    ErrorReporter.trace("service", "Service registered", data = mapOf(
-        "service_id" to service.id,
-        "service_title" to service.title
-    ))
+    if (service.category == Model.Category.CUSTOM) {
+      ErrorReporter.trace("service", "Service registered", data = mapOf(
+          "service_id" to service.id,
+          "service_title" to service.title
+      ))
+    }
   }
 
   /**
@@ -243,10 +245,12 @@ class ServiceRegistry(
     this.services.remove(service.id)
     this.customServices.remove(service.id)
 
-    ErrorReporter.trace("service", "Service deleted", data = mapOf(
-        "service_id" to service.id,
-        "service_title" to service.title
-    ))
+    if (service.category == Model.Category.CUSTOM) {
+      ErrorReporter.trace("service", "Service deleted", data = mapOf(
+          "service_id" to service.id,
+          "service_title" to service.title
+      ))
+    }
   }
 
   override fun iterator(): Iterator<Service> = this.services.values.iterator()

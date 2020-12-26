@@ -74,14 +74,17 @@ class PortExposureProvider : Closeable {
   fun refresh(): Boolean {
     logger.info("Querying network for compatible internet gateway")
 
+    logger.debug("Locating new gateway device within local network")
     this.internetGatewayDevice = runBlocking {
       locator.locate()
     }
 
+    logger.debug("Requesting external address from gateway device (if present)")
     runBlocking {
       _externalAddressProperty.set(internetGatewayDevice?.getExternalAddress())
     }
 
+    logger.debug("Attempting to initialize beacon instance for new gateway")
     val beacon = this.beacon
     beacon?.start()
 

@@ -32,7 +32,6 @@ import tv.dotstart.beacon.core.cache.filesystem.FileSystemCache
 import tv.dotstart.beacon.core.cache.filesystem.path.Murmur3PathProvider
 import tv.dotstart.beacon.core.util.Banner
 import tv.dotstart.beacon.core.util.OperatingSystem
-import tv.dotstart.beacon.core.version.InstabilityType
 import tv.dotstart.beacon.core.version.Version
 import tv.dotstart.beacon.core.version.update.GitHubUpdateProvider
 import tv.dotstart.beacon.core.version.update.UpdateProvider
@@ -180,10 +179,14 @@ object BeaconCli : CliktCommand(name = "Beacon") {
     logger.info(
         "System Repositories (${systemRepositories.size}): ${systemRepositories.joinToString()}")
 
-    if (verbose || debug) {
+    if (verbose || debug || debugCookie) {
       val level = if (verbose) {
         Level.ALL
       } else {
+        if (debugCookie) {
+          logger.warn("Logging level will be adjusted due to debug cookie file at $debugCookiePath")
+        }
+
         Level.DEBUG
       }
 

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright (C) 2019 Johannes Donath <johannesd@torchmind.com>
+  ~ Copyright 2020 Johannes Donath <johannesd@torchmind.com>
   ~ and other copyright owners as documented in the project's IP log.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
   ~ You may obtain a copy of the License at
   ~
-  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~ 	http://www.apache.org/licenses/LICENSE-2.0
   ~
   ~ Unless required by applicable law or agreed to in writing, software
   ~ distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,17 +18,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-
   <parent>
     <artifactId>parent</artifactId>
     <groupId>tv.dotstart.beacon</groupId>
     <version>3.0.0-alpha.3</version>
   </parent>
+  <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>ui</artifactId>
+  <artifactId>cli</artifactId>
 
-  <name>Beacon UI</name>
+  <name>Beacon CLI</name>
 
   <dependencies>
     <dependency>
@@ -45,37 +44,6 @@
       <artifactId>kotlin-stdlib-jdk8</artifactId>
     </dependency>
 
-    <dependency>
-      <groupId>org.openjfx</groupId>
-      <artifactId>javafx-base</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.openjfx</groupId>
-      <artifactId>javafx-fxml</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.openjfx</groupId>
-      <artifactId>javafx-controls</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.openjfx</groupId>
-      <artifactId>javafx-graphics</artifactId>
-      <classifier>win</classifier>
-    </dependency>
-    <dependency>
-      <groupId>org.openjfx</groupId>
-      <artifactId>javafx-graphics</artifactId>
-      <classifier>linux</classifier>
-    </dependency>
-    <dependency>
-      <groupId>org.openjfx</groupId>
-      <artifactId>javafx-graphics</artifactId>
-      <classifier>mac</classifier>
-    </dependency>
-    <dependency>
-      <groupId>com.jfoenix</groupId>
-      <artifactId>jfoenix</artifactId>
-    </dependency>
     <dependency>
       <groupId>com.github.ajalt</groupId>
       <artifactId>clikt</artifactId>
@@ -118,7 +86,7 @@
   </dependencies>
 
   <build>
-    <finalName>Beacon</finalName>
+    <finalName>beacon-cli</finalName>
 
     <resources>
       <resource>
@@ -146,25 +114,6 @@
         <filtering>true</filtering>
       </resource>
       <resource>
-        <directory>${project.basedir}/src/main/resources/fxml</directory>
-        <targetPath>fxml/</targetPath>
-        <filtering>false</filtering>
-
-        <includes>
-          <include>*.fxml</include>
-        </includes>
-      </resource>
-      <resource>
-        <directory>${project.basedir}/src/main/resources/image</directory>
-        <targetPath>image/</targetPath>
-        <filtering>false</filtering>
-
-        <includes>
-          <include>tray.ico</include>
-          <include>**/*.png</include>
-        </includes>
-      </resource>
-      <resource>
         <directory>${project.basedir}/src/main/resources/localization</directory>
         <targetPath>localization/</targetPath>
         <filtering>true</filtering>
@@ -185,16 +134,6 @@
         <artifactId>protobuf-maven-plugin</artifactId>
       </plugin>
       <plugin>
-        <groupId>org.lesscss</groupId>
-        <artifactId>lesscss-maven-plugin</artifactId>
-
-        <configuration>
-          <excludes>
-            <exclude>variables.less</exclude>
-          </excludes>
-        </configuration>
-      </plugin>
-      <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>license-maven-plugin</artifactId>
       </plugin>
@@ -206,7 +145,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>tv.dotstart.beacon.ui.BeaconKt</mainClass>
+              <mainClass>tv.dotstart.beacon.cli.BeaconKt</mainClass>
             </manifest>
           </archive>
         </configuration>
@@ -258,10 +197,10 @@
                 </goals>
 
                 <configuration>
-                  <headerType>gui</headerType>
+                  <headerType>CONSOLE</headerType>
                   <outfile>${project.build.directory}/${project.build.finalName}.exe</outfile>
                   <jar>${project.build.directory}/${project.build.finalName}.jar</jar>
-                  <errTitle>Beacon</errTitle>
+                  <errTitle>Beacon CLI</errTitle>
                   <icon>${project.basedir}/src/main/resources/image/logo.ico</icon>
 
                   <jre>

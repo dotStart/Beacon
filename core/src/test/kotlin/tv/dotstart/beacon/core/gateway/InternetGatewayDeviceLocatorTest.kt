@@ -97,7 +97,7 @@ internal class InternetGatewayDeviceLocatorTest {
 
     Assertions.assertTimeout(Duration.ofSeconds(2)) {
       val gateway = runBlocking {
-        deviceLocator.locate(cp)
+        deviceLocator.locate(cp, 1)
       }
 
       assertNotNull(gateway)
@@ -108,7 +108,7 @@ internal class InternetGatewayDeviceLocatorTest {
 
     verify(cp) {
       invocation { addDiscoveryListener(any()) }.occurredOnce()
-      invocation { search(InternetGatewayDeviceLocator.deviceType) }.occurredOnce()
+      invocation { search("${InternetGatewayDeviceLocator.deviceType}:1") }.occurredOnce()
       invocation { removeDiscoveryListener(any()) }.occurredOnce()
 
       noMoreInteractions()
@@ -124,7 +124,7 @@ internal class InternetGatewayDeviceLocatorTest {
 
     Assertions.assertTimeout(Duration.ofSeconds(5)) {
       val result = runBlocking {
-        deviceLocator.locate(cp)
+        deviceLocator.locate(cp, 1)
       }
 
       assertNull(result)
@@ -132,7 +132,7 @@ internal class InternetGatewayDeviceLocatorTest {
 
     verify(cp) {
       invocation { addDiscoveryListener(any()) }.occurredOnce()
-      invocation { search(InternetGatewayDeviceLocator.deviceType) }.occurredOnce()
+      invocation { search("${InternetGatewayDeviceLocator.deviceType}:1") }.occurredOnce()
       invocation { removeDiscoveryListener(any()) }.occurredOnce()
 
       noMoreInteractions()
@@ -170,7 +170,7 @@ internal class InternetGatewayDeviceLocatorTest {
 
     Assertions.assertTimeout(Duration.ofSeconds(5)) {
       val result = runBlocking {
-        deviceLocator.locate(cp)
+        deviceLocator.locate(cp, 2)
       }
 
       assertNull(result)
@@ -179,7 +179,7 @@ internal class InternetGatewayDeviceLocatorTest {
     verify(cp) {
       invocation { addDiscoveryListener(any()) }.occurredOnce()
       invocation {
-        search(tv.dotstart.beacon.core.gateway.InternetGatewayDeviceLocator.deviceType)
+        search("${InternetGatewayDeviceLocator.deviceType}:2")
       }.occurredOnce()
       invocation { removeDiscoveryListener(any()) }.occurredOnce()
 

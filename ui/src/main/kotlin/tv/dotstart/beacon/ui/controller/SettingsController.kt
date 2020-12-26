@@ -38,6 +38,7 @@ import tv.dotstart.beacon.core.gateway.InternetGatewayDevice
 import tv.dotstart.beacon.ui.BeaconCli
 import tv.dotstart.beacon.ui.BeaconUiMetadata
 import tv.dotstart.beacon.ui.config.Configuration
+import tv.dotstart.beacon.ui.debugCookie
 import tv.dotstart.beacon.ui.delegate.property
 import tv.dotstart.beacon.ui.exposure.PortExposureProvider
 import tv.dotstart.beacon.ui.util.window
@@ -86,6 +87,9 @@ class SettingsController : Initializable, KoinComponent {
   private lateinit var troubleshootingDeviceManufacturerTextField: JFXTextField
 
   @FXML
+  private lateinit var troubleshootingDebugLogging: JFXCheckBox
+
+  @FXML
   private lateinit var aboutVersionLabel: Label
 
   private val troubleshootingInternetGatewayDeviceProperty: ObjectProperty<InternetGatewayDevice> =
@@ -128,6 +132,17 @@ class SettingsController : Initializable, KoinComponent {
     this.troubleshootingDeviceVendorUrlButton.disableProperty().bind(
         Bindings.select<String>(this.troubleshootingInternetGatewayDeviceProperty,
                                 "manufacturerUrl").isNull)
+
+    this.troubleshootingDebugLogging.isSelected = debugCookie
+    this.troubleshootingDebugLogging.selectedProperty().addListener { _, _, newValue ->
+      if (newValue) {
+        logger.info("Setting debug cookie")
+      } else {
+        logger.info("Removing debug cookie")
+      }
+
+      debugCookie = newValue
+    }
 
     this.aboutVersionLabel.text = BeaconUiMetadata.version
   }

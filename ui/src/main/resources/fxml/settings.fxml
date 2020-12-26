@@ -93,6 +93,11 @@
 
     <Pane styleClass="settings-placeholder"/>
 
+    <JFXCheckBox fx:id="troubleshootingDebugLogging" text="%settings.troubleshooting.debug"
+      GridPane.rowIndex="3" GridPane.columnIndex="1" />
+
+    <Pane styleClass="settings-placeholder"/>
+
     <HBox styleClass="actions">
       <JFXButton text="%settings.troubleshooting.logs" onAction="#onTroubleshootingShowLogs"
         styleClass="brand"/>
