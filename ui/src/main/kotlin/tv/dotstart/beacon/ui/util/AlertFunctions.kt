@@ -23,7 +23,11 @@ import com.jfoenix.controls.JFXTextArea
 import javafx.event.EventHandler
 import javafx.scene.control.Label
 import javafx.scene.layout.VBox
+import kotlinx.coroutines.runBlocking
+import tv.dotstart.beacon.core.delegate.logManager
+import tv.dotstart.beacon.core.upnp.error.*
 import tv.dotstart.beacon.ui.BeaconUiMetadata
+import tv.dotstart.beacon.ui.exposure.PortExposureProvider
 import java.io.PrintWriter
 import java.io.StringWriter
 import java.time.OffsetDateTime
@@ -54,6 +58,25 @@ fun dialog(title: String, description: String, buttons: List<JFXButton> = emptyL
   alert.showAndWait()
 }
 
+/**
+ * Displays an error dialog for a given UPnP error.
+ */
+fun actionErrorDialog(ex: ActionException) {
+  val key = when (ex) {
+    is ActionFailedException -> "failed"
+    is DeviceOutOfMemoryException -> "memory"
+    is HumanInterventionRequiredException -> "intervention"
+    is InvalidActionArgumentException -> "argument"
+    is InvalidActionException -> "action"
+    else -> "unknown"
+  }
+
+  dialog(Localization("error.upnp.$key"), Localization("error.upnp.$key.body"))
+}
+
+/**
+ * Displays a detailed error report.
+ */
 fun detailedErrorDialog(title: String, description: String, ex: Throwable) {
   val alert = JFXAlert<Any>()
   alert.title = title
