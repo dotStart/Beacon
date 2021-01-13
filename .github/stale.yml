@@ -4,7 +4,8 @@ closeComment: false
 exemptLabels:
   - pinned
   - security
-  - bug
+  - enhancement
+  - confirmed
 staleLabel: wontfix
 markComment: >
   This issue has been automatically marked as stale because it has not had
