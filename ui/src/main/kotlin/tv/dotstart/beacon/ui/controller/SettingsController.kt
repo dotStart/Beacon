@@ -28,7 +28,6 @@ import javafx.scene.control.Label
 import javafx.scene.control.ListView
 import javafx.stage.Modality
 import javafx.stage.Stage
-import org.koin.core.component.KoinApiExtension
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.qualifier.named
@@ -57,7 +56,6 @@ import java.util.*
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
  * @date 09/12/2020
  */
-@KoinApiExtension
 class SettingsController : Initializable, KoinComponent {
 
   private val storagePath by inject<Path>(named("storagePath"))

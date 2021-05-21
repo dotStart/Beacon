@@ -23,7 +23,6 @@ import javafx.fxml.Initializable
 import javafx.scene.control.Label
 import javafx.scene.control.ProgressBar
 import javafx.stage.Stage
-import org.koin.core.component.KoinApiExtension
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import tv.dotstart.beacon.ui.BeaconApplication
@@ -43,7 +42,6 @@ import java.util.concurrent.Callable
  *
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
  */
-@KoinApiExtension
 class SplashController : Initializable, KoinComponent {
 
   private val configuration by inject<Configuration>()

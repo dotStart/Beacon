@@ -28,14 +28,14 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-    <kotlin.version>1.4.20</kotlin.version>
-    <kotlin-coroutines.version>1.4.2</kotlin-coroutines.version>
-    <koin.version>2.2.0</koin.version>
-    <mmupnp.version>3.1.1</mmupnp.version>
-    <jackson.version>2.10.0.pr1</jackson.version>
-    <log4j.version>2.12.0</log4j.version>
+    <kotlin.version>1.5.0</kotlin.version>
+    <kotlin-coroutines.version>1.5.0</kotlin-coroutines.version>
+    <koin.version>3.0.2</koin.version>
+    <mmupnp.version>3.1.3</mmupnp.version>
+    <jackson.version>2.12.3</jackson.version>
+    <log4j.version>2.14.1</log4j.version>
     <openjfx.version>11</openjfx.version>
-    <protobuf.version>3.9.0</protobuf.version>
+    <protobuf.version>3.17.0</protobuf.version>
 
     <raygun.token/>
     <exe.version>${project.version}.0</exe.version>
@@ -73,14 +73,6 @@
     <system>GitHub</system>
     <url>https://github.com/dotStart/Beacon/issues</url>
   </issueManagement>
-
-  <repositories>
-    <repository>
-      <id>jcenter</id>
-      <name>bintray</name>
-      <url>https://jcenter.bintray.com</url>
-    </repository>
-  </repositories>
 
   <dependencyManagement>
     <dependencies>
@@ -166,7 +158,7 @@
       </dependency>
 
       <dependency>
-        <groupId>net.mm2d</groupId>
+        <groupId>net.mm2d.mmupnp</groupId>
         <artifactId>mmupnp</artifactId>
         <version>${mmupnp.version}</version>
       </dependency>
@@ -203,8 +195,13 @@
         <version>${jackson.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.koin</groupId>
+        <groupId>io.insert-koin</groupId>
         <artifactId>koin-core</artifactId>
+        <version>${koin.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.insert-koin</groupId>
+        <artifactId>koin-core-jvm</artifactId>
         <version>${koin.version}</version>
       </dependency>
       <dependency>
