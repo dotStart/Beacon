@@ -59,9 +59,6 @@
       <timezone>Europe/Berlin</timezone>
       <email>johannesd@torchmind.com</email>
       <url>https://www.johannes-donath.com</url>
-
-      <organization>Torchmind</organization>
-      <organizationUrl>https://www.torchmind.com</organizationUrl>
     </developer>
   </developers>
 
