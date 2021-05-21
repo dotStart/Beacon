@@ -53,6 +53,7 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import java.time.Duration
 import javax.swing.JOptionPane
+import kotlin.system.exitProcess
 
 
 /**
@@ -86,7 +87,7 @@ object BeaconCli : CliktCommand(name = "Beacon") {
    * When enabled, this flag causes all cache checks to fail (e.g. files such as repositories and
    * icons will be reloaded immediately).
    */
-  val disableCache: Boolean by option(
+  private val disableCache: Boolean by option(
       "--disable-cache",
       help = "Disables all caching measures")
       .flag()
@@ -94,7 +95,7 @@ object BeaconCli : CliktCommand(name = "Beacon") {
   /**
    * Defines the minimum amount of time that has to pass between repository cache refreshes.
    */
-  val cacheDuration: Duration by option(
+  private val cacheDuration: Duration by option(
       "--cache-duration",
       help = "Specifies the duration for which repositories will be cached locally")
       .convert { Duration.parse(it) }
@@ -125,7 +126,7 @@ object BeaconCli : CliktCommand(name = "Beacon") {
   /**
    * Enables global trace logging.
    */
-  val verbose: Boolean by option(
+  private val verbose: Boolean by option(
       "--verbose",
       help = "Enables verbose logging")
       .flag()
@@ -162,7 +163,7 @@ object BeaconCli : CliktCommand(name = "Beacon") {
       Platform.runLater {
         detailedErrorDialog(Localization("error.unknown.title"),
                             Localization("error.unknown.body"), ex)
-        System.exit(128)
+        exitProcess(128)
       }
     }
 
