@@ -147,14 +147,16 @@ object BeaconCli : CliktCommand(name = "Beacon") {
 
     val logger = LogManager.getLogger(BeaconApplication::class.java)
 
-    val bytecodeVersion = System.getProperty("java.class.version", "").toFloatOrNull() ?: 53f
-    if (bytecodeVersion < 53) {
-      logger.error("Detected native Bytecode version $bytecodeVersion which is incompatible")
+    val bytecodeVersion = System.getProperty("java.class.version", "").toFloatOrNull() ?: 0f
+    logger.info("Detected native Bytecode version: $bytecodeVersion")
+
+    if (bytecodeVersion < 61) {
+      logger.error("Detected native Bytecode version is incompatible")
       logger.error("Launch has been aborted - Cannot recover")
 
       JOptionPane.showMessageDialog(
         null,
-        "You are running an outdated version of Java\nYou will need Java 9 or newer to run this application",
+        "You are running an outdated version of Java\nYou will need Java 17 or newer to run this application",
         "Outdated Java Version",
         JOptionPane.ERROR_MESSAGE
       )
