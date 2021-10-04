@@ -24,6 +24,7 @@ import javafx.beans.property.ReadOnlyObjectProperty
 import javafx.beans.property.SimpleObjectProperty
 import javafx.fxml.FXML
 import javafx.fxml.Initializable
+import javafx.scene.control.TextField
 import tv.dotstart.beacon.core.delegate.logManager
 import tv.dotstart.beacon.ui.delegate.property
 import java.net.URI
@@ -37,7 +38,7 @@ import java.util.*
 class RepositoryEditorController : Initializable {
 
   @FXML
-  private lateinit var repositoryUriTextField: JFXTextField
+  private lateinit var repositoryUriTextField: TextField
 
   @FXML
   private lateinit var saveButton: JFXButton

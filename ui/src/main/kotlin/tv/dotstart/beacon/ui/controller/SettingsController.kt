@@ -18,7 +18,6 @@ package tv.dotstart.beacon.ui.controller
 
 import com.jfoenix.controls.JFXButton
 import com.jfoenix.controls.JFXCheckBox
-import com.jfoenix.controls.JFXTextField
 import javafx.beans.binding.Bindings
 import javafx.beans.property.ObjectProperty
 import javafx.beans.property.SimpleObjectProperty
@@ -26,6 +25,7 @@ import javafx.fxml.FXML
 import javafx.fxml.Initializable
 import javafx.scene.control.Label
 import javafx.scene.control.ListView
+import javafx.scene.control.TextField
 import javafx.stage.Modality
 import javafx.stage.Stage
 import org.koin.core.component.KoinComponent
@@ -73,16 +73,16 @@ class SettingsController : Initializable, KoinComponent {
   private lateinit var generalUserRepositoryRemoveButton: JFXButton
 
   @FXML
-  private lateinit var troubleshootingDeviceNameTextField: JFXTextField
+  private lateinit var troubleshootingDeviceNameTextField: TextField
 
   @FXML
-  private lateinit var troubleshootingDeviceModelNameTextField: JFXTextField
+  private lateinit var troubleshootingDeviceModelNameTextField: TextField
 
   @FXML
   private lateinit var troubleshootingDeviceVendorUrlButton: JFXButton
 
   @FXML
-  private lateinit var troubleshootingDeviceManufacturerTextField: JFXTextField
+  private lateinit var troubleshootingDeviceManufacturerTextField: TextField
 
   @FXML
   private lateinit var troubleshootingDebugLogging: JFXCheckBox
@@ -91,9 +91,10 @@ class SettingsController : Initializable, KoinComponent {
   private lateinit var aboutVersionLabel: Label
 
   private val troubleshootingInternetGatewayDeviceProperty: ObjectProperty<InternetGatewayDevice> =
-      SimpleObjectProperty()
+    SimpleObjectProperty()
   private val troubleshootingInternetGatewayDevice by property(
-      troubleshootingInternetGatewayDeviceProperty)
+    troubleshootingInternetGatewayDeviceProperty
+  )
 
   private val generalSelectedUserRepositoryProperty: ObjectProperty<URI> = SimpleObjectProperty()
   private val generalSelectedUserRepository by property(generalSelectedUserRepositoryProperty)
@@ -105,31 +106,41 @@ class SettingsController : Initializable, KoinComponent {
 
   override fun initialize(location: URL?, resources: ResourceBundle?) {
     this.generalIconifyToTrayCheckBox.selectedProperty()
-        .bindBidirectional(this.configuration.iconifyToTrayProperty)
-    Bindings.bindContentBidirectional(this.generalUserRepositoryListView.items,
-                                      this.configuration.userRepositoryIndex)
+      .bindBidirectional(this.configuration.iconifyToTrayProperty)
+    Bindings.bindContentBidirectional(
+      this.generalUserRepositoryListView.items,
+      this.configuration.userRepositoryIndex
+    )
 
     val generalSelectedUserRepositoryBinding = Bindings.select<URI>(
-        this.generalUserRepositoryListView, "selectionModel", "selectedItem")
+      this.generalUserRepositoryListView, "selectionModel", "selectedItem"
+    )
     this.generalSelectedUserRepositoryProperty.bind(generalSelectedUserRepositoryBinding)
 
     this.generalUserRepositoryRemoveButton.disableProperty()
-        .bind(generalSelectedUserRepositoryBinding.isNull)
+      .bind(generalSelectedUserRepositoryBinding.isNull)
 
     val deviceBinding = Bindings.select<InternetGatewayDevice>(
-        this.portExposureProvider, "internetGatewayDevice")
+      this.portExposureProvider, "internetGatewayDevice"
+    )
     this.troubleshootingInternetGatewayDeviceProperty.bind(deviceBinding)
 
     this.troubleshootingDeviceNameTextField.textProperty().bind(
-        Bindings.selectString(this.troubleshootingInternetGatewayDeviceProperty, "friendlyName"))
+      Bindings.selectString(this.troubleshootingInternetGatewayDeviceProperty, "friendlyName")
+    )
     this.troubleshootingDeviceModelNameTextField.textProperty().bind(
-        Bindings.selectString(this.troubleshootingInternetGatewayDeviceProperty, "modelName"))
+      Bindings.selectString(this.troubleshootingInternetGatewayDeviceProperty, "modelName")
+    )
     this.troubleshootingDeviceManufacturerTextField.textProperty().bind(
-        Bindings.selectString(this.troubleshootingInternetGatewayDeviceProperty, "manufacturer"))
+      Bindings.selectString(this.troubleshootingInternetGatewayDeviceProperty, "manufacturer")
+    )
 
     this.troubleshootingDeviceVendorUrlButton.disableProperty().bind(
-        Bindings.select<String>(this.troubleshootingInternetGatewayDeviceProperty,
-                                "manufacturerUrl").isNull)
+      Bindings.select<String>(
+        this.troubleshootingInternetGatewayDeviceProperty,
+        "manufacturerUrl"
+      ).isNull
+    )
 
     this.troubleshootingDebugLogging.isSelected = debugCookie
     this.troubleshootingDebugLogging.selectedProperty().addListener { _, _, newValue ->
@@ -149,15 +160,16 @@ class SettingsController : Initializable, KoinComponent {
   private fun onGeneralAddRepository() {
     val stage = Stage()
     val controller = stage.window<RepositoryEditorController>(
-        "repository-editor.fxml",
-        minimizable = false,
-        maximizable = false)
+      "repository-editor.fxml",
+      minimizable = false,
+      maximizable = false
+    )
     stage.initModality(Modality.APPLICATION_MODAL)
 
     stage.showAndWait()
 
     val repositoryUri = controller.repositoryUri
-        ?: return
+      ?: return
 
     if (repositoryUri !in this.configuration.userRepositoryIndex) {
       this.configuration.userRepositoryIndex.add(repositoryUri)
@@ -167,7 +179,7 @@ class SettingsController : Initializable, KoinComponent {
   @FXML
   private fun onGeneralRemoveRepository() {
     val uri = this.generalSelectedUserRepository
-        ?: return
+      ?: return
 
     this.configuration.userRepositoryIndex -= uri
   }
@@ -176,9 +188,9 @@ class SettingsController : Initializable, KoinComponent {
   private fun onTroubleshootingVisitVendorUrl() {
     val websiteUri = try {
       this.troubleshootingInternetGatewayDevice
-          ?.manufacturerUrl
-          ?.let(URI::create)
-          ?: return
+        ?.manufacturerUrl
+        ?.let(URI::create)
+        ?: return
     } catch (ex: IllegalArgumentException) {
       logger.debug("Device reported invalid device URI", ex)
       return
@@ -203,15 +215,17 @@ class SettingsController : Initializable, KoinComponent {
     val targetFile = this.storagePath.resolve("THIRD-PARTY.txt")
 
     classLoader.getResourceAsStream("THIRD-PARTY.txt")
-        .use {
-          Channels.newChannel(it!!).use { input ->
-            FileChannel.open(targetFile, StandardOpenOption.CREATE,
-                             StandardOpenOption.TRUNCATE_EXISTING,
-                             StandardOpenOption.WRITE).use {
-              it.transferFrom(input, 0, Long.MAX_VALUE)
-            }
+      .use {
+        Channels.newChannel(it!!).use { input ->
+          FileChannel.open(
+            targetFile, StandardOpenOption.CREATE,
+            StandardOpenOption.TRUNCATE_EXISTING,
+            StandardOpenOption.WRITE
+          ).use {
+            it.transferFrom(input, 0, Long.MAX_VALUE)
           }
         }
+      }
 
     Desktop.getDesktop().open(targetFile.toFile())
   }

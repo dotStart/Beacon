@@ -18,10 +18,9 @@ package tv.dotstart.beacon.ui.controller
 
 import com.jfoenix.controls.JFXButton
 import com.jfoenix.controls.JFXRadioButton
-import com.jfoenix.controls.JFXTextField
-import javafx.event.ActionEvent
 import javafx.fxml.FXML
 import javafx.fxml.Initializable
+import javafx.scene.control.TextField
 import javafx.scene.control.TextFormatter
 import javafx.scene.control.ToggleGroup
 import javafx.stage.Stage
@@ -48,7 +47,7 @@ class PortEditorController : Initializable {
   private lateinit var udpProtocolButton: JFXRadioButton
 
   @FXML
-  private lateinit var portNumberTextField: JFXTextField
+  private lateinit var portNumberTextField: TextField
 
   @FXML
   private lateinit var saveButton: JFXButton
@@ -68,7 +67,7 @@ class PortEditorController : Initializable {
       }
 
       val newNumericValue = newValue.toIntOrNull(10)
-          ?.takeIf { it > 0 }
+        ?.takeIf { it > 0 }
 
       if (newNumericValue != null) {
         it
@@ -78,8 +77,8 @@ class PortEditorController : Initializable {
     })
 
     val validProperty = this.protocolToggleGroup.selectedToggleProperty()
-        .isNotNull
-        .and(this.portNumberTextField.textProperty().isNotEmpty)
+      .isNotNull
+      .and(this.portNumberTextField.textProperty().isNotEmpty)
     this.saveButton.disableProperty().bind(validProperty.not())
 
     val port = this.port
@@ -98,12 +97,12 @@ class PortEditorController : Initializable {
   @FXML
   private fun onSave() {
     this.port = Port(
-        if (this.protocolToggleGroup.selectedToggle == this.tcpProtocolButton) {
-          Protocol.TCP
-        } else {
-          Protocol.UDP
-        },
-        this.portNumberTextField.text.toInt(10)
+      if (this.protocolToggleGroup.selectedToggle == this.tcpProtocolButton) {
+        Protocol.TCP
+      } else {
+        Protocol.UDP
+      },
+      this.portNumberTextField.text.toInt(10)
     )
 
     (this.saveButton.scene.window as Stage).close()

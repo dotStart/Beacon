@@ -18,10 +18,10 @@
   -->
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXCheckBox?>
-<?import com.jfoenix.controls.JFXTextField?>
 <?import java.net.URL?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.GridPane?>
@@ -68,7 +68,7 @@
     <GridPane styleClass="settings-grid">
       <Label text="%settings.troubleshooting.deviceName"
         GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-      <JFXTextField fx:id="troubleshootingDeviceNameTextField" editable="false"
+      <TextField fx:id="troubleshootingDeviceNameTextField" editable="false"
         GridPane.rowIndex="0" GridPane.columnIndex="1" maxWidth="Infinity"/>
       <JFXButton fx:id="troubleshootingDeviceVendorUrlButton"
         text="%settings.troubleshooting.visitDeviceVendorUrl" styleClass="brand"
@@ -77,12 +77,12 @@
 
       <Label text="%settings.troubleshooting.deviceModelName"
         GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-      <JFXTextField fx:id="troubleshootingDeviceModelNameTextField" editable="false"
+      <TextField fx:id="troubleshootingDeviceModelNameTextField" editable="false"
         GridPane.rowIndex="1" GridPane.columnIndex="1" maxWidth="Infinity"/>
 
       <Label text="%settings.troubleshooting.deviceManufacturer"
         GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-      <JFXTextField fx:id="troubleshootingDeviceManufacturerTextField" editable="false"
+      <TextField fx:id="troubleshootingDeviceManufacturerTextField" editable="false"
         GridPane.rowIndex="2" GridPane.columnIndex="1" maxWidth="Infinity"/>
     </GridPane>
 

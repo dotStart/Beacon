@@ -16,17 +16,13 @@
  */
 package tv.dotstart.beacon.ui.controller
 
-import com.jfoenix.controls.JFXTextField
 import com.jfoenix.controls.JFXTreeView
 import javafx.beans.binding.Bindings
 import javafx.beans.property.ObjectProperty
 import javafx.beans.property.SimpleObjectProperty
 import javafx.fxml.FXML
 import javafx.fxml.Initializable
-import javafx.scene.control.Button
-import javafx.scene.control.Label
-import javafx.scene.control.TableView
-import javafx.scene.control.TreeItem
+import javafx.scene.control.*
 import javafx.scene.image.ImageView
 import javafx.stage.Modality
 import javafx.stage.Stage
@@ -60,7 +56,7 @@ class MainController : Initializable, KoinComponent {
   private lateinit var serviceList: JFXTreeView<ServiceListNode>
 
   @FXML
-  private lateinit var externalAddress: JFXTextField
+  private lateinit var externalAddress: TextField
 
   @FXML
   private lateinit var serviceIcon: ImageView
@@ -197,7 +193,7 @@ class MainController : Initializable, KoinComponent {
     val node = this.serviceList.selectionModel
       .selectedItem
       ?.value
-      as? ServiceNode ?: return
+        as? ServiceNode ?: return
     val service = node.service
 
     this.exposureProvider.expose(service)
@@ -210,7 +206,7 @@ class MainController : Initializable, KoinComponent {
     val node = this.serviceList.selectionModel
       .selectedItem
       ?.value
-      as? ServiceNode ?: return
+        as? ServiceNode ?: return
     val service = node.service
 
     this.exposureProvider.close(service)

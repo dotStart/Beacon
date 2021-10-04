@@ -16,12 +16,12 @@
   ~ limitations under the License.
   -->
 <?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXTextField?>
 <?import java.net.URL?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.VBox?>
 <VBox fx:id="root" styleClass="wrapper" xmlns:fx="http://javafx.com/fxml"
@@ -32,7 +32,7 @@
 
   <GridPane styleClass="form">
     <Label text="%editor.name" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-    <JFXTextField fx:id="nameTextField" GridPane.rowIndex="0" GridPane.columnIndex="1"
+    <TextField fx:id="nameTextField" GridPane.rowIndex="0" GridPane.columnIndex="1"
       maxWidth="Infinity"/>
 
     <TableView fx:id="portTableView" GridPane.rowIndex="1" GridPane.columnIndex="0">

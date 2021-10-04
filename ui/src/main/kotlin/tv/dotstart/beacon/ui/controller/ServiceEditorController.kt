@@ -17,16 +17,15 @@
 package tv.dotstart.beacon.ui.controller
 
 import com.jfoenix.controls.JFXButton
-import com.jfoenix.controls.JFXTextField
 import javafx.beans.binding.Bindings
 import javafx.beans.property.ObjectProperty
 import javafx.beans.property.SimpleObjectProperty
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
-import javafx.event.ActionEvent
 import javafx.fxml.FXML
 import javafx.fxml.Initializable
 import javafx.scene.control.TableView
+import javafx.scene.control.TextField
 import javafx.stage.Modality
 import javafx.stage.Stage
 import tv.dotstart.beacon.repository.Model
@@ -37,7 +36,6 @@ import tv.dotstart.beacon.ui.util.window
 import java.net.URI
 import java.net.URL
 import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
@@ -46,7 +44,7 @@ import kotlin.collections.ArrayList
 class ServiceEditorController : Initializable {
 
   @FXML
-  private lateinit var nameTextField: JFXTextField
+  private lateinit var nameTextField: TextField
 
   @FXML
   private lateinit var portTableView: TableView<Port>
@@ -70,12 +68,13 @@ class ServiceEditorController : Initializable {
     Bindings.bindContent(this.portTableView.items, this.ports)
 
     val selectionProperty = Bindings.select<Port?>(
-        this.portTableView.selectionModelProperty(), "selectedItem")
+      this.portTableView.selectionModelProperty(), "selectedItem"
+    )
     this.removePortButton.disableProperty().bind(selectionProperty.isNull)
 
     val valid = Bindings.size(this.ports)
-        .isNotEqualTo(0)
-        .and(this.nameTextField.textProperty().isNotEmpty)
+      .isNotEqualTo(0)
+      .and(this.nameTextField.textProperty().isNotEmpty)
     this.saveButton.disableProperty().bind(valid.not())
 
     this.serviceProperty.addListener({ _, _, new -> this.refreshContent(new) })
@@ -94,7 +93,8 @@ class ServiceEditorController : Initializable {
   private fun onAddPort() {
     val stage = Stage()
     val controller = stage.window<PortEditorController>(
-        "port-editor.fxml", maximizable = false, minimizable = false)
+      "port-editor.fxml", maximizable = false, minimizable = false
+    )
     stage.initModality(Modality.APPLICATION_MODAL)
 
     stage.title = Localization("editor.port.title")
@@ -111,7 +111,7 @@ class ServiceEditorController : Initializable {
   @FXML
   private fun onRemovePort() {
     val selectedPort = this.portTableView.selectionModel.selectedItem
-        ?: return
+      ?: return
 
     this.ports.remove(selectedPort)
   }
@@ -119,15 +119,15 @@ class ServiceEditorController : Initializable {
   @FXML
   private fun onSave() {
     val serviceId = this.service
-        ?.id
-        ?: URI("custom", UUID.randomUUID().toString(), null)
+      ?.id
+      ?: URI("custom", UUID.randomUUID().toString(), null)
 
     this.service = Service(
-        serviceId,
-        Model.Category.CUSTOM,
-        null,
-        this.nameTextField.text,
-        ArrayList(this.ports)
+      serviceId,
+      Model.Category.CUSTOM,
+      null,
+      this.nameTextField.text,
+      ArrayList(this.ports)
     )
 
     (this.saveButton.scene.window as Stage).close()
