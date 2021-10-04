@@ -77,7 +77,7 @@ enum class OperatingSystem(vararg patterns: String) {
    * Resolves an application specific storage directory for the executing user.
    */
   open fun resolveApplicationDirectory(name: String): Path =
-      this.storageDirectory.resolve(storageDirectoryPrefix + name.toLowerCase())
+      this.storageDirectory.resolve(storageDirectoryPrefix + name.lowercase())
 
   companion object {
 
