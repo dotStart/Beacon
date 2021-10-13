@@ -21,7 +21,7 @@
   <parent>
     <artifactId>parent</artifactId>
     <groupId>tv.dotstart.beacon</groupId>
-    <version>3.0.0-alpha.3</version>
+    <version>3.0.0-alpha.4</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
@@ -59,8 +59,12 @@
       <artifactId>commons-compress</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.koin</groupId>
+      <groupId>io.insert-koin</groupId>
       <artifactId>koin-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.insert-koin</groupId>
+      <artifactId>koin-core-jvm</artifactId>
     </dependency>
     <dependency>
       <groupId>com.sangupta</groupId>

@@ -23,7 +23,7 @@
   <parent>
     <artifactId>parent</artifactId>
     <groupId>tv.dotstart.beacon</groupId>
-    <version>3.0.0-alpha.3</version>
+    <version>3.0.0-alpha.4</version>
   </parent>
 
   <artifactId>core</artifactId>
@@ -76,7 +76,7 @@
       <artifactId>jackson-module-kotlin</artifactId>
     </dependency>
     <dependency>
-      <groupId>net.mm2d</groupId>
+      <groupId>net.mm2d.mmupnp</groupId>
       <artifactId>mmupnp</artifactId>
     </dependency>
     <dependency>

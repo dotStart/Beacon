@@ -23,14 +23,13 @@ import tv.dotstart.beacon.core.Beacon
 import tv.dotstart.beacon.core.delegate.logManager
 import tv.dotstart.beacon.core.gateway.InternetGatewayDevice
 import tv.dotstart.beacon.core.gateway.InternetGatewayDeviceLocator
-import tv.dotstart.beacon.core.upnp.error.*
+import tv.dotstart.beacon.core.upnp.error.ActionException
 import tv.dotstart.beacon.ui.delegate.property
 import tv.dotstart.beacon.ui.preload.Loader
 import tv.dotstart.beacon.ui.preload.error.PreloadError
 import tv.dotstart.beacon.ui.repository.model.Service
 import tv.dotstart.beacon.ui.util.ErrorReporter
-import tv.dotstart.beacon.ui.util.Localization
-import tv.dotstart.beacon.ui.util.dialog
+import tv.dotstart.beacon.ui.util.actionErrorDialog
 import java.io.Closeable
 
 /**
@@ -74,19 +73,24 @@ class PortExposureProvider : Closeable {
   fun refresh(): Boolean {
     logger.info("Querying network for compatible internet gateway")
 
-    logger.debug("Locating new gateway device within local network")
-    this.internetGatewayDevice = runBlocking {
-      locator.locate()
-    }
+    try {
+      logger.debug("Locating new gateway device within local network")
+      this.internetGatewayDevice = runBlocking {
+        locator.locate()
+      }
 
-    logger.debug("Requesting external address from gateway device (if present)")
-    runBlocking {
-      _externalAddressProperty.set(internetGatewayDevice?.getExternalAddress())
-    }
+      logger.debug("Requesting external address from gateway device (if present)")
+      runBlocking {
+        _externalAddressProperty.set(internetGatewayDevice?.getExternalAddress())
+      }
 
-    logger.debug("Attempting to initialize beacon instance for new gateway")
-    val beacon = this.beacon
-    beacon?.start()
+      logger.debug("Attempting to initialize beacon instance for new gateway")
+      val beacon = this.beacon
+      beacon?.start()
+    } catch (ex: ActionException) {
+      logger.error("Gateway refresh failed", ex)
+      actionErrorDialog(ex)
+    }
 
     ErrorReporter.trace("exposure", "Internet gateway refresh performed")
     return beacon != null
@@ -100,24 +104,9 @@ class PortExposureProvider : Closeable {
       runBlocking {
         beacon.expose(service)
       }
-    } catch (ex: ActionFailedException) {
-      logger.error("UPnP action failed for service $service", ex)
-      dialog(Localization("error.upnp.failed"), Localization("error.upnp.failed.body"))
-    } catch (ex: DeviceOutOfMemoryException) {
-      logger.error("UPnP device ran out of memory for service $service", ex)
-      dialog(Localization("error.upnp.memory"), Localization("error.upnp.memory.body"))
-    } catch (ex: HumanInterventionRequiredException) {
-      logger.error("UPnP device requires human intervention for service $service", ex)
-      dialog(Localization("error.upnp.intervention"), Localization("error.upnp.intervention.body"))
-    } catch (ex: InvalidActionArgumentException) {
-      logger.error("UPnP device rejected action arguments for service $service", ex)
-      dialog(Localization("error.upnp.argument"), Localization("error.upnp.argument.body"))
-    } catch (ex: InvalidActionException) {
-      logger.error("UPnP device rejected action for service $service", ex)
-      dialog(Localization("error.upnp.action"), Localization("error.upnp.action.body"))
     } catch (ex: ActionException) {
-      logger.error("UPnP action failed for service $service", ex)
-      dialog(Localization("error.upnp.unknown"), Localization("error.upnp.unknown.body"))
+      logger.error("UPnP exposure for service $service failed", ex)
+      actionErrorDialog(ex)
     }
 
     ErrorReporter.trace("exposure", "Service exposed", data = mapOf(

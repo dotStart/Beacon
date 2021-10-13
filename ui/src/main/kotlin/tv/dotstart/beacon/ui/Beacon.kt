@@ -22,7 +22,6 @@ import javafx.application.Application
 import javafx.application.Platform
 import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.LogManager
-import org.koin.core.component.KoinApiExtension
 import org.koin.core.context.startKoin
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
@@ -53,6 +52,7 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import java.time.Duration
 import javax.swing.JOptionPane
+import kotlin.system.exitProcess
 
 
 /**
@@ -65,9 +65,9 @@ object BeaconCli : CliktCommand(name = "Beacon") {
    * given.
    */
   private val defaultSystemRepositories = listOf(
-      URI.create("github://dotStart/Beacon#indie.dat"),
-      URI.create("github://dotStart/Beacon#steam.dat"),
-      URI.create("github://dotStart/Beacon#tools.dat")
+    URI.create("github://dotStart/Beacon#indie.dat"),
+    URI.create("github://dotStart/Beacon#steam.dat"),
+    URI.create("github://dotStart/Beacon#tools.dat")
   )
 
   /**
@@ -77,28 +77,31 @@ object BeaconCli : CliktCommand(name = "Beacon") {
    * an unpublished system repository).
    */
   val systemRepositories: List<URI> by option(
-      names = arrayOf("--repository", "-r"),
-      help = "Specifies a custom system repository (Overrides any default system repositories)")
-      .convert { URI.create(it) }
-      .multiple(defaultSystemRepositories)
+    names = arrayOf("--repository", "-r"),
+    help = "Specifies a custom system repository (Overrides any default system repositories)"
+  )
+    .convert { URI.create(it) }
+    .multiple(defaultSystemRepositories)
 
   /**
    * When enabled, this flag causes all cache checks to fail (e.g. files such as repositories and
    * icons will be reloaded immediately).
    */
-  val disableCache: Boolean by option(
-      "--disable-cache",
-      help = "Disables all caching measures")
-      .flag()
+  private val disableCache: Boolean by option(
+    "--disable-cache",
+    help = "Disables all caching measures"
+  )
+    .flag()
 
   /**
    * Defines the minimum amount of time that has to pass between repository cache refreshes.
    */
-  val cacheDuration: Duration by option(
-      "--cache-duration",
-      help = "Specifies the duration for which repositories will be cached locally")
-      .convert { Duration.parse(it) }
-      .default(Duration.ofDays(1))
+  private val cacheDuration: Duration by option(
+    "--cache-duration",
+    help = "Specifies the duration for which repositories will be cached locally"
+  )
+    .convert { Duration.parse(it) }
+    .default(Duration.ofDays(1))
 
   /**
    * Defines the location in which log files shall be placed by the application.
@@ -107,34 +110,36 @@ object BeaconCli : CliktCommand(name = "Beacon") {
    * NIX based systems, etc).
    */
   val logDirectory: Path by option(
-      "--log-dir",
-      help = "Specifies the log storage directory")
-      .convert { Paths.get(it) }
-      .defaultLazy {
-        OperatingSystem.current.resolveApplicationDirectory(applicationName).resolve("log")
-      }
+    "--log-dir",
+    help = "Specifies the log storage directory"
+  )
+    .convert { Paths.get(it) }
+    .defaultLazy {
+      OperatingSystem.current.resolveApplicationDirectory(applicationName).resolve("log")
+    }
 
   /**
    * Enables global debug logging.
    */
   val debug: Boolean by option(
-      "--debug",
-      help = "Enables debug logging")
-      .flag()
+    "--debug",
+    help = "Enables debug logging"
+  )
+    .flag()
 
   /**
    * Enables global trace logging.
    */
-  val verbose: Boolean by option(
-      "--verbose",
-      help = "Enables verbose logging")
-      .flag()
+  private val verbose: Boolean by option(
+    "--verbose",
+    help = "Enables verbose logging"
+  )
+    .flag()
 
   init {
     versionOption(BeaconUiMetadata.version)
   }
 
-  @KoinApiExtension
   override fun run() {
     // stash the desired logging path as early as possible to make sure Logger construction does not
     // fail due to missing system properties
@@ -142,15 +147,19 @@ object BeaconCli : CliktCommand(name = "Beacon") {
 
     val logger = LogManager.getLogger(BeaconApplication::class.java)
 
-    val bytecodeVersion = System.getProperty("java.class.version", "").toFloatOrNull() ?: 53f
-    if (bytecodeVersion < 53) {
-      logger.error("Detected native Bytecode version $bytecodeVersion which is incompatible")
+    val bytecodeVersion = System.getProperty("java.class.version", "").toFloatOrNull() ?: 0f
+    logger.info("Detected native Bytecode version: $bytecodeVersion")
+
+    if (bytecodeVersion < 61) {
+      logger.error("Detected native Bytecode version is incompatible")
       logger.error("Launch has been aborted - Cannot recover")
 
-      JOptionPane.showMessageDialog(null,
-                                    "You are running an outdated version of Java\nYou will need Java 9 or newer to run this application",
-                                    "Outdated Java Version",
-                                    JOptionPane.ERROR_MESSAGE)
+      JOptionPane.showMessageDialog(
+        null,
+        "You are running an outdated version of Java\nYou will need Java 17 or newer to run this application",
+        "Outdated Java Version",
+        JOptionPane.ERROR_MESSAGE
+      )
       return
     }
 
@@ -160,9 +169,11 @@ object BeaconCli : CliktCommand(name = "Beacon") {
       logger.error("Uncaught exception on thread \"${thread.name}\" (#${thread.id})", ex)
 
       Platform.runLater {
-        detailedErrorDialog(Localization("error.unknown.title"),
-                            Localization("error.unknown.body"), ex)
-        System.exit(128)
+        detailedErrorDialog(
+          Localization("error.unknown.title"),
+          Localization("error.unknown.body"), ex
+        )
+        exitProcess(128)
       }
     }
 
@@ -173,11 +184,13 @@ object BeaconCli : CliktCommand(name = "Beacon") {
 
     if (defaultSystemRepositories != systemRepositories) {
       logger.warn(
-          "System repositories have been overridden - Some standard services may be missing")
+        "System repositories have been overridden - Some standard services may be missing"
+      )
     }
 
     logger.info(
-        "System Repositories (${systemRepositories.size}): ${systemRepositories.joinToString()}")
+      "System Repositories (${systemRepositories.size}): ${systemRepositories.joinToString()}"
+    )
 
     if (verbose || debug || debugCookie) {
       val level = if (verbose) {
@@ -210,14 +223,16 @@ object BeaconCli : CliktCommand(name = "Beacon") {
           val cachePath = get<Path>(storagePathQualifier).resolve("cache")
           val config = get<Configuration>()
 
-          FileSystemCache(cachePath, cacheDuration,
-                          pathProvider = Murmur3PathProvider(424242L))
-              .also {
-                if (config.migration) {
-                  logger.warn("Migrating between versions - Purging all cache entries")
-                  it.purgeAll()
-                }
+          FileSystemCache(
+            cachePath, cacheDuration,
+            pathProvider = Murmur3PathProvider(424242L)
+          )
+            .also {
+              if (config.migration) {
+                logger.warn("Migrating between versions - Purging all cache entries")
+                it.purgeAll()
               }
+            }
         }
       }
 
@@ -230,9 +245,10 @@ object BeaconCli : CliktCommand(name = "Beacon") {
         val channel = version.instabilityType
 
         GitHubUpdateProvider(
-            version,
-            channel,
-            gitHub.forRepository("dotStart", "Beacon"))
+          version,
+          channel,
+          gitHub.forRepository("dotStart", "Beacon")
+        )
       }
 
       single<Loader>(named("updateLoader")) { UpdateCheckLoader(get()) }

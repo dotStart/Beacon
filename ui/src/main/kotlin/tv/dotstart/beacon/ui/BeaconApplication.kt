@@ -20,12 +20,11 @@ import javafx.application.Application
 import javafx.application.Platform
 import javafx.scene.image.Image
 import javafx.stage.Stage
-import org.koin.core.component.KoinApiExtension
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import tv.dotstart.beacon.core.util.OperatingSystem
 import tv.dotstart.beacon.ui.config.Configuration
 import tv.dotstart.beacon.ui.controller.SplashController
-import tv.dotstart.beacon.core.util.OperatingSystem
 import tv.dotstart.beacon.ui.preload.Preloader
 import tv.dotstart.beacon.ui.util.logger
 import tv.dotstart.beacon.ui.util.splashWindow
@@ -40,7 +39,6 @@ import java.nio.file.Files
  *
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
  */
-@KoinApiExtension
 class BeaconApplication : Application(), KoinComponent {
 
   private val configuration by inject<Configuration>()
@@ -53,7 +51,7 @@ class BeaconApplication : Application(), KoinComponent {
     private const val iconPath = "image/logo.png"
     val icon: Image by lazy {
       Thread.currentThread().contextClassLoader.getResourceAsStream(iconPath)
-          .use(::Image)
+        .use(::Image)
     }
   }
 

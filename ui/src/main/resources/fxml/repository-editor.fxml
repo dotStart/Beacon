@@ -16,9 +16,9 @@
   ~ limitations under the License.
   -->
 <?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXTextField?>
 <?import java.net.URL?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.VBox?>
 <VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
@@ -31,7 +31,7 @@
   <GridPane styleClass="form">
     <Label text="%settings.general.userRepository.uri" GridPane.rowIndex="0"
       GridPane.columnIndex="0"/>
-    <JFXTextField fx:id="repositoryUriTextField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+    <TextField fx:id="repositoryUriTextField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
   </GridPane>
 
   <JFXButton fx:id="saveButton" text="%action.save" onAction="#onSave" maxWidth="Infinity"

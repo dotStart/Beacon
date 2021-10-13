@@ -16,31 +16,25 @@
  */
 package tv.dotstart.beacon.ui.controller
 
-import com.jfoenix.controls.JFXTextField
 import com.jfoenix.controls.JFXTreeView
 import javafx.beans.binding.Bindings
 import javafx.beans.property.ObjectProperty
 import javafx.beans.property.SimpleObjectProperty
-import javafx.event.ActionEvent
 import javafx.fxml.FXML
 import javafx.fxml.Initializable
-import javafx.scene.control.Button
-import javafx.scene.control.Label
-import javafx.scene.control.TableView
-import javafx.scene.control.TreeItem
+import javafx.scene.control.*
 import javafx.scene.image.ImageView
 import javafx.stage.Modality
 import javafx.stage.Stage
-import org.koin.core.component.KoinApiExtension
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import tv.dotstart.beacon.repository.Model
 import tv.dotstart.beacon.ui.BeaconUiMetadata
 import tv.dotstart.beacon.ui.cell.ServiceListTreeCell
 import tv.dotstart.beacon.ui.cell.model.CategoryNode
 import tv.dotstart.beacon.ui.cell.model.ServiceListNode
 import tv.dotstart.beacon.ui.cell.model.ServiceNode
 import tv.dotstart.beacon.ui.exposure.PortExposureProvider
-import tv.dotstart.beacon.repository.Model
 import tv.dotstart.beacon.ui.repository.ServiceRegistry
 import tv.dotstart.beacon.ui.repository.model.Port
 import tv.dotstart.beacon.ui.repository.model.Service
@@ -53,7 +47,6 @@ import java.util.*
  *
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
  */
-@KoinApiExtension
 class MainController : Initializable, KoinComponent {
 
   private val exposureProvider by inject<PortExposureProvider>()
@@ -63,7 +56,7 @@ class MainController : Initializable, KoinComponent {
   private lateinit var serviceList: JFXTreeView<ServiceListNode>
 
   @FXML
-  private lateinit var externalAddress: JFXTextField
+  private lateinit var externalAddress: TextField
 
   @FXML
   private lateinit var serviceIcon: ImageView
@@ -91,8 +84,8 @@ class MainController : Initializable, KoinComponent {
 
   private val root = TreeItem<ServiceListNode>()
   private val categoryMap = Model.Category.values()
-      .map { it to TreeItem<ServiceListNode>(CategoryNode(it)) }
-      .toMap()
+    .map { it to TreeItem<ServiceListNode>(CategoryNode(it)) }
+    .toMap()
 
   private var currentServiceProperty: ObjectProperty<Service> = SimpleObjectProperty()
   private var currentService: Service?
@@ -106,7 +99,7 @@ class MainController : Initializable, KoinComponent {
     this.serviceList.root = this.root
 
     this.serviceList.selectionModel.selectedItemProperty()
-        .addListener({ _, _, new -> this.onServiceSelect(new?.value) })
+      .addListener({ _, _, new -> this.onServiceSelect(new?.value) })
 
     this.serviceOpenButton.managedProperty().bind(this.serviceOpenButton.visibleProperty())
     this.serviceCloseButton.managedProperty().bind(this.serviceCloseButton.visibleProperty())
@@ -147,12 +140,12 @@ class MainController : Initializable, KoinComponent {
     }
 
     this.categoryMap.values
-        .filter { it.children.isNotEmpty() }
-        .forEach {
-          it.isExpanded = true
-          it.children.sortBy { it.value.title }
-          this.root.children.add(it)
-        }
+      .filter { it.children.isNotEmpty() }
+      .forEach {
+        it.isExpanded = true
+        it.children.sortBy { it.value.title }
+        this.root.children.add(it)
+      }
 
     this.serviceList.selectionModel.select(1)
   }
@@ -174,13 +167,13 @@ class MainController : Initializable, KoinComponent {
 
   private fun selectService(definition: Service) {
     val (node, _) = this.categoryMap.values
-        .flatMap { it.children }
-        .mapNotNull { node ->
-          (node.value as? ServiceNode)
-              ?.let { node to it.service }
-        }
-        .find { (_, service) -> service == definition }
-        ?: return
+      .flatMap { it.children }
+      .mapNotNull { node ->
+        (node.value as? ServiceNode)
+          ?.let { node to it.service }
+      }
+      .find { (_, service) -> service == definition }
+      ?: return
 
     this.serviceList.selectionModel.select(node)
   }
@@ -198,8 +191,8 @@ class MainController : Initializable, KoinComponent {
   @FXML
   private fun onServiceOpen() {
     val node = this.serviceList.selectionModel
-        .selectedItem
-        ?.value
+      .selectedItem
+      ?.value
         as? ServiceNode ?: return
     val service = node.service
 
@@ -211,8 +204,8 @@ class MainController : Initializable, KoinComponent {
   @FXML
   private fun onServiceClose() {
     val node = this.serviceList.selectionModel
-        .selectedItem
-        ?.value
+      .selectedItem
+      ?.value
         as? ServiceNode ?: return
     val service = node.service
 
@@ -225,9 +218,11 @@ class MainController : Initializable, KoinComponent {
   private fun onAddService() {
     val stage = Stage()
     val controller =
-        stage.window<ServiceEditorController>("service-editor.fxml",
-                                              maximizable = false,
-                                              minimizable = false)
+      stage.window<ServiceEditorController>(
+        "service-editor.fxml",
+        maximizable = false,
+        minimizable = false
+      )
     stage.initModality(Modality.APPLICATION_MODAL)
 
     stage.title = Localization("editor.title")
@@ -236,7 +231,7 @@ class MainController : Initializable, KoinComponent {
     stage.showAndWait()
 
     val definition = controller.service
-        ?: return
+      ?: return
 
     this.serviceRegistry += definition
     this.persistCustomServices()
@@ -248,14 +243,16 @@ class MainController : Initializable, KoinComponent {
   @FXML
   private fun onServiceEdit() {
     val previous = this.currentService
-        ?.takeIf { it.category == Model.Category.CUSTOM }
-        ?: return
+      ?.takeIf { it.category == Model.Category.CUSTOM }
+      ?: return
 
     val stage = Stage()
     val controller =
-        stage.window<ServiceEditorController>("service-editor.fxml",
-                                              maximizable = false,
-                                              minimizable = false)
+      stage.window<ServiceEditorController>(
+        "service-editor.fxml",
+        maximizable = false,
+        minimizable = false
+      )
     stage.initModality(Modality.APPLICATION_MODAL)
 
     controller.service = previous
@@ -278,8 +275,8 @@ class MainController : Initializable, KoinComponent {
   @FXML
   private fun onServiceRemove() {
     val selected = this.currentService
-        ?.takeIf { it.category == Model.Category.CUSTOM }
-        ?: return
+      ?.takeIf { it.category == Model.Category.CUSTOM }
+      ?: return
 
     this.serviceRegistry -= selected
 
