@@ -20,7 +20,6 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.Response
 import org.apache.logging.log4j.LogManager
 import tv.dotstart.beacon.repository.compiler.model.Repository
 import java.awt.image.BufferedImage
@@ -133,9 +132,18 @@ object Compiler {
           category = service.category
 
           service.icon?.let { iconUrl ->
-            withTemporaryFile {
-              fetchIcon(iconUrl, it)
-              icon = it
+            try {
+              withTemporaryFile {
+                fetchIcon(iconUrl, it)
+                icon = it
+              }
+            } catch (ex: IllegalStateException) {
+              logger.warn(
+                "Failed to fetch icon for service ${service.id} (\"${service.title}\")",
+                ex
+              )
+
+              null
             }
           }
 
@@ -169,10 +177,16 @@ object Compiler {
         .build()
 
       this.client.newCall(request).execute()
-        .takeIf(Response::isSuccessful)
-        ?.body
-        ?.bytes()
-        ?.let { Files.write(path, it) }
+        .use {
+          if (!it.isSuccessful) {
+            throw IllegalStateException("Failed to fetch icon at $url: Received code ${it.code}")
+          }
+
+          it
+            ?.body
+            ?.bytes()
+            ?.let { Files.write(path, it) }
+        }
 
       try {
         convertImage(path, target)
