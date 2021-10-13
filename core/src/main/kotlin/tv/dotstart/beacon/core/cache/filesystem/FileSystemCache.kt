@@ -37,29 +37,30 @@ import kotlin.streams.asSequence
  */
 class FileSystemCache(
 
-    /**
-     * Defines the location at which cache files are stored.
-     *
-     * If this directory does not exist, it will be created when the first cache file is written to
-     * disk.
-     */
-    val root: Path,
+  /**
+   * Defines the location at which cache files are stored.
+   *
+   * If this directory does not exist, it will be created when the first cache file is written to
+   * disk.
+   */
+  val root: Path,
 
-    /**
-     * Identifies the amount of time that cache keys remain valid unless explicitly overriden.
-     */
-    val expirationPeriod: Duration? = null,
+  /**
+   * Identifies the amount of time that cache keys remain valid unless explicitly overriden.
+   */
+  val expirationPeriod: Duration? = null,
 
-    /**
-     * Defines the clock by which cache lifespans are computed.
-     */
-    val clock: Clock = Clock.systemUTC(),
+  /**
+   * Defines the clock by which cache lifespans are computed.
+   */
+  val clock: Clock = Clock.systemUTC(),
 
-    /**
-     * Defines a path provider which resolves the respective location for each cache key relative
-     * to the cache root.
-     */
-    val pathProvider: PathProvider = MessageDigestPathProvider.sha256) : CacheProvider {
+  /**
+   * Defines a path provider which resolves the respective location for each cache key relative
+   * to the cache root.
+   */
+  val pathProvider: PathProvider = MessageDigestPathProvider.sha256
+) : CacheProvider {
 
   companion object {
 
@@ -76,12 +77,13 @@ class FileSystemCache(
     val keyLifespan = lifespan ?: this.expirationPeriod
     if (keyLifespan != null) {
       val createdAt = Files.getLastModifiedTime(location)
-          .toInstant()
+        .toInstant()
       val spentLifetime = Duration.between(createdAt, Instant.now(this.clock))
 
       if (spentLifetime >= keyLifespan) {
         logger.debug(
-            "Cache key $key has expired (lifespan $spentLifetime exceeds desired duration of $keyLifespan)")
+          "Cache key $key has expired (lifespan $spentLifetime exceeds desired duration of $keyLifespan)"
+        )
         return null
       }
     }
@@ -90,7 +92,8 @@ class FileSystemCache(
       Files.readAllBytes(location)
     } catch (ex: IOException) {
       throw CacheException(
-          "Failed to retrieve cache entry with key \"$key\" from storage path $location", ex)
+        "Failed to retrieve cache entry with key \"$key\" from storage path $location", ex
+      )
     }
   }
 
@@ -102,14 +105,20 @@ class FileSystemCache(
       Files.write(location, value)
     } catch (ex: IOException) {
       throw CacheException(
-          "Failed to store cache entry with key \"$key\" in storage path $location", ex)
+        "Failed to store cache entry with key \"$key\" in storage path $location", ex
+      )
     }
   }
 
   override fun purgeAll() {
+    // no purge necessary if the directory does not yet exist
+    if (Files.notExists(this.root)) {
+      return
+    }
+
     Files.walk(this.root).asSequence()
-        .sortedWith(Comparator.reverseOrder())
-        .forEach { Files.deleteIfExists(it) }
+      .sortedWith(Comparator.reverseOrder())
+      .forEach { Files.deleteIfExists(it) }
   }
 
   override fun purge(key: String) {
@@ -119,7 +128,8 @@ class FileSystemCache(
       Files.deleteIfExists(location)
     } catch (ex: IOException) {
       throw CacheException(
-          "Failed to purge cache entry with key \"$key\" in storage path $location", ex)
+        "Failed to purge cache entry with key \"$key\" in storage path $location", ex
+      )
     }
   }
 }
