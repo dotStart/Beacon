@@ -45,7 +45,7 @@ object Compiler {
   private val mapper = jacksonObjectMapper()
 
   val client = OkHttpClient.Builder() // TODO: User Agent
-      .build()
+    .build()
 
   /**
    * JVM Entry Point
@@ -93,7 +93,8 @@ object Compiler {
       println()
       println("Note that the icon field may be omitted if none is available. If given, it is")
       println(
-          "expected to to be a file, http or https URL which points to the desired image. When")
+        "expected to to be a file, http or https URL which points to the desired image. When"
+      )
       println("an icon is given, it will be converted into the PNG format and resized to the")
       println("default icon size (currently ${ICON_SIZE}x$ICON_SIZE).")
       println()
@@ -164,16 +165,20 @@ object Compiler {
       logger.debug("Storing image $url in temporary file $path")
 
       val request = Request.Builder()
-          .url(url)
-          .build()
+        .url(url)
+        .build()
 
       this.client.newCall(request).execute()
-          .takeIf(Response::isSuccessful)
-          ?.body
-          ?.bytes()
-          ?.let { Files.write(path, it) }
+        .takeIf(Response::isSuccessful)
+        ?.body
+        ?.bytes()
+        ?.let { Files.write(path, it) }
 
-      convertImage(path, target)
+      try {
+        convertImage(path, target)
+      } catch (ex: IllegalArgumentException) {
+        throw IllegalArgumentException("Invalid image file: $url", ex)
+      }
     }
   }
 
@@ -186,6 +191,8 @@ object Compiler {
     logger.debug("Converting image $input to $output")
 
     val img = ImageIO.read(input.toFile())
+      ?: throw IllegalArgumentException("Invalid input image format")
+
     val targetImg = if (img.width != ICON_SIZE || img.height != ICON_SIZE) {
       logger.debug("Image size mismatch - Resizing to ${ICON_SIZE}x${ICON_SIZE}")
       val outImg = BufferedImage(ICON_SIZE, ICON_SIZE, BufferedImage.TYPE_4BYTE_ABGR)
@@ -204,7 +211,7 @@ object Compiler {
 
   private fun <R> withTemporaryFile(block: (Path) -> R): R {
     val tmp = Files.createTempFile("beacon_", ".tmp")
-        ?: throw IllegalStateException("Failed to allocate temporary file")
+      ?: throw IllegalStateException("Failed to allocate temporary file")
 
     logger.debug("Allocated temporary file $tmp")
     try {
