@@ -58,7 +58,8 @@ class TrayIconProvider(icon: BufferedImage?) {
       }
     }
 
-    this.icon = TrayIcon(icon, "Beacon")
+    this.icon = try {
+      TrayIcon(icon, "Beacon")
         .also {
           it.addActionListener {
             Platform.runLater {
@@ -66,6 +67,15 @@ class TrayIconProvider(icon: BufferedImage?) {
             }
           }
         }
+    } catch (ex: UnsupportedOperationException) {
+      if (logger.isDebugEnabled) {
+        logger.debug("TrayIcon construction failed", ex)
+      }
+
+      logger.warn("Tray icon support is inaccessible: %s", ex.message)
+
+      null
+    }
   }
 
   fun registerCallback(block: () -> Unit) {
@@ -77,10 +87,10 @@ class TrayIconProvider(icon: BufferedImage?) {
    */
   fun show() {
     val icon = this.icon
-        ?: return
+      ?: return
 
     val tray = SystemTray.getSystemTray()
-        ?: return
+      ?: return
 
     logger.info("Displaying tray icon")
     tray.add(icon)
@@ -91,9 +101,9 @@ class TrayIconProvider(icon: BufferedImage?) {
    */
   fun hide() {
     val icon = this.icon
-        ?: return
+      ?: return
     val tray = SystemTray.getSystemTray()
-        ?: return
+      ?: return
 
     logger.info("Hiding tray icon")
     tray.remove(icon)
