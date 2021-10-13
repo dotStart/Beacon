@@ -43,7 +43,14 @@ object Compiler {
 
   private val mapper = jacksonObjectMapper()
 
-  val client = OkHttpClient.Builder() // TODO: User Agent
+  val client = OkHttpClient.Builder()
+    .addNetworkInterceptor { chain ->
+      chain.proceed(
+        chain.request().newBuilder()
+          .header("User-Agent", "Beacon Compiler/0.0.0")
+          .build()
+      )
+    }
     .build()
 
   /**
